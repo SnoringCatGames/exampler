@@ -34,6 +34,6 @@ To learn more about how the code works, checkout the [Surfacer](https://github.c
     -   [addons/squirrel_away/src/config/squirrel_away_third_party_licenses.gd](https://github.com/SnoringCatGames/squirrel_away/blob/master/src/config/squirrel_away_third_party_licenses.gd)
 
 <p align="center">
-  <img src="addons/squirrel_away/assets/images/loading.gif"
+  <img src="https://github.com/SnoringCatGames/squirrel_away/blob/master/assets/images/loading.gif"
        alt="An animated GIF showing a squirrel running">
 </p>
