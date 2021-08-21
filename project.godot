@@ -134,7 +134,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/action/action_handlers/cap_velocity_action.gd"
 }, {
-"base": "Reference",
+"base": "SurfacerCharacter",
 "class": "Cat",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/characters/cat/cat.gd"
@@ -1579,7 +1579,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/splash_screen.gd"
 }, {
-"base": "Reference",
+"base": "SurfacerCharacter",
 "class": "Squirrel",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/characters/squirrel/squirrel.gd"
@@ -2536,6 +2536,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_3="walk_through_walls"
 2d_physics/layer_4="squirrels"
 2d_physics/layer_5="birds"
+2d_physics/layer_6="cats"
 
 [logging]
 
