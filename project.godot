@@ -1877,7 +1877,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "UUID",
 "language": "GDScript",
-"path": "res://addons/crypto_uuid_v4/uuid.gd"
+"path": "res://addons/scaffolder/addons/crypto_uuid_v4/uuid.gd"
 }, {
 "base": "Node",
 "class": "Utils",
