@@ -262,7 +262,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "CircularBuffer",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/utils/structures/CircularBuffer.gd"
+"path": "res://addons/scaffolder/src/utils/structures/circular_buffer.gd"
 }, {
 "base": "Behavior",
 "class": "ClimbAdjacentSurfacesBehavior",
@@ -1247,7 +1247,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "PriorityQueue",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/utils/structures/PriorityQueue.gd"
+"path": "res://addons/scaffolder/src/utils/structures/priority_queue.gd"
 }, {
 "base": "Node",
 "class": "Profiler",
