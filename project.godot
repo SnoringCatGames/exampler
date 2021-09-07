@@ -1719,7 +1719,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_type.gd"
 }, {
-"base": "Node",
+"base": "ScaffolderAnnotationParameters",
 "class": "SurfacerAnnotationParameters",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/surfacer_annotation_parameters.gd"
