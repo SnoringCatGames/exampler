@@ -1839,6 +1839,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surfaces_tile_map.gd"
 }, {
+"base": "SurfacesTileMap",
+"class": "TestOddShapesTileMap",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/levels/test_odd_shapes_tile_map.gd"
+}, {
 "base": "ControlRow",
 "class": "TextControlRow",
 "language": "GDScript",
@@ -2366,6 +2371,7 @@ _global_script_class_icons={
 "SurfacesGroupItemController": "",
 "SurfacesOfSideGroupItemController": "",
 "SurfacesTileMap": "res://addons/surfacer/assets/images/editor_icons/surfaces_tile_map.png",
+"TestOddShapesTileMap": "",
 "TextControlRow": "",
 "ThirdPartyLicensesScreen": "",
 "Time": "",
