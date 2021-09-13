@@ -300,9 +300,9 @@ _global_script_classes=[ {
 "path": "res://addons/surfacer/src/platform_graph/edge/utils/collision_check_utils.gd"
 }, {
 "base": "Reference",
-"class": "CollisionTileMapCoordResult",
+"class": "CollisionSurfaceResult",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/platform_graph/edge/models/collision_tile_map_coord_result.gd"
+"path": "res://addons/surfacer/src/platform_graph/edge/models/collision_surface_result.gd"
 }, {
 "base": "Reference",
 "class": "ColorParams",
@@ -2063,7 +2063,7 @@ _global_script_class_icons={
 "CollisionCalcParams": "",
 "CollisionCalcResultMetadata": "",
 "CollisionCheckUtils": "",
-"CollisionTileMapCoordResult": "",
+"CollisionSurfaceResult": "",
 "ColorParams": "",
 "ColorParamsFactory": "",
 "ColorParamsType": "",
