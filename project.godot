@@ -159,11 +159,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/action/action_handlers/ceiling_jump_down_action.gd"
 }, {
-"base": "CharacterActionHandler",
-"class": "CeilingRoundingCornerAction",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/character/action/action_handlers/ceiling_rounding_corner_action.gd"
-}, {
 "base": "SurfacesOfSideGroupItemController",
 "class": "CeilingsItemController",
 "language": "GDScript",
@@ -708,11 +703,6 @@ _global_script_classes=[ {
 "class": "FloorJumpAction",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/action/action_handlers/floor_jump_action.gd"
-}, {
-"base": "CharacterActionHandler",
-"class": "FloorRoundingCornerAction",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/character/action/action_handlers/floor_rounding_corner_action.gd"
 }, {
 "base": "CharacterActionHandler",
 "class": "FloorWalkAction",
@@ -1944,11 +1934,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/action/action_handlers/wall_jump_action.gd"
 }, {
-"base": "CharacterActionHandler",
-"class": "WallRoundingCornerAction",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/character/action/action_handlers/wall_rounding_corner_action.gd"
-}, {
 "base": "Behavior",
 "class": "WanderBehavior",
 "language": "GDScript",
@@ -2035,7 +2020,6 @@ _global_script_class_icons={
 "CeilingDefaultAction": "",
 "CeilingFallAction": "",
 "CeilingJumpDownAction": "",
-"CeilingRoundingCornerAction": "",
 "CeilingsItemController": "",
 "CenteredPanel": "res://addons/scaffolder/assets/images/editor_icons/centered_panel.png",
 "CharacterActionHandler": "",
@@ -2145,7 +2129,6 @@ _global_script_class_icons={
 "FloorFallThroughAction": "",
 "FloorFrictionAction": "",
 "FloorJumpAction": "",
-"FloorRoundingCornerAction": "",
 "FloorWalkAction": "",
 "FloorsItemController": "",
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
@@ -2392,7 +2375,6 @@ _global_script_class_icons={
 "WallDefaultAction": "",
 "WallFallAction": "",
 "WallJumpAction": "",
-"WallRoundingCornerAction": "",
 "WanderBehavior": "res://addons/surfacer/assets/images/editor_icons/wander_behavior.png",
 "Waypoint": "",
 "WaypointUtils": "",
