@@ -934,6 +934,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/utils/jump_land_positions_utils.gd"
 }, {
+"base": "Reference",
+"class": "KinematicCollision2DCopy",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/character/kinematic_collision_2D_copy.gd"
+}, {
 "base": "VBoxContainer",
 "class": "LabeledControlList",
 "language": "GDScript",
@@ -2175,6 +2180,7 @@ _global_script_class_icons={
 "JumpLandPositions": "",
 "JumpLandPositionsAnnotationElement": "",
 "JumpLandPositionsUtils": "",
+"KinematicCollision2DCopy": "",
 "LabeledControlList": "res://addons/scaffolder/assets/images/editor_icons/control_row_list.png",
 "LeftWallsItemController": "",
 "Legend": "",
