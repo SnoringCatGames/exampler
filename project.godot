@@ -1014,11 +1014,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/main_menu_screen.gd"
 }, {
-"base": "CharacterActionHandler",
-"class": "MatchExpectedEdgeTrajectoryAction",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/character/action/action_handlers/match_expected_edge_trajectory_action.gd"
-}, {
 "base": "CheckboxControlRow",
 "class": "MetronomeControlRow",
 "language": "GDScript",
@@ -2196,7 +2191,6 @@ _global_script_class_icons={
 "LevelSelectScreen": "",
 "LockAnimation": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_placeholder.png",
 "MainMenuScreen": "",
-"MatchExpectedEdgeTrajectoryAction": "",
 "MetronomeControlRow": "",
 "MoveBackAndForthBehavior": "res://addons/surfacer/assets/images/editor_icons/move_back_and_forth_behavior.png",
 "MovementParameters": "res://addons/surfacer/assets/images/editor_icons/movement_params.png",
