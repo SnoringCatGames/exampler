@@ -1259,7 +1259,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/platform_graph_inspector/inspector_item_controllers/profiler_group/profiler_timing_item_controller.gd"
 }, {
-"base": "Reference",
+"base": "Node2D",
 "class": "ProximityDetector",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/character/proximity_detector.gd"
@@ -1283,6 +1283,11 @@ _global_script_classes=[ {
 "class": "RightWallsItemController",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/platform_graph_inspector/inspector_item_controllers/surfaces_group/right_walls_item_controller.gd"
+}, {
+"base": "Reference",
+"class": "RotatedShape",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/utils/rotated_shape.gd"
 }, {
 "base": "Node2D",
 "class": "RulerAnnotator",
@@ -2240,11 +2245,12 @@ _global_script_class_icons={
 "ProfilerCountItemController": "",
 "ProfilerGroupItemController": "",
 "ProfilerTimingItemController": "",
-"ProximityDetector": "",
+"ProximityDetector": "res://addons/scaffolder/assets/images/editor_icons/proximity_detector.png",
 "RateAppScreen": "",
 "RecentMovementAnnotatorControlRow": "",
 "ReturnBehavior": "",
 "RightWallsItemController": "",
+"RotatedShape": "",
 "RulerAnnotator": "",
 "RulerAnnotatorControlRow": "",
 "RunAwayBehavior": "res://addons/surfacer/assets/images/editor_icons/run_away_behavior.png",
