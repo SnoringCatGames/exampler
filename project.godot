@@ -889,6 +889,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/edges/intra_surface_edge.gd"
 }, {
+"base": "Reference",
+"class": "IntraSurfaceEdgeFactory",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/platform_graph/edge/calculators/intra_surface_edge_factory.gd"
+}, {
 "base": "CheckboxControlRow",
 "class": "IntroChoreographyControlRow",
 "language": "GDScript",
@@ -2181,6 +2186,7 @@ _global_script_class_icons={
 "IntendedPositionType": "",
 "InterSurfaceEdgesResult": "",
 "IntraSurfaceEdge": "",
+"IntraSurfaceEdgeFactory": "",
 "IntroChoreographyControlRow": "",
 "IosModelNames": "",
 "IosResolutions": "",
