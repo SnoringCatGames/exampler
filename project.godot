@@ -1049,6 +1049,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/nav_bar.gd"
 }, {
+"base": "Reference",
+"class": "NavigationInterruptionResolution",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/platform_graph/navigation_interruption_resolution.gd"
+}, {
 "base": "Node2D",
 "class": "NavigationPulseAnnotator",
 "language": "GDScript",
@@ -2218,6 +2223,7 @@ _global_script_class_icons={
 "MovementUtils": "",
 "MusicControlRow": "",
 "NavBar": "res://addons/scaffolder/assets/images/editor_icons/nav_bar.png",
+"NavigationInterruptionResolution": "",
 "NavigationPulseAnnotator": "",
 "NavigatorAnnotator": "",
 "NotificationScreen": "",
