@@ -969,6 +969,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/legend/legend_items/legend_item_type.gd"
 }, {
+"base": "SquirrelAwayLevel",
+"class": "Level8",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/levels/level8.gd"
+}, {
 "base": "CheckboxControlRow",
 "class": "LevelAnnotatorControlRow",
 "language": "GDScript",
@@ -2207,6 +2212,7 @@ _global_script_class_icons={
 "Legend": "",
 "LegendItem": "",
 "LegendItemType": "",
+"Level8": "",
 "LevelAnnotatorControlRow": "",
 "LevelButtonInput": "",
 "LevelControlRow": "",
