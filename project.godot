@@ -1677,7 +1677,7 @@ _global_script_classes=[ {
 "base": "SurfacesTileMap",
 "class": "SquirrelAwayTileMap",
 "language": "GDScript",
-"path": "res://addons/squirrel_away/src/levels/squirrel_away_tile_map.gd"
+"path": "res://addons/squirrel_away/src/tiles/squirrel_away_tile_map.gd"
 }, {
 "base": "TextControlRow",
 "class": "StaticTextControlRow",
@@ -1892,7 +1892,7 @@ _global_script_classes=[ {
 "base": "SurfacesTileMap",
 "class": "TestOddShapesTileMap",
 "language": "GDScript",
-"path": "res://addons/squirrel_away/src/levels/test_odd_shapes_tile_map.gd"
+"path": "res://addons/squirrel_away/src/tiles/test_odd_shapes_tile_map.gd"
 }, {
 "base": "ControlRow",
 "class": "TextControlRow",
@@ -1903,6 +1903,16 @@ _global_script_classes=[ {
 "class": "ThirdPartyLicensesScreen",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/third_party_licenses_screen.gd"
+}, {
+"base": "SurfacesTileMap",
+"class": "TileMapWithManyAngles",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/tile_map_with_many_angles.gd"
+}, {
+"base": "TileSet",
+"class": "TileSetWithManyAngles",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/tile_set_with_many_angles.gd"
 }, {
 "base": "Reference",
 "class": "TileShapeData",
@@ -2434,6 +2444,8 @@ _global_script_class_icons={
 "TestOddShapesTileMap": "",
 "TextControlRow": "",
 "ThirdPartyLicensesScreen": "",
+"TileMapWithManyAngles": "",
+"TileSetWithManyAngles": "",
 "TileShapeData": "",
 "Time": "",
 "TimeControlRow": "",
