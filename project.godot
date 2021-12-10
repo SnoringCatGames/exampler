@@ -1834,6 +1834,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/surfacer_character.gd"
 }, {
+"base": "CharacterAnimationState",
+"class": "SurfacerCharacterAnimationState",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/character/surfacer_character_animation_state.gd"
+}, {
 "base": "ScaffolderCharacterAnimator",
 "class": "SurfacerCharacterAnimator",
 "language": "GDScript",
@@ -2510,6 +2515,7 @@ _global_script_class_icons={
 "SurfacerBeatTracker": "",
 "SurfacerBootstrap": "",
 "SurfacerCharacter": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character.png",
+"SurfacerCharacterAnimationState": "",
 "SurfacerCharacterAnimator": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character_animator.png",
 "SurfacerCharacterAnnotator": "",
 "SurfacerCharacterCategory": "",
