@@ -1819,6 +1819,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/surfacer_annotators.gd"
 }, {
+"base": "BeatTracker",
+"class": "SurfacerBeatTracker",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/utils/surfacer_beat_tracker.gd"
+}, {
 "base": "ScaffolderBootstrap",
 "class": "SurfacerBootstrap",
 "language": "GDScript",
@@ -2502,6 +2507,7 @@ _global_script_class_icons={
 "SurfacerAnnotationParameters": "",
 "SurfacerAnnotationsManifest": "",
 "SurfacerAnnotators": "",
+"SurfacerBeatTracker": "",
 "SurfacerBootstrap": "",
 "SurfacerCharacter": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character.png",
 "SurfacerCharacterAnimator": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character_animator.png",
