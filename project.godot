@@ -434,7 +434,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/edges/edge.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "EdgeAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/edge_annotation_element.gd"
@@ -509,7 +509,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/models/edge_step.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "EdgeStepAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/edge_step_annotation_element.gd"
@@ -609,7 +609,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/models/failed_edge_attempt.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "FailedEdgeAttemptAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/failed_edge_attempt_annotation_element.gd"
@@ -929,7 +929,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/models/jump_land_positions.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "JumpLandPositionsAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/jump_land_positions_annotation_element.gd"
@@ -1249,7 +1249,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/pointer_selection_position.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "PolylineAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/polyline_annotation_element.gd"
@@ -1724,7 +1724,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface.gd"
 }, {
-"base": "AnnotationElement",
+"base": "SurfacerAnnotationElement",
 "class": "SurfaceAnnotationElement",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/annotation_elements/surface_annotation_element.gd"
@@ -1798,6 +1798,11 @@ _global_script_classes=[ {
 "class": "SurfaceType",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_type.gd"
+}, {
+"base": "AnnotationElement",
+"class": "SurfacerAnnotationElement",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/annotators/surfacer_annotation_element.gd"
 }, {
 "base": "ScaffolderAnnotationParameters",
 "class": "SurfacerAnnotationParameters",
@@ -2493,6 +2498,7 @@ _global_script_class_icons={
 "SurfaceSide": "",
 "SurfaceStore": "",
 "SurfaceType": "",
+"SurfacerAnnotationElement": "",
 "SurfacerAnnotationParameters": "",
 "SurfacerAnnotationsManifest": "",
 "SurfacerAnnotators": "",
