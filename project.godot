@@ -192,7 +192,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "CharacterAnimationState",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/character/character_animation_state.gd"
+"path": "res://addons/scaffolder/src/character/character_animation_state.gd"
 }, {
 "base": "CheckboxControlRow",
 "class": "CharacterAnnotatorControlRow",
