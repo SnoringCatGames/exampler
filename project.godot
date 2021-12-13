@@ -369,11 +369,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/control_rows/settings/debug_time_display_control_row.gd"
 }, {
-"base": "FrameworkConfig",
-"class": "DefaultAppManifest",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/config/default_app_manifest.gd"
-}, {
 "base": "Behavior",
 "class": "DefaultBehavior",
 "language": "GDScript",
@@ -1307,7 +1302,7 @@ _global_script_classes=[ {
 "base": "CheckboxControlRow",
 "class": "RecentMovementAnnotatorControlRow",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/control_rows/recent_movement_annotator_control_row.gd"
+"path": "res://addons/scaffolder/src/gui/control_rows/displays/recent_movement_annotator_control_row.gd"
 }, {
 "base": "Behavior",
 "class": "ReturnBehavior",
@@ -1332,7 +1327,7 @@ _global_script_classes=[ {
 "base": "CheckboxControlRow",
 "class": "RulerAnnotatorControlRow",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/control_rows/ruler_annotator_control_row.gd"
+"path": "res://addons/scaffolder/src/gui/control_rows/displays/ruler_annotator_control_row.gd"
 }, {
 "base": "Behavior",
 "class": "RunAwayBehavior",
@@ -1874,6 +1869,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_colors.gd"
 }, {
+"base": "FrameworkConfig",
+"class": "SurfacerDefaultAppManifest",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/config/surfacer_default_app_manifest.gd"
+}, {
 "base": "ScaffolderDrawUtils",
 "class": "SurfacerDrawUtils",
 "language": "GDScript",
@@ -2222,7 +2222,6 @@ _global_script_class_icons={
 "DebugPanel": "res://addons/scaffolder/assets/images/editor_icons/debug_panel.png",
 "DebugPanelControlRow": "",
 "DebugTimeDisplayControlRow": "",
-"DefaultAppManifest": "",
 "DefaultBehavior": "",
 "DescriptionItemController": "",
 "DestinationLegendItem": "",
@@ -2523,6 +2522,7 @@ _global_script_class_icons={
 "SurfacerCharacterRecentMovementAnnotator": "",
 "SurfacerClickAnnotator": "",
 "SurfacerColors": "",
+"SurfacerDefaultAppManifest": "",
 "SurfacerDrawUtils": "",
 "SurfacerGeometry": "",
 "SurfacerHud": "",
