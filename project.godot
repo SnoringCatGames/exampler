@@ -1524,6 +1524,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/widgets/scaffolder_slider.gd"
 }, {
+"base": "Position2D",
+"class": "ScaffolderSpawnPosition",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/character/scaffolder_spawn_position.gd"
+}, {
 "base": "Node",
 "class": "ScaffolderStyles",
 "language": "GDScript",
@@ -1633,11 +1638,6 @@ _global_script_classes=[ {
 "class": "Spacer",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/widgets/spacer.gd"
-}, {
-"base": "Position2D",
-"class": "SpawnPosition",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/character/spawn_position.gd"
 }, {
 "base": "Screen",
 "class": "SplashScreen",
@@ -1918,6 +1918,11 @@ _global_script_classes=[ {
 "class": "SurfacerMovementManifest",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_movement_manifest.gd"
+}, {
+"base": "ScaffolderSpawnPosition",
+"class": "SurfacerSpawnPosition",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/character/surfacer_spawn_position.gd"
 }, {
 "base": "Node",
 "class": "SurfacerSurfacePropertiesManifest",
@@ -2453,6 +2458,7 @@ _global_script_class_icons={
 "ScaffolderProgressBar": "res://addons/scaffolder/assets/images/editor_icons/progress_bar.png",
 "ScaffolderProjectSettings": "",
 "ScaffolderSlider": "res://addons/scaffolder/assets/images/editor_icons/slider.png",
+"ScaffolderSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
 "ScaffolderStyles": "",
 "ScaffolderTextureButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_texture_button.png",
 "ScaffolderTextureLink": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_texture_link.png",
@@ -2475,7 +2481,6 @@ _global_script_class_icons={
 "SlowMotionMusic": "",
 "SoundEffectsControlRow": "",
 "Spacer": "res://addons/scaffolder/assets/images/editor_icons/spacer.png",
-"SpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
 "SplashScreen": "",
 "Squirrel": "",
 "SquirrelAwayLevel": "",
@@ -2532,6 +2537,7 @@ _global_script_class_icons={
 "SurfacerLevelSession": "",
 "SurfacerLoadingScreen": "",
 "SurfacerMovementManifest": "",
+"SurfacerSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
 "SurfacerSurfacePropertiesManifest": "",
 "SurfacerThirdPartyLicenses": "",
 "SurfacesAnnotator": "",
