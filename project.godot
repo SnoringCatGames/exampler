@@ -1109,10 +1109,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/control_rows/npc/npc_slow_mo_trajectory_annotator_control_row.gd"
 }, {
-"base": "TransientAnnotator",
+"base": "Reference",
 "class": "OnBeatHashAnnotator",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/transient_annotators/on_beat_hash_annotator.gd"
+"path": "res://addons/surfacer/src/annotators/transient_annotators/on_beat_hash_annotator.gd"
 }, {
 "base": "LegendItem",
 "class": "OriginLegendItem",
