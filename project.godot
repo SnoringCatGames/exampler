@@ -327,7 +327,7 @@ _global_script_classes=[ {
 "base": "ValidEdgeTrajectoryLegendItem",
 "class": "ContinuousEdgeTrajectoryLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/continuous_edge_trajectory_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/continuous_edge_trajectory_legend_item.gd"
 }, {
 "base": "Reference",
 "class": "ControlRow",
@@ -387,7 +387,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "DestinationLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/destination_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/destination_legend_item.gd"
 }, {
 "base": "SurfaceAnnotationElement",
 "class": "DestinationSurfaceAnnotationElement",
@@ -402,7 +402,7 @@ _global_script_classes=[ {
 "base": "SurfaceLegendItem",
 "class": "DestinationSurfaceLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/destination_surface_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/destination_surface_legend_item.gd"
 }, {
 "base": "SplashScreen",
 "class": "DeveloperSplashScreen",
@@ -417,7 +417,7 @@ _global_script_classes=[ {
 "base": "ValidEdgeTrajectoryLegendItem",
 "class": "DiscreteEdgeTrajectoryLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/discrete_edge_trajectory_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/discrete_edge_trajectory_legend_item.gd"
 }, {
 "base": "ControlRow",
 "class": "DropdownControlRow",
@@ -622,7 +622,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "FailedEdgeTrajectoryLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/failed_edge_trajectory_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/failed_edge_trajectory_legend_item.gd"
 }, {
 "base": "InspectorItemController",
 "class": "FailedEdgesGroupItemController",
@@ -662,7 +662,7 @@ _global_script_classes=[ {
 "base": "PolylineLegendItem",
 "class": "FallRangeWithJumpDistanceLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/fall_range_with_jump_distance_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/fall_range_with_jump_distance_legend_item.gd"
 }, {
 "base": "PolylineAnnotationElement",
 "class": "FallRangeWithoutJumpDistanceAnnotationElement",
@@ -672,7 +672,7 @@ _global_script_classes=[ {
 "base": "PolylineLegendItem",
 "class": "FallRangeWithoutJumpDistanceLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/fall_range_without_jump_distance_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/fall_range_without_jump_distance_legend_item.gd"
 }, {
 "base": "TextControlRow",
 "class": "FastestTimeControlRow",
@@ -827,7 +827,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "HypotheticalEdgeTrajectoryLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/hypothetical_edge_trajectory_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/hypothetical_edge_trajectory_legend_item.gd"
 }, {
 "base": "CheckboxControlRow",
 "class": "InspectorEnabledControlRow",
@@ -857,12 +857,12 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "InstructionEndLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/instruction_end_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/instruction_end_legend_item.gd"
 }, {
 "base": "LegendItem",
 "class": "InstructionStartLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/instruction_start_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/instruction_start_legend_item.gd"
 }, {
 "base": "CharacterActionSource",
 "class": "InstructionsActionSource",
@@ -957,17 +957,12 @@ _global_script_classes=[ {
 "base": "VBoxContainer",
 "class": "Legend",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend.gd"
+"path": "res://addons/scaffolder/src/gui/legend.gd"
 }, {
 "base": "Control",
 "class": "LegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/legend_item.gd"
-}, {
-"base": "Reference",
-"class": "LegendItemType",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/legend_item_type.gd"
+"path": "res://addons/scaffolder/src/gui/legend_item.gd"
 }, {
 "base": "SquirrelAwayLevel",
 "class": "Level8",
@@ -1127,7 +1122,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "OriginLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/origin_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/origin_legend_item.gd"
 }, {
 "base": "SurfaceAnnotationElement",
 "class": "OriginSurfaceAnnotationElement",
@@ -1142,7 +1137,7 @@ _global_script_classes=[ {
 "base": "SurfaceLegendItem",
 "class": "OriginSurfaceLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/origin_surface_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/origin_surface_legend_item.gd"
 }, {
 "base": "Node",
 "class": "OverlayMaskTransition",
@@ -1257,7 +1252,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "PolylineLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/polyline_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/polyline_legend_item.gd"
 }, {
 "base": "Reference",
 "class": "PositionAlongSurface",
@@ -1752,7 +1747,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "SurfaceLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/surface_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/surface_legend_item.gd"
 }, {
 "base": "TileMap",
 "class": "SurfaceMark",
@@ -2062,7 +2057,7 @@ _global_script_classes=[ {
 "base": "LegendItem",
 "class": "ValidEdgeTrajectoryLegendItem",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/gui/legend/legend_items/valid_edge_trajectory_legend_item.gd"
+"path": "res://addons/surfacer/src/gui/legend/valid_edge_trajectory_legend_item.gd"
 }, {
 "base": "EdgeStep",
 "class": "VerticalEdgeStep",
@@ -2346,7 +2341,6 @@ _global_script_class_icons={
 "LeftWallsItemController": "",
 "Legend": "",
 "LegendItem": "",
-"LegendItemType": "",
 "Level8": "",
 "LevelAnnotatorControlRow": "",
 "LevelButtonInput": "",
