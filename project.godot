@@ -164,6 +164,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/platform_graph_inspector/inspector_item_controllers/surfaces_group/ceilings_item_controller.gd"
 }, {
+"base": "Reference",
+"class": "CellAngleType",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/cell_angle_type.gd"
+}, {
+"base": "Reference",
+"class": "CellProximity",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/cell_proximity.gd"
+}, {
 "base": "PanelContainer",
 "class": "CenteredPanel",
 "language": "GDScript",
@@ -2181,6 +2191,8 @@ _global_script_class_icons={
 "CeilingFallAction": "",
 "CeilingJumpDownAction": "",
 "CeilingsItemController": "",
+"CellAngleType": "",
+"CellProximity": "",
 "CenteredPanel": "res://addons/scaffolder/assets/images/editor_icons/centered_panel.png",
 "CharacterActionHandler": "",
 "CharacterActionSource": "",
