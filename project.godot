@@ -1690,6 +1690,11 @@ _global_script_classes=[ {
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
 }, {
 "base": "SubtileCorner",
+"class": "SquirrelAwaySubtileQuadrantsManifest",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/tiles/squirrel_away_subtile_quadrants_manifest.gd"
+}, {
+"base": "Reference",
 "class": "SquirrelAwaySubtilesManifest",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/tiles/squirrel_away_subtiles_manifest.gd"
@@ -1762,7 +1767,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "SubtileTargetCornerUtils",
 "language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/subtile_target_corner_utils.gd"
+}, {
+"base": "Reference",
+"class": "SubtileTargetCornerUtilsV2",
+"language": "GDScript",
 "path": "res://addons/surfacer/src/tiles/old/subtile_target_corner_utils_v2.gd"
+}, {
+"base": "Reference",
+"class": "SubtileTargetQuadrantUtils",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/subtile_target_quadrant_utils.gd"
 }, {
 "base": "Reference",
 "class": "Surface",
@@ -2541,6 +2556,7 @@ _global_script_class_icons={
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
+"SquirrelAwaySubtileQuadrantsManifest": "",
 "SquirrelAwaySubtilesManifest": "",
 "SquirrelAwaySurfacesTileSet": "",
 "SquirrelAwayThirdPartyLicenses": "",
@@ -2556,6 +2572,8 @@ _global_script_class_icons={
 "SubtileCornerV2": "",
 "SubtileQuadrant": "",
 "SubtileTargetCornerUtils": "",
+"SubtileTargetCornerUtilsV2": "",
+"SubtileTargetQuadrantUtils": "",
 "Surface": "",
 "SurfaceAnnotationElement": "",
 "SurfaceCollision": "",
