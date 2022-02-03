@@ -1690,11 +1690,6 @@ _global_script_classes=[ {
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
 }, {
 "base": "SubtileCorner",
-"class": "SquirrelAwaySubtileQuadrantsManifest",
-"language": "GDScript",
-"path": "res://addons/squirrel_away/src/tiles/squirrel_away_subtile_quadrants_manifest.gd"
-}, {
-"base": "Reference",
 "class": "SquirrelAwaySubtilesManifest",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/tiles/squirrel_away_subtiles_manifest.gd"
@@ -1754,6 +1749,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/tiles/subtile_corner.gd"
 }, {
+"base": "Node",
+"class": "SubtileCornerAnnotations",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/subtile_corner_annotations.gd"
+}, {
 "base": "Reference",
 "class": "SubtileCornerV2",
 "language": "GDScript",
@@ -1762,7 +1762,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "SubtileQuadrant",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/tiles/subtile_quadrant.gd"
+"path": "res://addons/surfacer/src/tiles/old/subtile_quadrant.gd"
 }, {
 "base": "Reference",
 "class": "SubtileTargetCornerUtils",
@@ -1777,7 +1777,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "SubtileTargetQuadrantUtils",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/tiles/subtile_target_quadrant_utils.gd"
+"path": "res://addons/surfacer/src/tiles/old/subtile_target_quadrant_utils.gd"
 }, {
 "base": "Reference",
 "class": "Surface",
@@ -2556,7 +2556,6 @@ _global_script_class_icons={
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
-"SquirrelAwaySubtileQuadrantsManifest": "",
 "SquirrelAwaySubtilesManifest": "",
 "SquirrelAwaySurfacesTileSet": "",
 "SquirrelAwayThirdPartyLicenses": "",
@@ -2569,6 +2568,7 @@ _global_script_class_icons={
 "StyleBoxFlatScalable": "",
 "StyleBoxTextureScalable": "",
 "SubtileCorner": "",
+"SubtileCornerAnnotations": "",
 "SubtileCornerV2": "",
 "SubtileQuadrant": "",
 "SubtileTargetCornerUtils": "",
