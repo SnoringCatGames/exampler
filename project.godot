@@ -1709,11 +1709,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/tiles/squirrel_away_tile_set_with_many_angles.gd"
 }, {
-"base": "SurfacesTileSet",
-"class": "SquirrelAwayTileSetWithManyAnglesOld",
-"language": "GDScript",
-"path": "res://addons/squirrel_away/src/tiles/squirrel_away_tile_set_with_many_angles_old.gd"
-}, {
 "base": "TextControlRow",
 "class": "StaticTextControlRow",
 "language": "GDScript",
@@ -2530,7 +2525,6 @@ _global_script_class_icons={
 "SquirrelAwayTileMap": "",
 "SquirrelAwayTileMapWithManyAngles": "",
 "SquirrelAwayTileSetWithManyAngles": "",
-"SquirrelAwayTileSetWithManyAnglesOld": "",
 "StaticTextControlRow": "",
 "Stopwatch": "",
 "StyleBoxFlatScalable": "",
