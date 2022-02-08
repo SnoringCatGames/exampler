@@ -1679,11 +1679,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
 }, {
-"base": "SubtileCorner",
-"class": "SquirrelAwaySubtilesManifest",
-"language": "GDScript",
-"path": "res://addons/squirrel_away/src/tiles/squirrel_away_subtiles_manifest.gd"
-}, {
 "base": "SurfacesTileSet",
 "class": "SquirrelAwaySurfacesTileSet",
 "language": "GDScript",
@@ -2519,7 +2514,6 @@ _global_script_class_icons={
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
-"SquirrelAwaySubtilesManifest": "",
 "SquirrelAwaySurfacesTileSet": "",
 "SquirrelAwayThirdPartyLicenses": "",
 "SquirrelAwayTileMap": "",
