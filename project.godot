@@ -344,6 +344,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/control_row_list/control_row.gd"
 }, {
+"base": "Node",
+"class": "CornerMatchAutotileInitializer",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/corner_match_autotile_initializer.gd"
+}, {
+"base": "Node",
+"class": "CornerMatchAutotileShapeCalculator",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/corner_match_autotile_shape_calculator.gd"
+}, {
 "base": "SurfacesTileSet",
 "class": "CornerMatchAutotilingTileSet",
 "language": "GDScript",
@@ -2257,6 +2267,8 @@ _global_script_class_icons={
 "ConfirmDataDeletionScreenWithAnalytics": "",
 "ContinuousEdgeTrajectoryLegendItem": "",
 "ControlRow": "",
+"CornerMatchAutotileInitializer": "",
+"CornerMatchAutotileShapeCalculator": "",
 "CornerMatchAutotilingTileSet": "",
 "CrashReporter": "",
 "CrashTestDummy": "",
