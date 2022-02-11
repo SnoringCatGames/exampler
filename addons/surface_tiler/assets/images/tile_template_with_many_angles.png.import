@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tile_template_with_many_angles.png-490e2e3edc5bfdd60033db4b123425f6.stex"
+path="res://.import/tile_template_with_many_angles.png-f9ff18422a12855ff2a5b11f518f5c13.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/surfacer/assets/images/tile_template_with_many_angles.png"
-dest_files=[ "res://.import/tile_template_with_many_angles.png-490e2e3edc5bfdd60033db4b123425f6.stex" ]
+source_file="res://addons/surface_tiler/assets/images/tile_template_with_many_angles.png"
+dest_files=[ "res://.import/tile_template_with_many_angles.png-f9ff18422a12855ff2a5b11f518f5c13.stex" ]
 
 [params]
 
