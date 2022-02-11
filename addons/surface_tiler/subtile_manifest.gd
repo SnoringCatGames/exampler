@@ -11,6 +11,9 @@ extends Node
 
 ###
 
+# Dictionary<int, String>
+var SUBTILE_CORNER_TYPE_VALUE_TO_KEY: Dictionary
+
 var quadrant_size: int
 var subtile_collision_margin: float
 var autotile_name_prefix: String
@@ -60,6 +63,8 @@ func register_manifest(manifest: Dictionary) -> void:
     
     assert(manifest.tile_set is CornerMatchTileset)
     self.tile_set = manifest.tile_set
+    
+    _parse_subtile_corner_key_values()
     
     if manifest.has("tile_set_image_parser_class"):
         self.tile_set_image_parser = manifest.tile_set_image_parser_class.new()
@@ -119,3 +124,27 @@ func _parse_corner_types_to_swap_for_bottom_quadrants(
                 corner_type_pair[1]
         self.corner_types_to_swap_for_bottom_quadrants[corner_type_pair[1]] = \
                 corner_type_pair[0]
+
+
+# This hacky function exists for a couple reasons:
+# -   We need to be able to use the anonymous enum syntax for these
+#     SubtileCorner values, so that tile-set authors don't need to include so
+#     many extra characters for the enum prefix in their GDScript
+#     configurations.
+# -   We need to be able to print the key for a given enum value, so that a
+#     human can debug what's going on.
+# -   We need to be able to iterate over all possible enum values.
+# -   GDScript's type system doesn't allow referencing the name of a class from
+#     within that class.
+func _parse_subtile_corner_key_values() -> void:
+    if !Engine.editor_hint and \
+            !supports_runtime_autotiling:
+        return
+    
+    var constants := SubtileCorner.get_script_constant_map()
+    for key in constants:
+        SUBTILE_CORNER_TYPE_VALUE_TO_KEY[constants[key]] = key
+
+
+func get_subtile_corner_string(type: int) -> String:
+    return SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]

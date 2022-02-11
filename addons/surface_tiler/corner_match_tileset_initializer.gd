@@ -16,8 +16,8 @@ func initialize_tiles(tile_set: CornerMatchTileset) -> void:
                 Su.subtile_manifest.tile_set_corner_type_annotations_path,
                 Su.subtile_manifest.quadrant_size)
     
-    var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
-            .create_shapes_for_quadrants(tile_set)
+    var shapes: Dictionary = \
+            Su.subtile_manifest.shape_calculator.create_tileset_shapes()
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
     var collision_shapes: Dictionary = shapes.collision_shapes
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
@@ -60,10 +60,14 @@ func _initialize_tile(
     
     var tile_name: String = \
             Su.subtile_manifest.autotile_name_prefix + tile_name_suffix
+    
     var tile_id := tile_set.find_tile_by_name(tile_name)
-    if tile_id < 0:
-        tile_id = tile_set.get_last_unused_tile_id()
-        tile_set.create_tile(tile_id)
+    if tile_id >= 0:
+        # Clear any pre-existing state for this tile.
+        tile_set.remove_tile(tile_id)
+    
+    tile_id = tile_set.get_last_unused_tile_id()
+    tile_set.create_tile(tile_id)
     
     var quadrants_texture_size: Vector2 = \
             Su.subtile_manifest.tile_set_quadrants_texture.get_size()

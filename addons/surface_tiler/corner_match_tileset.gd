@@ -153,9 +153,6 @@ const _CORNER_TYPE_TO_ADDITIONAL_MATCHING_TYPES := {
 # FIXME: LEFT OFF HERE: --------------------------------
 var _ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 2.0
 
-# Dictionary<int, String>
-var _SUBTILE_CORNER_TYPE_VALUE_TO_KEY: Dictionary
-
 # Dictionary<
 #     CornerDirection,
 #     Dictionary<
@@ -188,13 +185,6 @@ var _allows_partial_matches: bool
 var _supports_runtime_autotiling: bool
 
 
-# func _init().([]) -> void:
-    # FIXME: LEFT OFF HERE: ---------------------------------------------
-    # - Move to manifest.
-#    _parse_enum_key_values()
-    # pass
-
-
 # FIXME: LEFT OFF HERE: ---------------------------------------------
 func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
     if !Engine.editor_hint and \
@@ -214,9 +204,9 @@ func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
             Dictionary):
         # Check that the corner-type enum values match the
         # corner-type-to-matching-types map.
-        assert(_SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
+        assert(Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
                 _CORNER_TYPE_TO_ADDITIONAL_MATCHING_TYPES.size())
-        for corner_type in _SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+        for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
             assert(_CORNER_TYPE_TO_ADDITIONAL_MATCHING_TYPES.has(corner_type))
             assert(_CORNER_TYPE_TO_ADDITIONAL_MATCHING_TYPES[corner_type] is Array)
         
@@ -232,7 +222,7 @@ func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
     for corner in CornerDirection.OUTBOUND_CORNERS:
         var type_to_subtiles := {}
         _corner_to_type_to_subtiles[corner] = type_to_subtiles
-        for corner_type in _SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+        for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
             if corner_type != SubtileCorner.UNKNOWN and \
                     corner_type != SubtileCorner.ERROR:
                 var subtiles := {}
@@ -291,35 +281,6 @@ func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
         assert(was_a_corner_interesting)
 
 
-# This hacky function exists for a couple reasons:
-# -   We need to be able to use the anonymous enum syntax for these
-#     SubtileCorner values, so that tile-set authors don't need to include so
-#     many extra characters for the enum prefix in their GDScript
-#     configurations.
-# -   We need to be able to print the key for a given enum value, so that a
-#     human can debug what's going on.
-# -   We need to be able to iterate over all possible enum values.
-# -   GDScript's type system doesn't allow referencing the name of a class from
-#     within that class.
-func _parse_enum_key_values() -> void:
-    if !Engine.editor_hint and \
-            !_supports_runtime_autotiling:
-        return
-    
-    var script: Script = SubtileCorner
-    var constants := script.get_script_constant_map()
-    # FIXME: ------- REMOVE this after finaling tile-set system.
-#    while !constants.has("EMPTY"):
-#        script = script.get_base_script()
-#        constants = script.get_script_constant_map()
-    for key in constants:
-        _SUBTILE_CORNER_TYPE_VALUE_TO_KEY[constants[key]] = key
-
-
-func get_subtile_corner_string(type: int) -> String:
-    return _SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]
-
-
 func get_subtile_config_string(subtile_config: Dictionary) -> String:
     var optional_position_string: String = \
             "p:%s, " % subtile_config.p if \
@@ -327,10 +288,14 @@ func get_subtile_config_string(subtile_config: Dictionary) -> String:
             ""
     return "{%stl:%s, tr:%s, bl:%s, br:%s}" % [
         optional_position_string,
-        get_subtile_corner_string(subtile_config[CornerDirection.TOP_LEFT]),
-        get_subtile_corner_string(subtile_config[CornerDirection.TOP_RIGHT]),
-        get_subtile_corner_string(subtile_config[CornerDirection.BOTTOM_LEFT]),
-        get_subtile_corner_string(subtile_config[CornerDirection.BOTTOM_RIGHT]),
+        Su.subtile_manifest.get_subtile_corner_string(
+                subtile_config[CornerDirection.TOP_LEFT]),
+        Su.subtile_manifest.get_subtile_corner_string(
+                subtile_config[CornerDirection.TOP_RIGHT]),
+        Su.subtile_manifest.get_subtile_corner_string(
+                subtile_config[CornerDirection.BOTTOM_LEFT]),
+        Su.subtile_manifest.get_subtile_corner_string(
+                subtile_config[CornerDirection.BOTTOM_RIGHT]),
     ]
 
 

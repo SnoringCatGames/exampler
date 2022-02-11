@@ -3,140 +3,119 @@ class_name CornerMatchTilesetShapeCalculator
 extends Node
 
 
-func create_shapes_for_quadrants(tile_set: CornerMatchTileset) -> Dictionary:
-    # FIXME: Dedup shape instances.
+func create_tileset_shapes() -> Dictionary:
+    # Use this to memoize and dedup shape instances.
+    # Dictionary<
+    #   QuadrantShapeType,
+    #   Dictionary<
+    #     CornerDirection,
+    #     [Shape2D, OccluderPolygon2D]>>
+    var shape_type_to_shapes := _create_shape_type_to_shapes()
     
-    var collision_shapes := {
-        CornerDirection.TOP_LEFT: {},
-        CornerDirection.TOP_RIGHT: {},
-        CornerDirection.BOTTOM_LEFT: {},
-        CornerDirection.BOTTOM_RIGHT: {},
-    }
-    var occlusion_shapes := {
-        CornerDirection.TOP_LEFT: {},
-        CornerDirection.TOP_RIGHT: {},
-        CornerDirection.BOTTOM_LEFT: {},
-        CornerDirection.BOTTOM_RIGHT: {},
-    }
+    # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
+    var collision_shapes := {}
+    # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
+    var occlusion_shapes := {}
     
-    for corner_direction in tile_set.subtile_corner_types:
-        var corner_types_flag_to_position: Dictionary = \
-                tile_set.subtile_corner_types[corner_direction]
-        for corner_types_flag in corner_types_flag_to_position:
-            var corner_type: int = Su.subtile_manifest.tile_set_image_parser \
-                    .get_corner_types_from_flag(corner_types_flag) \
-                    .self_corner_type
-            _create_shapes_for_quadrant(
-                    collision_shapes,
-                    occlusion_shapes,
-                    corner_type,
-                    corner_direction)
+    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+        collision_shapes[corner_direction] = {}
+        occlusion_shapes[corner_direction] = {}
+        for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+            var shape_type := QuadrantShapeType.get_shape_type_for_corner_type(
+                    corner_type)
+            var shapes: Array = \
+                    shape_type_to_shapes[shape_type][corner_direction]
+            collision_shapes[corner_direction][corner_type] = shapes[0]
+            occlusion_shapes[corner_direction][corner_type] = shapes[1]
     
     return {
         collision_shapes = collision_shapes,
         occlusion_shapes = occlusion_shapes,
     }
 
-
-func _create_shapes_for_quadrant(
-        collision_shapes: Dictionary,
-        occlusion_shapes: Dictionary,
-        corner_type: int,
-        corner_direction: int) -> void:
-    var points := _get_shape_vertices_for_quadrant(
-            corner_type,
-            corner_direction)
+# Dictionary<
+#   QuadrantShapeType,
+#   Dictionary<
+#     CornerDirection,
+#     Dictionary<
+#       SubtileCorner,
+#       [Array<Vector2>, Shape2D, OccluderPolygon2D]>>>
+func _create_shape_type_to_shapes() -> Dictionary:
+    var shape_type_to_shapes := {}
     
-    var collision_shape: Shape2D
-    var occlusion_shape: OccluderPolygon2D
-    
-    if !points.empty():
-        var points_pool := PoolVector2Array(points)
+    for shape_type in QuadrantShapeType.VALUES:
+        var corner_direction_to_shapes := {}
+        shape_type_to_shapes[shape_type] = corner_direction_to_shapes
         
-        if Su.subtile_manifest.forces_convex_collision_shapes or \
-                Su.subtile_manifest.subtile_collision_margin == 0.0:
-            collision_shape = ConvexPolygonShape2D.new()
-            collision_shape.points = points_pool
-        else:
-            collision_shape = ConcavePolygonShape2D.new()
-            collision_shape.segments = points_pool
-        
-        occlusion_shape = OccluderPolygon2D.new()
-        occlusion_shape.polygon = points_pool
+        for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+            var vertices := _get_shape_vertices(shape_type, corner_direction)
+            
+            var collision_shape: Shape2D
+            var occlusion_shape: OccluderPolygon2D
+            
+            if !vertices.empty():
+                var vertices_pool := PoolVector2Array(vertices)
+                
+                if Su.subtile_manifest.forces_convex_collision_shapes or \
+                        Su.subtile_manifest.subtile_collision_margin == 0.0:
+                    collision_shape = ConvexPolygonShape2D.new()
+                    collision_shape.points = vertices_pool
+                else:
+                    collision_shape = ConcavePolygonShape2D.new()
+                    collision_shape.segments = vertices_pool
+                
+                occlusion_shape = OccluderPolygon2D.new()
+                occlusion_shape.polygon = vertices_pool
+            
+            var shapes := [
+                collision_shape,
+                occlusion_shape,
+            ]
+            corner_direction_to_shapes[corner_direction] = shapes
     
-    collision_shapes[corner_direction][corner_type] = collision_shape
-    occlusion_shapes[corner_direction][corner_type] = occlusion_shape
+    return shape_type_to_shapes
 
 
-func _get_shape_vertices_for_quadrant(
-        corner_type: int,
+func _get_shape_vertices(
+        shape_type: int,
         corner_direction: int) -> Array:
-    var points := _get_shape_vertices_for_corner_type_at_top_left(corner_type)
-    assert(points.size() % 2 == 0)
+    var vertices := _get_shape_vertices_for_shape_type_at_top_left(shape_type)
+    assert(vertices.size() % 2 == 0)
     
     # Flip vertically if needed.
     if !CornerDirection.get_is_top(corner_direction):
-        for vertex_index in points.size() / 2:
+        for vertex_index in vertices.size() / 2:
             var coordinate_index: int = vertex_index * 2 + 1
-            points[coordinate_index] = \
-                    Su.subtile_manifest.quadrant_size - points[coordinate_index]
+            vertices[coordinate_index] = \
+                    Su.subtile_manifest.quadrant_size - \
+                    vertices[coordinate_index]
     
     # Flip horizontally if needed.
     if !CornerDirection.get_is_left(corner_direction):
-        for vertex_index in points.size() / 2:
+        for vertex_index in vertices.size() / 2:
             var coordinate_index: int = vertex_index * 2
-            points[coordinate_index] = \
-                    Su.subtile_manifest.quadrant_size - points[coordinate_index]
+            vertices[coordinate_index] = \
+                    Su.subtile_manifest.quadrant_size - \
+                    vertices[coordinate_index]
     
-    return points
+    return vertices
 
 
-func _get_shape_vertices_for_corner_type_at_top_left(corner_type: int) -> Array:
+func _get_shape_vertices_for_shape_type_at_top_left(shape_type: int) -> Array:
     var quadrant_size: int = Su.subtile_manifest.quadrant_size
     var collision_margin: float = Su.subtile_manifest.subtile_collision_margin
     
-    match corner_type:
-        SubtileCorner.EMPTY:
+    match shape_type:
+        QuadrantShapeType.EMPTY:
             return []
-        SubtileCorner.FULLY_INTERIOR:
+        QuadrantShapeType.FULL_SQUARE:
             return [
                 0, 0,
                 quadrant_size, 0,
                 quadrant_size, quadrant_size,
                 0, quadrant_size,
             ]
-        SubtileCorner.ERROR:
-            return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        ### 90-degree.
-        
-        SubtileCorner.EXT_90H:
-            return [
-                0, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        SubtileCorner.EXT_90V:
-            return [
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                collision_margin, quadrant_size,
-            ]
-        SubtileCorner.EXT_90_90_CONVEX:
-            return [
-                collision_margin, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size,
-                collision_margin, quadrant_size,
-            ]
-        SubtileCorner.EXT_90_90_CONCAVE:
+        QuadrantShapeType.CLIPPED_CORNER_90_90:
             return [
                 0, collision_margin,
                 collision_margin, collision_margin,
@@ -145,167 +124,61 @@ func _get_shape_vertices_for_corner_type_at_top_left(corner_type: int) -> Array:
                 quadrant_size, quadrant_size,
                 0, quadrant_size,
             ]
-        
-        SubtileCorner.EXT_INT_90H, \
-        SubtileCorner.EXT_INT_90V, \
-        SubtileCorner.EXT_INT_90_90_CONVEX, \
-        SubtileCorner.EXT_INT_90_90_CONCAVE, \
-        SubtileCorner.INT_90H, \
-        SubtileCorner.INT_90V, \
-        SubtileCorner.INT_90_90_CONVEX, \
-        SubtileCorner.INT_90_90_CONCAVE:
+        QuadrantShapeType.CLIPPED_CORNER_45:
             return [
-                0, 0,
+                0, collision_margin,
+                collision_margin, 0,
                 quadrant_size, 0,
                 quadrant_size, quadrant_size,
                 0, quadrant_size,
             ]
-        
-        ### 45-degree.
-        
-        SubtileCorner.EXT_45_FLOOR:
+        QuadrantShapeType.MARGIN_TOP_90:
+            return [
+                0, collision_margin,
+                quadrant_size, collision_margin,
+                quadrant_size, quadrant_size,
+                0, quadrant_size,
+            ]
+        QuadrantShapeType.MARGIN_SIDE_90:
+            return [
+                collision_margin, 0,
+                quadrant_size, 0,
+                quadrant_size, quadrant_size,
+                collision_margin, quadrant_size,
+            ]
+        QuadrantShapeType.MARGIN_TOP_AND_SIDE_90:
+            return [
+                collision_margin, collision_margin,
+                quadrant_size, collision_margin,
+                quadrant_size, quadrant_size,
+                collision_margin, quadrant_size,
+            ]
+        QuadrantShapeType.FLOOR_45_N:
             return [
                 0, collision_margin,
                 quadrant_size - collision_margin, quadrant_size,
                 0, quadrant_size,
             ]
-        SubtileCorner.EXT_45_CEILING:
+        QuadrantShapeType.CEILING_45_N:
             return [
                 collision_margin, 0,
                 quadrant_size, 0,
                 quadrant_size, quadrant_size - collision_margin,
             ]
-        SubtileCorner.EXT_EXT_45_CLIPPED:
-            return [
-                0, collision_margin,
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        SubtileCorner.EXT_INT_45_FLOOR, \
-        SubtileCorner.EXT_INT_45_CEILING, \
-        SubtileCorner.EXT_INT_45_CLIPPED, \
-        SubtileCorner.INT_EXT_45_CLIPPED, \
-        SubtileCorner.INT_45_FLOOR, \
-        SubtileCorner.INT_45_CEILING, \
-        SubtileCorner.INT_INT_45_CLIPPED:
-            return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        ### 90-to-45-degree.
-        
-        SubtileCorner.EXT_90H_45_CONVEX_ACUTE:
+        QuadrantShapeType.EXT_90H_45_CONVEX_ACUTE:
             return [
                 collision_margin * 2, collision_margin,
                 quadrant_size, collision_margin,
                 quadrant_size, quadrant_size - collision_margin,
             ]
-        SubtileCorner.EXT_90V_45_CONVEX_ACUTE:
+        QuadrantShapeType.EXT_90V_45_CONVEX_ACUTE:
             return [
                 collision_margin, collision_margin * 2,
                 quadrant_size - collision_margin, quadrant_size,
                 collision_margin, quadrant_size,
             ]
-        
-        SubtileCorner.EXT_90H_45_CONVEX:
-            return [
-                0, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        SubtileCorner.EXT_90V_45_CONVEX:
-            return [
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                collision_margin, quadrant_size,
-            ]
-        
-        SubtileCorner.EXT_90H_45_CONCAVE:
-            return [
-                0, collision_margin,
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        SubtileCorner.EXT_90V_45_CONCAVE:
-            return [
-                0, collision_margin,
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        SubtileCorner.EXT_INT_90H_45_CONVEX, \
-        SubtileCorner.EXT_INT_90V_45_CONVEX, \
-        SubtileCorner.EXT_INT_90H_45_CONCAVE, \
-        SubtileCorner.EXT_INT_90V_45_CONCAVE, \
-        SubtileCorner.INT_EXT_90H_45_CONCAVE, \
-        SubtileCorner.INT_EXT_90V_45_CONCAVE, \
-        SubtileCorner.INT_INT_90H_45_CONCAVE, \
-        SubtileCorner.INT_INT_90V_45_CONCAVE:
-            return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        ### Complex 90-45-degree combinations.
-        
-        SubtileCorner.EXT_INT_45_FLOOR_45_CEILING, \
-        SubtileCorner.INT_45_FLOOR_45_CEILING, \
-        SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE, \
-        SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE, \
-        SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE, \
-        SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE, \
-        SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE, \
-        SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE, \
-        SubtileCorner.INT_90H_INT_EXT_45_CLIPPED, \
-        SubtileCorner.INT_90V_INT_EXT_45_CLIPPED, \
-        SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED, \
-        SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-        SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-        SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR, \
-        SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE, \
-        SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR:
-            return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
-        
-        # FIXME: LEFT OFF HERE: -------- A27
-        
-        SubtileCorner.UNKNOWN, \
         _:
-            # FIXME: LEFT OFF HERE: ---------------------
-            # - Translate int to String after moving the translator to manifest.
             Sc.logger.error(
                     "CornerMatchTilesetShapeCalculator" +
-                    "._get_shape_vertices_for_corner_type_at_top_left: %s" % \
-                    corner_type)
-            return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
-            ]
+                    "._get_shape_vertices_for_shape_type_at_top_left")
+            return []
