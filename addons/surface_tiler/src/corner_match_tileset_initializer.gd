@@ -65,8 +65,8 @@ func _initialize_tile(
     if tile_id >= 0:
         # Clear any pre-existing state for this tile.
         tile_set.remove_tile(tile_id)
-    
-    tile_id = tile_set.get_last_unused_tile_id()
+    else:
+        tile_id = tile_set.get_last_unused_tile_id()
     tile_set.create_tile(tile_id)
     
     var quadrants_texture_size: Vector2 = \
