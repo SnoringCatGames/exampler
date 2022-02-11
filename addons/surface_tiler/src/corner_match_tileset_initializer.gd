@@ -106,7 +106,7 @@ func _tile_set_shapes_for_quadrants(
         tile_id: int,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
-    for corner_direction in tile_set.subtile_corner_types:
+    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
         var corner_types_flag_to_position: Dictionary = \
                 tile_set.subtile_corner_types[corner_direction]
         for corner_types_flag in corner_types_flag_to_position:

@@ -2,6 +2,13 @@ class_name TileSetImageParser
 extends Node
 
 
+# FIXME: LEFT OFF HERE: -------------------------------
+# - Refactor this to not use the combined-corner-types-int pattern!
+#   - Why did I ever create this??
+#   - I need to be able to query partial matches.
+# # subtile_corner_types[corner_direction][self_corner_type][h_opp_corner_type][v_opp_corner_type] = (Vector2|Dictionary<SubtileCorner, Dictionary<SubtileCorner, Vector2>>)
+
+
 const ANNOTATION_SIZE := Vector2(4,4)
 
 # This is an int with the first 10 bits set.
@@ -134,6 +141,8 @@ func parse_tile_set_corner_type_annotations(
                     quadrant_size,
                     image,
                     tile_set_corner_type_annotations_path)
+    
+    _validate_quadrants(subtile_corner_types)
     
     image.unlock()
     
@@ -690,6 +699,27 @@ static func _get_quadrant_annotation(
         bits = annotation_bits,
         color = annotation_color.to_rgba64(),
     }
+
+
+func _validate_quadrants(subtile_corner_types: Dictionary) -> void:
+    # Dictionary<CornerDirection, Dictionary<int, Vector2>>
+    pass
+    
+    # FIXME: LEFT OFF HERE: ----------------------
+    # - Check that many corner-types are defined at least once for all four
+    #   corner-directions.
+    # - ERROR
+    # - EMPTY
+    # - FULLY_INTERNAL
+    # - All 90s
+    # - Some basic 45s, if configured to use 45s
+    # - Some basic 27s, if configured to use 27s
+#    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+#        assert(subtile_corner_types[corner_direction].)
+    
+    # FIXME: LEFT OFF HERE: --------------------------------------
+    # - Anything else to validate?
+    # - Check notes...
 
 
 static func _get_log_string(

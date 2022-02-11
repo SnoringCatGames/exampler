@@ -3,7 +3,6 @@ class_name CornerMatchTileset
 extends TileSet
 
 # FIXME: LEFT OFF HERE: --------------------------------------
-#   - TileSetImageParser
 #   - Implement _get_quadrants().
 #     - Return the quadrants with the greatest weight for the given
 #       target_corners.
@@ -16,44 +15,10 @@ extends TileSet
 #   - ...
 
 
-export var tile_set_id := "" setget _set_tile_set_id
-
-
-func _set_tile_set_id(value: String) -> void:
-    tile_set_id = value
-    initialize()
-
-
-func get_is_ready() -> bool:
-    return tile_set_id != ""
-
-
-# FIXME: LEFT OFF HERE: -------------------------
-# - Do initializing stuff here?
-# - Use tile_set_id to connect this resource with the manifest config.
-func initialize() -> void:
-    if !get_is_ready():
-        return
-    pass
-
-# A mapping from pixel-color to pixel-bit-flag to corner-type.
-# Dictionary<int, Dictionary<int, SubtileCorner>>
-var corner_type_annotation_key: Dictionary
-
 # A mapping from CornerDirection to combined-corner-types-flag to quadrant
 # position.
 # Dictionary<CornerDirection, Dictionary<int, Vector2>>
 var subtile_corner_types: Dictionary
-
-
-
-#    var corner_types_flag: int = Su.subtile_manifest.tile_set_image_parser \
-#            .get_flag_from_corner_types(
-#                self_corner_type,
-#                h_opp_corner_type,
-#                v_opp_corner_type,
-#                h_inbound_corner_type,
-#                v_inbound_corner_type)
 
 
 
@@ -158,7 +123,7 @@ var _ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 2.0
 #     Dictionary<
 #         SubtileCorner,
 #         Dictionary<Vector2, SubtileConfig>>>
-var _corner_to_type_to_subtiles: Dictionary
+var _corner_direction_to_type_to_subtiles: Dictionary
 
 var _error_indicator_subtile_position: Vector2
 
@@ -221,7 +186,7 @@ func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
     # Create the nested dictionary structure for holding the subtile manifest.
     for corner in CornerDirection.OUTBOUND_CORNERS:
         var type_to_subtiles := {}
-        _corner_to_type_to_subtiles[corner] = type_to_subtiles
+        _corner_direction_to_type_to_subtiles[corner] = type_to_subtiles
         for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
             if corner_type != SubtileCorner.UNKNOWN and \
                     corner_type != SubtileCorner.ERROR:
@@ -275,7 +240,7 @@ func _parse_subtiles_manifest(subtiles_manifest: Dictionary) -> void:
             assert(corner_type is int and corner_type != SubtileCorner.UNKNOWN)
             if corner_type != SubtileCorner.UNKNOWN and \
                     corner_type != SubtileCorner.ERROR:
-                _corner_to_type_to_subtiles[corner][corner_type][position] = \
+                _corner_direction_to_type_to_subtiles[corner][corner_type][position] = \
                         subtile_config
                 was_a_corner_interesting = true
         assert(was_a_corner_interesting)
@@ -401,7 +366,7 @@ func _choose_subtile(proximity: CellProximity) -> Vector2:
     for corner in CornerDirection.OUTBOUND_CORNERS:
         var corner_type: int = target_corners[corner]
         corner_to_matches[corner] = \
-                _corner_to_type_to_subtiles[corner][corner_type]
+                _corner_direction_to_type_to_subtiles[corner][corner_type]
     
     # FIXME: LEFT OFF HERE: ---------------------------
     # - As an efficiency step, first check if the pre-existing cell in the
