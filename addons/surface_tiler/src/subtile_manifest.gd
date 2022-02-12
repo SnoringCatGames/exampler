@@ -9,6 +9,52 @@ extends Node
 # - Configuring z-index
 
 
+# NOTE:
+# -   This mapping enables us to match one corner type with another.
+# -   Defining a value as negative will configure it as a valid match, but with
+#     a lower-priority than a positive value.
+# -   This maps from an expected target corner type to what is actually
+#     configured in the given tile-set.
+# FIXME: LEFT OFF HERE: -----------------------------------------
+# - Is there a simpler way to allow the tile-set author to configure which
+#   slopes are allowed to transition into which others?
+const _FALLBACK_CORNER_TYPE_MATCHES := {
+    # FIXME: LEFT OFF HERE: ------------------
+    # FIXME: LEFT OFF HERE: ------------------
+    # FIXME: LEFT OFF HERE: ------------------
+#    SubtileCorner.EMPTY: [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE, SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE],
+#
+#    SubtileCorner.EXT_90_90_CONVEX: [SubtileCorner.EMPTY],
+#
+#    SubtileCorner.EXT_CLIPPED_90_90: [-SubtileCorner.EXT_CLIPPED_45_45],
+#
+#    SubtileCorner.EXT_45_FLOOR_TO_90: [-SubtileCorner.EXT_45_FLOOR],
+#    SubtileCorner.EXT_45_FLOOR_TO_45_CONVEX: [-SubtileCorner.EXT_45_FLOOR],
+#    SubtileCorner.EXT_45_CEILING_TO_90: [-SubtileCorner.EXT_45_CEILING],
+#    SubtileCorner.EXT_45_CEILING_TO_45_CONVEX: [-SubtileCorner.EXT_45_CEILING],
+#
+#
+#    SubtileCorner.EXT_CLIPPED_27_SHALLOW: [-SubtileCorner.EXT_CLIPPED_45_45],
+#    SubtileCorner.EXT_CLIPPED_27_STEEP: [-SubtileCorner.EXT_CLIPPED_45_45],
+#    SubtileCorner.EXT_27_FLOOR_SHALLOW_CLOSE: [-SubtileCorner.EXT_90H],
+#    SubtileCorner.EXT_27_FLOOR_STEEP_CLOSE: [-SubtileCorner.EXT_90V],
+#
+#
+#    SubtileCorner.EXT_27_CEILING_SHALLOW_CLOSE: [-SubtileCorner.EXT_90H],
+#    SubtileCorner.EXT_27_CEILING_STEEP_CLOSE: [-SubtileCorner.EXT_90V],
+#
+#
+#    SubtileCorner.EXT_CLIPPED_90H_45: [-SubtileCorner.EXT_CLIPPED_45_45],
+#    SubtileCorner.EXT_CLIPPED_90V_45: [-SubtileCorner.EXT_CLIPPED_45_45],
+#    SubtileCorner.EXT_90H_TO_45_CONVEX: [-SubtileCorner.EXT_90H],
+#    SubtileCorner.EXT_90V_TO_45_CONVEX: [-SubtileCorner.EXT_90V],
+#    SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE: [SubtileCorner.EMPTY, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE],
+#    SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE: [SubtileCorner.EMPTY, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE],
+}
+
+# FIXME: LEFT OFF HERE: --------------------------------
+var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 2.0
+
 ###
 
 # Dictionary<int, String>
@@ -16,7 +62,27 @@ var SUBTILE_CORNER_TYPE_VALUE_TO_KEY: Dictionary
 
 var autotile_name_prefix: String
 var forces_convex_collision_shapes: bool
+
+# -   If true, the autotiling logic will try to find the best match given which
+#     subtiles are available.
+#     -   The tile-set author can then omit many of the possible subtile angle
+#         combinations.
+#     -   This may impact performance if many tiles are updated frequently at
+#         run time.
+# -   If false, the autotiling logic will assume all possible subtile angle
+#         combinations are defined.
+#     -   The tile-set author then needs to draw, and configure in GDScript,
+#         many more subtile angle combinations.
+#     -   Only exact matches will be used.
+#     -   If an exact match isn't defined, then a single given fallback
+#         error-indicator subtile will be used.
+#     -   The level author can then see the error-indicator subtile and change
+#         their level topography to instead use whichever subtiles are
+#         available.
 var allows_partial_matches: bool
+
+# -   If false, then custom corner-match autotiling behavior will not happen at
+#     runtime, and will only happen when editing within the scene editor.
 var supports_runtime_autotiling: bool
 
 var corner_type_annotation_key_path: String
@@ -54,6 +120,10 @@ func register_manifest(manifest: Dictionary) -> void:
             manifest.corner_type_annotation_key_path
     
     _parse_subtile_corner_key_values()
+    
+    if !supports_runtime_autotiling and \
+            Engine.editor_hint:
+        return
     
     if manifest.has("tile_set_image_parser_class"):
         self.tile_set_image_parser = manifest.tile_set_image_parser_class.new()
@@ -100,9 +170,7 @@ func register_manifest(manifest: Dictionary) -> void:
     
     _parse_corner_types_to_swap_for_bottom_quadrants(manifest)
     
-    if !supports_runtime_autotiling and \
-            Engine.editor_hint:
-        return
+    _parse_fallback_corner_type_matches()
     
     for tile_set_config in tile_set_configs:
         initializer.initialize_tileset(tile_set_config)
@@ -144,3 +212,24 @@ func _parse_subtile_corner_key_values() -> void:
 
 func get_subtile_corner_string(type: int) -> String:
     return SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]
+
+
+func _parse_fallback_corner_type_matches() -> void:
+    # If the additional matching type map is a const and has already been
+    # parsed, then skip it.
+    if fallback_corner_type_matches.empty():
+        # Check that the corner-type enum values match the
+        # corner-type-to-matching-types map.
+        assert(Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
+                _FALLBACK_CORNER_TYPE_MATCHES.size())
+        for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+            assert(_FALLBACK_CORNER_TYPE_MATCHES.has(corner_type))
+            assert(_FALLBACK_CORNER_TYPE_MATCHES[corner_type] is Array)
+        
+        # Convert additional-matching arrays into sets.
+        for corner_type in _FALLBACK_CORNER_TYPE_MATCHES:
+            var list: Array = _FALLBACK_CORNER_TYPE_MATCHES[corner_type]
+            var set := {}
+            for matching_type in list:
+                set[matching_type] = true
+            fallback_corner_type_matches[corner_type] = set
