@@ -115,24 +115,36 @@ func _tile_set_shapes_for_quadrants(
         tile_id: int,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
-    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
-        var corner_types_flag_to_position: Dictionary = \
+    for corner_direction in tile_set.subtile_corner_types:
+        var self_corner_type_map: Dictionary = \
                 tile_set.subtile_corner_types[corner_direction]
-        for corner_types_flag in corner_types_flag_to_position:
-            var quadrant_position: Vector2 = \
-                    corner_types_flag_to_position[corner_types_flag]
-            # FIXME: LEFT OFF HERE: ----------------------------
-            var corner_type: int = Su.subtile_manifest.tile_set_image_parser \
-                    .get_corner_types_from_flag(corner_types_flag) \
-                    .self_corner_type
-            _set_shapes_for_quadrant(
-                    tile_set,
-                    tile_id,
-                    quadrant_position,
-                    corner_type,
-                    corner_direction,
-                    collision_shapes,
-                    occlusion_shapes)
+        for self_corner_type in self_corner_type_map:
+            var h_opp_corner_type_map: Dictionary = \
+                    self_corner_type_map[self_corner_type]
+            for v_opp_corner_type_map in h_opp_corner_type_map.values():
+                for position_or_h_inbound_corner_type_map in \
+                        v_opp_corner_type_map.values():
+                    if position_or_h_inbound_corner_type_map is Vector2:
+                        _set_shapes_for_quadrant(
+                                tile_set,
+                                tile_id,
+                                position_or_h_inbound_corner_type_map,
+                                self_corner_type,
+                                corner_direction,
+                                collision_shapes,
+                                occlusion_shapes)
+                    else:
+                        for v_inbound_corner_type_map in \
+                                position_or_h_inbound_corner_type_map.values():
+                            for position in v_inbound_corner_type_map.values():
+                                _set_shapes_for_quadrant(
+                                        tile_set,
+                                        tile_id,
+                                        position,
+                                        self_corner_type,
+                                        corner_direction,
+                                        collision_shapes,
+                                        occlusion_shapes)
 
 
 func _set_shapes_for_quadrant(

@@ -15,9 +15,20 @@ extends TileSet
 #   - ...
 
 
-# A mapping from CornerDirection to combined-corner-types-flag to quadrant
-# position.
-# Dictionary<CornerDirection, Dictionary<int, Vector2>>
+# Dictionary<
+#   CornerDirection,
+#   Dictionary<
+#     SubtileCorner, # Self-corner
+#     Dictionary<
+#       SubtileCorner, # H-opp-corner
+#       Dictionary<
+#         SubtileCorner, # V-opp-corner
+#         (Vector2|
+#         Dictionary<
+#           SubtileCorner, # H-inbound-corner
+#           Dictionary<
+#             SubtileCorner, # V-inbound-corner
+#             Vector2>>)>>>>
 var subtile_corner_types: Dictionary
 
 

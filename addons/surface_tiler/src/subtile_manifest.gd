@@ -38,7 +38,7 @@ var corner_types_to_swap_for_bottom_quadrants: Dictionary
 #   are_45_degree_subtiles_used: bool,
 #   are_27_degree_subtiles_used: bool,
 # }>
-var tile_set_configs := []
+var tile_set_configs: Array
 
 ###
 
@@ -87,18 +87,16 @@ func register_manifest(manifest: Dictionary) -> void:
     self.add_child(initializer)
     
     assert(manifest.tile_sets is Array)
+    self.tile_set_configs = manifest.tile_sets
     for tile_set_config in manifest.tile_sets:
         assert(tile_set_config.tile_set is CornerMatchTileset)
-        self.tile_set_configs.push_back({
-            tile_set = manifest.tile_set,
-            tile_set_quadrants_path = manifest.tile_set_quadrants_path,
-            tile_set_corner_type_annotations_path = \
-                manifest.tile_set_corner_type_annotations_path,
-            quadrant_size = manifest.quadrant_size,
-            subtile_collision_margin = manifest.subtile_collision_margin,
-            are_45_degree_subtiles_used = manifest.are_45_degree_subtiles_used,
-            are_27_degree_subtiles_used = manifest.are_27_degree_subtiles_used,
-        })
+        assert(tile_set_config.tile_set_quadrants_path is String)
+        assert(tile_set_config.tile_set_corner_type_annotations_path is String)
+        assert(tile_set_config.quadrant_size is int)
+        assert(tile_set_config.subtile_collision_margin is float or \
+                tile_set_config.subtile_collision_margin is int)
+        assert(tile_set_config.are_45_degree_subtiles_used is bool)
+        assert(tile_set_config.are_27_degree_subtiles_used is bool)
     
     _parse_corner_types_to_swap_for_bottom_quadrants(manifest)
     
