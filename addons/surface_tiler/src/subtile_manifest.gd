@@ -92,6 +92,9 @@ var subtile_target_corner_calculator: SubtileTargetCornerCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
 var initializer: CornerMatchTilesetInitializer
 
+# Dictionary<SubtileCorner, Dictionary<SubtileCorner, bool>>
+var fallback_corner_type_matches := {}
+
 # Dictionary<int, int>
 var corner_types_to_swap_for_bottom_quadrants: Dictionary
 

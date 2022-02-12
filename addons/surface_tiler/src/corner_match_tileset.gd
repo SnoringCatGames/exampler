@@ -32,9 +32,6 @@ extends TileSet
 #             Vector2>>)>>>>
 var subtile_corner_types: Dictionary
 
-# Dictionary<SubtileCorner, Dictionary<SubtileCorner, bool>>
-var fallback_corner_type_matches := {}
-
 
 func _forward_subtile_selection(
         tile_id: int,
