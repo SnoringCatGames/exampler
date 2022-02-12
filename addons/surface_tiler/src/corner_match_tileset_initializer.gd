@@ -3,21 +3,25 @@ class_name CornerMatchTilesetInitializer
 extends Node
 
 
-func initialize_tiles(tile_set: CornerMatchTileset) -> void:
+func initialize_tileset(tile_set_config: Dictionary) -> void:
+    var tile_set: CornerMatchTileset = tile_set_config.tile_set
+    tile_set_config.tile_set_quadrants_texture = \
+            load(tile_set_config.tile_set_quadrants_path)
+    
     var corner_type_annotation_key: Dictionary = \
             Su.subtile_manifest.tile_set_image_parser \
                 .parse_corner_type_annotation_key(
                     Su.subtile_manifest.corner_type_annotation_key_path,
-                    Su.subtile_manifest.quadrant_size)
+                    tile_set_config.quadrant_size)
     tile_set.subtile_corner_types = Su.subtile_manifest.tile_set_image_parser \
             .parse_tile_set_corner_type_annotations(
                 corner_type_annotation_key,
                 Su.subtile_manifest.corner_types_to_swap_for_bottom_quadrants,
-                Su.subtile_manifest.tile_set_corner_type_annotations_path,
-                Su.subtile_manifest.quadrant_size)
+                tile_set_config.tile_set_corner_type_annotations_path,
+                tile_set_config.quadrant_size)
     
-    var shapes: Dictionary = \
-            Su.subtile_manifest.shape_calculator.create_tileset_shapes()
+    var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
+            .create_tileset_shapes(tile_set_config)
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
     var collision_shapes: Dictionary = shapes.collision_shapes
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
@@ -27,26 +31,30 @@ func initialize_tiles(tile_set: CornerMatchTileset) -> void:
             tile_set,
             CellAngleType.A90,
             collision_shapes,
-            occlusion_shapes)
-    if Su.subtile_manifest.are_45_degree_subtiles_used:
+            occlusion_shapes,
+            tile_set_config)
+    if tile_set_config.are_45_degree_subtiles_used:
         _initialize_tile(
                 tile_set,
                 CellAngleType.A45,
                 collision_shapes,
-                occlusion_shapes)
-    if Su.subtile_manifest.are_27_degree_subtiles_used:
+                occlusion_shapes,
+                tile_set_config)
+    if tile_set_config.are_27_degree_subtiles_used:
         _initialize_tile(
                 tile_set,
                 CellAngleType.A27,
                 collision_shapes,
-                occlusion_shapes)
+                occlusion_shapes,
+                tile_set_config)
 
 
 func _initialize_tile(
         tile_set: CornerMatchTileset,
         angle_type: int,
         collision_shapes: Dictionary,
-        occlusion_shapes: Dictionary) -> void:
+        occlusion_shapes: Dictionary,
+        tile_set_config: Dictionary) -> void:
     var tile_name_suffix: String
     match angle_type:
         CellAngleType.A90:
@@ -70,14 +78,15 @@ func _initialize_tile(
     tile_set.create_tile(tile_id)
     
     var quadrants_texture_size: Vector2 = \
-            Su.subtile_manifest.tile_set_quadrants_texture.get_size()
+            tile_set_config.tile_set_quadrants_texture.get_size()
     var tile_region := Rect2(Vector2.ZERO, quadrants_texture_size)
     
     var subtile_size: Vector2 = \
-            Vector2.ONE * Su.subtile_manifest.quadrant_size * 2
+            Vector2.ONE * tile_set_config.quadrant_size * 2
     
     tile_set.tile_set_name(tile_id, tile_name)
-    tile_set.tile_set_texture(tile_id, Su.subtile_manifest.tile_set_quadrants_texture)
+    tile_set.tile_set_texture(tile_id, \
+            tile_set_config.tile_set_quadrants_texture)
     tile_set.tile_set_region(tile_id, tile_region)
     tile_set.tile_set_tile_mode(tile_id, TileSet.AUTO_TILE)
     tile_set.autotile_set_size(tile_id, subtile_size)
@@ -112,6 +121,7 @@ func _tile_set_shapes_for_quadrants(
         for corner_types_flag in corner_types_flag_to_position:
             var quadrant_position: Vector2 = \
                     corner_types_flag_to_position[corner_types_flag]
+            # FIXME: LEFT OFF HERE: ----------------------------
             var corner_type: int = Su.subtile_manifest.tile_set_image_parser \
                     .get_corner_types_from_flag(corner_types_flag) \
                     .self_corner_type

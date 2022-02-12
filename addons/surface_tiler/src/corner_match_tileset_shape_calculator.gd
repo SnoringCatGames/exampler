@@ -3,14 +3,14 @@ class_name CornerMatchTilesetShapeCalculator
 extends Node
 
 
-func create_tileset_shapes() -> Dictionary:
+func create_tileset_shapes(tile_set_config: Dictionary) -> Dictionary:
     # Use this to memoize and dedup shape instances.
     # Dictionary<
     #   QuadrantShapeType,
     #   Dictionary<
     #     CornerDirection,
     #     [Shape2D, OccluderPolygon2D]>>
-    var shape_type_to_shapes := _create_shape_type_to_shapes()
+    var shape_type_to_shapes := _create_shape_type_to_shapes(tile_set_config)
     
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
     var collision_shapes := {}
@@ -40,7 +40,7 @@ func create_tileset_shapes() -> Dictionary:
 #     Dictionary<
 #       SubtileCorner,
 #       [Array<Vector2>, Shape2D, OccluderPolygon2D]>>>
-func _create_shape_type_to_shapes() -> Dictionary:
+func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
     var shape_type_to_shapes := {}
     
     for shape_type in QuadrantShapeType.VALUES:
@@ -48,7 +48,10 @@ func _create_shape_type_to_shapes() -> Dictionary:
         shape_type_to_shapes[shape_type] = corner_direction_to_shapes
         
         for corner_direction in CornerDirection.OUTBOUND_CORNERS:
-            var vertices := _get_shape_vertices(shape_type, corner_direction)
+            var vertices := _get_shape_vertices(
+                    shape_type,
+                    corner_direction,
+                    tile_set_config)
             
             var collision_shape: Shape2D
             var occlusion_shape: OccluderPolygon2D
@@ -57,7 +60,7 @@ func _create_shape_type_to_shapes() -> Dictionary:
                 var vertices_pool := PoolVector2Array(vertices)
                 
                 if Su.subtile_manifest.forces_convex_collision_shapes or \
-                        Su.subtile_manifest.subtile_collision_margin == 0.0:
+                        tile_set_config.subtile_collision_margin == 0.0:
                     collision_shape = ConvexPolygonShape2D.new()
                     collision_shape.points = vertices_pool
                 else:
@@ -78,8 +81,11 @@ func _create_shape_type_to_shapes() -> Dictionary:
 
 func _get_shape_vertices(
         shape_type: int,
-        corner_direction: int) -> Array:
-    var vertices := _get_shape_vertices_for_shape_type_at_top_left(shape_type)
+        corner_direction: int,
+        tile_set_config: Dictionary) -> Array:
+    var vertices := _get_shape_vertices_for_shape_type_at_top_left(
+            shape_type,
+            tile_set_config)
     assert(vertices.size() % 2 == 0)
     
     # Flip vertically if needed.
@@ -87,7 +93,7 @@ func _get_shape_vertices(
         for vertex_index in vertices.size() / 2:
             var coordinate_index: int = vertex_index * 2 + 1
             vertices[coordinate_index] = \
-                    Su.subtile_manifest.quadrant_size - \
+                    tile_set_config.quadrant_size - \
                     vertices[coordinate_index]
     
     # Flip horizontally if needed.
@@ -95,15 +101,17 @@ func _get_shape_vertices(
         for vertex_index in vertices.size() / 2:
             var coordinate_index: int = vertex_index * 2
             vertices[coordinate_index] = \
-                    Su.subtile_manifest.quadrant_size - \
+                    tile_set_config.quadrant_size - \
                     vertices[coordinate_index]
     
     return vertices
 
 
-func _get_shape_vertices_for_shape_type_at_top_left(shape_type: int) -> Array:
-    var quadrant_size: int = Su.subtile_manifest.quadrant_size
-    var collision_margin: float = Su.subtile_manifest.subtile_collision_margin
+func _get_shape_vertices_for_shape_type_at_top_left(
+        shape_type: int,
+        tile_set_config: Dictionary) -> Array:
+    var quadrant_size: int = tile_set_config.quadrant_size
+    var collision_margin: float = tile_set_config.subtile_collision_margin
     
     match shape_type:
         QuadrantShapeType.EMPTY:

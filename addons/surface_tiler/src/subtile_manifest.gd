@@ -14,41 +14,37 @@ extends Node
 # Dictionary<int, String>
 var SUBTILE_CORNER_TYPE_VALUE_TO_KEY: Dictionary
 
-var quadrant_size: int
-var subtile_collision_margin: float
 var autotile_name_prefix: String
-var are_45_degree_subtiles_used: bool
-var are_27_degree_subtiles_used: bool
 var forces_convex_collision_shapes: bool
 var allows_partial_matches: bool
 var supports_runtime_autotiling: bool
 
 var corner_type_annotation_key_path: String
-var tile_set_quadrants_path: String
-var tile_set_corner_type_annotations_path: String
 
-var tile_set: CornerMatchTileset
 var tile_set_image_parser: TileSetImageParser
 var subtile_target_corner_calculator: SubtileTargetCornerCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
 var initializer: CornerMatchTilesetInitializer
 
-var corner_type_annotation_key_texture: Texture
-var tile_set_quadrants_texture: Texture
-var tile_set_corner_type_annotations_texture: Texture
-
 # Dictionary<int, int>
 var corner_types_to_swap_for_bottom_quadrants: Dictionary
+
+# Array<{
+#   tile_set: CornerMatchTileset,
+#   tile_set_quadrants_path: String,
+#   tile_set_corner_type_annotations_path: String,
+#   quadrant_size: int,
+#   subtile_collision_margin: float,
+#   are_45_degree_subtiles_used: bool,
+#   are_27_degree_subtiles_used: bool,
+# }>
+var tile_set_configs := []
 
 ###
 
 
 func register_manifest(manifest: Dictionary) -> void:
-    self.quadrant_size = manifest.quadrant_size
-    self.subtile_collision_margin = manifest.subtile_collision_margin
     self.autotile_name_prefix = manifest.autotile_name_prefix
-    self.are_45_degree_subtiles_used = manifest.are_45_degree_subtiles_used
-    self.are_27_degree_subtiles_used = manifest.are_27_degree_subtiles_used
     self.forces_convex_collision_shapes = \
             manifest.forces_convex_collision_shapes
     self.allows_partial_matches = manifest.allows_partial_matches
@@ -56,13 +52,6 @@ func register_manifest(manifest: Dictionary) -> void:
     
     self.corner_type_annotation_key_path = \
             manifest.corner_type_annotation_key_path
-    self.tile_set_quadrants_path = \
-            manifest.tile_set_quadrants_path
-    self.tile_set_corner_type_annotations_path = \
-            manifest.tile_set_corner_type_annotations_path
-    
-    assert(manifest.tile_set is CornerMatchTileset)
-    self.tile_set = manifest.tile_set
     
     _parse_subtile_corner_key_values()
     
@@ -97,19 +86,28 @@ func register_manifest(manifest: Dictionary) -> void:
         self.initializer = CornerMatchTilesetInitializer.new()
     self.add_child(initializer)
     
+    assert(manifest.tile_sets is Array)
+    for tile_set_config in manifest.tile_sets:
+        assert(tile_set_config.tile_set is CornerMatchTileset)
+        self.tile_set_configs.push_back({
+            tile_set = manifest.tile_set,
+            tile_set_quadrants_path = manifest.tile_set_quadrants_path,
+            tile_set_corner_type_annotations_path = \
+                manifest.tile_set_corner_type_annotations_path,
+            quadrant_size = manifest.quadrant_size,
+            subtile_collision_margin = manifest.subtile_collision_margin,
+            are_45_degree_subtiles_used = manifest.are_45_degree_subtiles_used,
+            are_27_degree_subtiles_used = manifest.are_27_degree_subtiles_used,
+        })
+    
     _parse_corner_types_to_swap_for_bottom_quadrants(manifest)
     
     if !supports_runtime_autotiling and \
             Engine.editor_hint:
         return
     
-    self.corner_type_annotation_key_texture = \
-            load(corner_type_annotation_key_path)
-    self.tile_set_quadrants_texture = load(tile_set_quadrants_path)
-    self.tile_set_corner_type_annotations_texture = \
-            load(tile_set_corner_type_annotations_path)
-    
-    initializer.initialize_tiles(tile_set)
+    for tile_set_config in tile_set_configs:
+        initializer.initialize_tileset(tile_set_config)
 
 
 func _parse_corner_types_to_swap_for_bottom_quadrants(

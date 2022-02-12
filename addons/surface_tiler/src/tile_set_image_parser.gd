@@ -97,12 +97,20 @@ func parse_corner_type_annotation_key(
     return corner_type_annotation_key
 
 
-# -   Returns a mapping from CornerDirection to a combined-corner-types-int to
-#     quadrant position.
-# -   The combined-corner-types-int is calculated as follows:
-#         self-corner | h-opp-corner << 10 | v-opp-corner << 20 | \
-#             h-inbound-corner << 30 | v-inbound-corner << 40
-# Dictionary<CornerDirection, Dictionary<int, Vector2>>
+# Dictionary<
+#   CornerDirection,
+#   Dictionary<
+#     SubtileCorner, # Self-corner
+#     Dictionary<
+#       SubtileCorner, # H-opp-corner
+#       Dictionary<
+#         SubtileCorner, # V-opp-corner
+#         (Vector2|
+#         Dictionary<
+#           SubtileCorner, # H-inbound-corner
+#           Dictionary<
+#             SubtileCorner, # V-inbound-corner
+#             Vector2>>)>>>>
 func parse_tile_set_corner_type_annotations(
         corner_type_annotation_key: Dictionary,
         corner_types_to_swap_for_bottom_quadrants: Dictionary,
@@ -147,29 +155,6 @@ func parse_tile_set_corner_type_annotations(
     image.unlock()
     
     return subtile_corner_types
-
-
-func get_flag_from_corner_types(
-        self_corner_type: int,
-        h_opp_corner_type: int,
-        v_opp_corner_type: int,
-        h_inbound_corner_type: int,
-        v_inbound_corner_type: int) -> int:
-    return self_corner_type | \
-            h_opp_corner_type << 10 | \
-            v_opp_corner_type << 20 | \
-            h_inbound_corner_type << 30 | \
-            v_inbound_corner_type << 40
-
-
-func get_corner_types_from_flag(corner_types_flag: int) -> Dictionary:
-    return {
-        self_corner_type = corner_types_flag & _CORNER_TYPE_BIT_MASK,
-        h_opp_corner_type = corner_types_flag >> 10 & _CORNER_TYPE_BIT_MASK,
-        v_opp_corner_type = corner_types_flag >> 20 & _CORNER_TYPE_BIT_MASK,
-        h_inbound_corner_type = corner_types_flag >> 30 & _CORNER_TYPE_BIT_MASK,
-        v_inbound_corner_type = corner_types_flag >> 40 & _CORNER_TYPE_BIT_MASK,
-    }
 
 
 func _parse_corner_type_annotation(
@@ -472,39 +457,112 @@ func _parse_corner_type_annotation(
                 corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_BR_B)
     
-    var tl_corner_types_flag := get_flag_from_corner_types(
+    _record_autotile_coord(
+            subtile_corner_types,
+            tl_quadrant_position / quadrant_size,
             tl_corner_type,
             tr_corner_type,
             bl_corner_type,
             tl_h_inbound_corner_type,
             tl_v_inbound_corner_type)
-    var tr_corner_types_flag := get_flag_from_corner_types(
+    _record_autotile_coord(
+            subtile_corner_types,
+            tr_quadrant_position / quadrant_size,
             tr_corner_type,
             tl_corner_type,
             br_corner_type,
             tr_h_inbound_corner_type,
             tr_v_inbound_corner_type)
-    var bl_corner_types_flag := get_flag_from_corner_types(
+    _record_autotile_coord(
+            subtile_corner_types,
+            bl_quadrant_position / quadrant_size,
             bl_corner_type,
             br_corner_type,
             tl_corner_type,
             bl_h_inbound_corner_type,
             bl_v_inbound_corner_type)
-    var br_corner_types_flag := get_flag_from_corner_types(
+    _record_autotile_coord(
+            subtile_corner_types,
+            br_quadrant_position / quadrant_size,
             br_corner_type,
             bl_corner_type,
             tr_corner_type,
             br_h_inbound_corner_type,
             br_v_inbound_corner_type)
+
+
+static func _record_autotile_coord(
+        subtile_corner_types: Dictionary,
+        autotile_coord: Vector2,
+        self_corner_type: int,
+        h_opp_corner_type: int,
+        v_opp_corner_type: int,
+        h_inbound_corner_type: int,
+        v_inbound_corner_type: int) -> void:
+    var includes_inbound := \
+            h_inbound_corner_type != SubtileCorner.UNKNOWN or \
+            v_inbound_corner_type != SubtileCorner.UNKNOWN
     
-    subtile_corner_types[CornerDirection.TOP_LEFT][tl_corner_types_flag] = \
-            tl_quadrant_position / quadrant_size
-    subtile_corner_types[CornerDirection.TOP_RIGHT][tr_corner_types_flag] = \
-            tr_quadrant_position / quadrant_size
-    subtile_corner_types[CornerDirection.BOTTOM_LEFT][bl_corner_types_flag] = \
-            bl_quadrant_position / quadrant_size
-    subtile_corner_types[CornerDirection.BOTTOM_RIGHT][br_corner_types_flag] = \
-            br_quadrant_position / quadrant_size
+    # CornerDirection mapping.
+    var map: Dictionary = subtile_corner_types[CornerDirection.TOP_LEFT]
+    
+    # Self corner-type mapping.
+    if !map.has(self_corner_type):
+        map[self_corner_type] = {}
+    map = map[self_corner_type]
+    
+    # H-opp corner-type mapping.
+    if !map.has(h_opp_corner_type):
+        map[h_opp_corner_type] = {}
+    map = map[h_opp_corner_type]
+    
+    if includes_inbound:
+        if !map.has(v_opp_corner_type):
+            # There was no previous mapping for the v-opp corner-type.
+            map[v_opp_corner_type] = {}
+            
+        elif map[v_opp_corner_type] is Vector2:
+            # There was a Vector2 value mapped for the v-opp corner-type.
+            var previous_position: Vector2 = map[v_opp_corner_type]
+            
+            # V-opp corner-type mapping (for the previous value).
+            map[v_opp_corner_type] = {}
+            var new_map = map[v_opp_corner_type]
+            
+            # H-inbound corner-type mapping (for the previous value).
+            if !new_map.has(SubtileCorner.UNKNOWN):
+                new_map[SubtileCorner.UNKNOWN] = {}
+            new_map = new_map[SubtileCorner.UNKNOWN]
+            
+            new_map[SubtileCorner.UNKNOWN] = previous_position
+        
+        # V-opp corner-type mapping.
+        map = map[v_opp_corner_type]
+        
+        # H-inbound corner-type mapping.
+        if !map.has(h_inbound_corner_type):
+            map[h_inbound_corner_type] = {}
+        map = map[h_inbound_corner_type]
+        
+        map[v_inbound_corner_type] = autotile_coord
+        
+    else:
+        if map.has(v_opp_corner_type) and \
+                map[v_opp_corner_type] is Dictionary:
+            # There was a Dictionary value (inbound-corner-types) mapped for
+            # the v-opp corner-type.
+            
+            # V-opp corner-type mapping.
+            map = map[v_opp_corner_type]
+            
+            # H-inbound corner-type mapping.
+            if !map.has(SubtileCorner.UNKNOWN):
+                map[SubtileCorner.UNKNOWN] = {}
+            map = map[SubtileCorner.UNKNOWN]
+            
+            map[SubtileCorner.UNKNOWN] = autotile_coord
+        else:
+            map[v_opp_corner_type] = autotile_coord
 
 
 static func _get_corner_type_from_annotation(
@@ -701,7 +759,7 @@ static func _get_quadrant_annotation(
     }
 
 
-func _validate_quadrants(subtile_corner_types: Dictionary) -> void:
+static func _validate_quadrants(subtile_corner_types: Dictionary) -> void:
     # Dictionary<CornerDirection, Dictionary<int, Vector2>>
     pass
     
