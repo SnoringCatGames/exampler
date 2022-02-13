@@ -133,16 +133,19 @@ func _get_best_quadrant_match(
         var best_fallback_position := Vector2.INF
         var best_fallback_weight := -INF
         
-        for fallback_corner_type in \
+        for fallback_corner_type_and_weight in \
                 FallbackSubtileCornerMatches.MATCHES[corner_type]:
+            var fallback_corner_type: int = fallback_corner_type_and_weight[0]
+            var fallback_corner_weight_multiplier: float = \
+                    fallback_corner_type_and_weight[1]
+            
             if corner_type_map_or_position.has(fallback_corner_type):
                 # There is a quadrant configured for this fallback corner-type.
                 
                 var fallback_corner_type_map_or_position = \
                         corner_type_map_or_position[fallback_corner_type]
-                # FIXME: LEFT OFF HERE: ---------------------------------
-                # - Scale the weight according to the fallback configuration.
-                weight += current_weight_contribution
+                weight += current_weight_contribution * \
+                        fallback_corner_weight_multiplier
                 
                 if fallback_corner_type_map_or_position is Vector2:
                     # Base case: We found a position.
