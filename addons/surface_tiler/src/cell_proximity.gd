@@ -109,7 +109,14 @@ func to_string() -> String:
     for i in range(0, neighbors_presence.size(), 2):
         if neighbors_presence[i + 1]:
             neighbors.push_back(neighbors_presence[i])
-    return "CellProximity(p=%s, neighbors=%s)" % [
+    return (
+        "CellProximity(" +
+        "world_position=%s, " +
+        "grid_position=%s, " +
+        "neighbors=%s)"
+    ) % [
+        Sc.utils.get_vector_string(
+                Sc.geometry.tile_map_to_world(position, tile_map), 2),
         Sc.utils.get_vector_string(position, 0),
         Sc.utils.join(neighbors),
     ]

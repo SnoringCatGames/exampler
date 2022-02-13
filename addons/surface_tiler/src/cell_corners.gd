@@ -85,7 +85,7 @@ func to_string() -> String:
             var corner_type: int = get_corner_type(corner_direction)
             var corner_direction_string := \
                     CornerDirection.get_string(corner_direction)
-            var corner_type_string := \
+            var corner_type_string: String = \
                     Su.subtile_manifest.get_subtile_corner_string(corner_type)
             corner_strings.push_back("%s=%s" % [
                     corner_direction_string,
