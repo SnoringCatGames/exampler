@@ -76,20 +76,22 @@ func _init(proximity: CellProximity) -> void:
                     .get_target_bottom_left_corner(right_proximity)
 
 
-func get_quadrant_position(
-        quadrant_direction: int,
-        subtile_corner_types: Dictionary) -> Vector2:
-    var position_or_h_inbound_corner_type = subtile_corner_types \
-            [quadrant_direction] \
-            [get_corner_type(quadrant_direction)] \
-            [get_h_opp_corner_type(quadrant_direction)] \
-            [get_v_opp_corner_type(quadrant_direction)]
-    if position_or_h_inbound_corner_type is Vector2:
-        return position_or_h_inbound_corner_type
-    else:
-        return position_or_h_inbound_corner_type \
-                [get_h_inbound_corner_type(quadrant_direction)] \
-                [get_v_inbound_corner_type(quadrant_direction)]
+func to_string() -> String:
+    var corner_strings := []
+    for corner_directions in [
+            CornerDirection.OUTBOUND_CORNERS,
+            CornerDirection.INBOUND_CORNERS]:
+        for corner_direction in corner_directions:
+            var corner_type: int = get_corner_type(corner_direction)
+            var corner_direction_string := \
+                    CornerDirection.get_string(corner_direction)
+            var corner_type_string := \
+                    Su.subtile_manifest.get_subtile_corner_string(corner_type)
+            corner_strings.push_back("%s=%s" % [
+                    corner_direction_string,
+                    corner_type_string,
+               ])
+    return "CellCorners(%s)" % Sc.utils.join(corner_strings, ", ")
 
 
 func get_are_corners_valid() -> bool:

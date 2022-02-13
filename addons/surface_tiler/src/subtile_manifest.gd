@@ -236,3 +236,6 @@ func _parse_fallback_corner_type_matches() -> void:
             for matching_type in list:
                 set[matching_type] = true
             fallback_corner_type_matches[corner_type] = set
+    
+    # FIXME: LEFT OFF HERE: --------------------------
+    # - Clear _FALLBACK_CORNER_TYPE_MATCHES?

@@ -38,8 +38,6 @@ func _forward_subtile_selection(
         bitmask: int,
         tile_map: Object,
         cell_position: Vector2):
-    var subtile_position := Vector2.INF
-    
     if Engine.editor_hint or \
             Su.subtile_manifest.supports_runtime_autotiling:
         var proximity := CellProximity.new(
@@ -47,49 +45,162 @@ func _forward_subtile_selection(
                 self,
                 cell_position,
                 tile_id)
+        var quadrant_positions := _choose_quadrants(proximity)
         # FIXME: LEFT OFF HERE: -----------------------------
-        var corner_direction := CornerDirection.TOP_LEFT
-        subtile_position = _choose_subtile(proximity, corner_direction)
+        # - Pass along the quadrant positions to the inner tile-map.
+        pass
     
-    if subtile_position != Vector2.INF:
-        return subtile_position
+    return Vector2.ZERO
+
+
+# FIXME: LEFT OFF HERE: ----------------------------- REMOVE?
+func get_quadrant_position(
+        corner_direction: int,
+        target_corners: CellCorners) -> Vector2:
+    var position_or_h_inbound_corner_type = subtile_corner_types \
+            [corner_direction] \
+            [target_corners.get_corner_type(corner_direction)] \
+            [target_corners.get_h_opp_corner_type(corner_direction)] \
+            [target_corners.get_v_opp_corner_type(corner_direction)]
+    if position_or_h_inbound_corner_type is Vector2:
+        return position_or_h_inbound_corner_type
     else:
-        # Fallback to Godot's default autotiling behavior.
-        # NOTE:
-        # -   Not returning any value here is terrible.
-        # -   However, the underlying API apparently doesn't support returning
-        #     any actual values that would indicate redirecting back to the
-        #     default behavior.
-        return
+        return position_or_h_inbound_corner_type \
+                [target_corners.get_h_inbound_corner_type(corner_direction)] \
+                [target_corners.get_v_inbound_corner_type(corner_direction)]
 
 
-func _choose_subtile(
-        proximity: CellProximity,
-        corner_direction: int) -> Vector2:
+func _choose_quadrants(proximity: CellProximity) -> Array:
     var target_corners := CellCorners.new(proximity)
     
     if !target_corners.get_are_corners_valid():
-        return subtile_corner_types \
-                [corner_direction] \
+        var tl_quadrant_position: Vector2 = subtile_corner_types \
+                [CornerDirection.TOP_LEFT] \
                 [SubtileCorner.ERROR] \
                 [SubtileCorner.ERROR] \
                 [SubtileCorner.ERROR]
+        var tr_quadrant_position: Vector2 = subtile_corner_types \
+                [CornerDirection.TOP_RIGHT] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR]
+        var bl_quadrant_position: Vector2 = subtile_corner_types \
+                [CornerDirection.BOTTOM_LEFT] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR]
+        var br_quadrant_position: Vector2 = subtile_corner_types \
+                [CornerDirection.BOTTOM_RIGHT] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR] \
+                [SubtileCorner.ERROR]
+        return [
+            tl_quadrant_position,
+            tr_quadrant_position,
+            bl_quadrant_position,
+            br_quadrant_position,
+        ]
+    
+    # FIXME: Uncomment this to help with debugging.
+#    Sc.logger.print(">>>>>>>>>>>>>>>>_choose_subtile:\n%s\n%s" % [
+#        proximity.to_string(),
+#        target_corners.to_string(),
+#    ])
+    
+    
+    
+    
     
     # FIXME: LEFT OFF HERE: ---------------------------
     # FIXME: LEFT OFF HERE: ---------------------------
+    
+#    var position_or_h_inbound_corner_type = subtile_corner_types \
+#            [corner_direction] \
+#            [target_corners.get_corner_type(corner_direction)] \
+#            [target_corners.get_h_opp_corner_type(corner_direction)] \
+#            [target_corners.get_v_opp_corner_type(corner_direction)]
+    
+    var corner_direction := CornerDirection.TOP_LEFT
+    
+    var self_target_corner_type := \
+            target_corners.get_corner_type(corner_direction)
+    var h_opp_target_corner_type := \
+            target_corners.get_h_opp_corner_type(corner_direction)
+    var v_opp_target_corner_type := \
+            target_corners.get_v_opp_corner_type(corner_direction)
+    var h_inbound_target_corner_type := \
+            target_corners.get_h_inbound_corner_type(corner_direction)
+    var v_inbound_target_corner_type := \
+            target_corners.get_v_inbound_corner_type(corner_direction)
+    
+    # FIXME: LEFT OFF HERE: ----------------------------------------
+    # - Move this into a recursize function that returns a nested-combined
+    #   priority with the base-case match position?
+    var self_corner_type_map: Dictionary = \
+            subtile_corner_types[corner_direction]
+    if self_corner_type_map.has(self_target_corner_type):
+        pass
+    else:
+        for fallback_corner_type in \
+                Su.subtile_manifest._FALLBACK_CORNER_TYPE_MATCHES \
+                    [self_corner_type_map]:
+            if self_corner_type_map.has(self_target_corner_type):
+                pass
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # FIXME: LEFT OFF HERE: ---------------------------
-    return subtile_corner_types \
-            [corner_direction] \
+    var tl_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.TOP_LEFT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var tr_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.TOP_RIGHT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var bl_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.BOTTOM_LEFT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var br_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.BOTTOM_RIGHT] \
             [SubtileCorner.ERROR] \
             [SubtileCorner.ERROR] \
             [SubtileCorner.ERROR]
     
-#    # FIXME: Uncomment this to help with debugging.
-##    Sc.logger.print(">>>>>>>>>>_choose_subtile: %s, corners=%s" % [
-##        proximity.to_string(),
-##        get_subtile_config_string(target_corners),
-##    ])
-#
+    return [
+        tl_quadrant_position,
+        tr_quadrant_position,
+        bl_quadrant_position,
+        br_quadrant_position,
+    ]
+    
+    
+    
+    
+    
+    
+    
+    
+    
 #    # Dictionary<CornerDirection, Dictionary<Vector2, Dictionary>>
 #    var corner_to_matches := {}
 #    for corner in CornerDirection.OUTBOUND_CORNERS:
@@ -166,49 +277,49 @@ func _choose_subtile(
 #        return _error_indicator_subtile_position
 
 
-func _get_does_angle_type_match(
-        actual_corners: Dictionary,
-        expected_corners: Dictionary) -> bool:
-    return expected_corners.is_a90 and actual_corners.is_a90 or \
-            expected_corners.is_a45 and actual_corners.is_a45 or \
-            expected_corners.is_a27 and actual_corners.is_a27
+#func _get_does_angle_type_match(
+#        actual_corners: Dictionary,
+#        expected_corners: Dictionary) -> bool:
+#    return expected_corners.is_a90 and actual_corners.is_a90 or \
+#            expected_corners.is_a45 and actual_corners.is_a45 or \
+#            expected_corners.is_a27 and actual_corners.is_a27
 
 
-func _get_match_priority(
-        actual_corners: Dictionary,
-        expected_corners: Dictionary) -> float:
-    var priority := 0.0
-    
-    for corner in CornerDirection.OUTBOUND_CORNERS:
-        var actual_corner: int = actual_corners[corner]
-        var expected_corner: int = expected_corners[corner]
-        var additional_matching_types: Dictionary = Su.subtile_manifest \
-                .fallback_corner_type_matches[expected_corner]
-        # Determine the priority-contribution for this corner.
-        if actual_corner == expected_corner or \
-                additional_matching_types.has(actual_corner):
-            priority += 1.0
-        elif additional_matching_types.has(-actual_corner):
-            priority += 0.1
-        else:
-            # FIXME: -------------- Is there a more elegant fallback for this?
-            priority -= 5.0
-    
-    for inbound_corner in CornerDirection.INBOUND_CORNERS:
-        if !actual_corners.has(inbound_corner):
-            continue
-        var actual_corner: int = actual_corners[inbound_corner]
-        var expected_corner: int = expected_corners[inbound_corner]
-        var additional_matching_types: Dictionary = Su.subtile_manifest \
-                .fallback_corner_type_matches[expected_corner]
-        # Determine the priority-contribution for this inbound corner.
-        if actual_corner == expected_corner or \
-                additional_matching_types.has(actual_corner):
-            priority += 0.01
-        elif additional_matching_types.has(-actual_corner):
-            priority += 0.001
-        else:
-            # Do nothing for non-matching corners.
-            pass
-    
-    return priority
+#func _get_match_priority(
+#        actual_corners: Dictionary,
+#        expected_corners: Dictionary) -> float:
+#    var priority := 0.0
+#
+#    for corner in CornerDirection.OUTBOUND_CORNERS:
+#        var actual_corner: int = actual_corners[corner]
+#        var expected_corner: int = expected_corners[corner]
+#        var additional_matching_types: Dictionary = Su.subtile_manifest \
+#                .fallback_corner_type_matches[expected_corner]
+#        # Determine the priority-contribution for this corner.
+#        if actual_corner == expected_corner or \
+#                additional_matching_types.has(actual_corner):
+#            priority += 1.0
+#        elif additional_matching_types.has(-actual_corner):
+#            priority += 0.1
+#        else:
+#            # FIXME: -------------- Is there a more elegant fallback for this?
+#            priority -= 5.0
+#
+#    for inbound_corner in CornerDirection.INBOUND_CORNERS:
+#        if !actual_corners.has(inbound_corner):
+#            continue
+#        var actual_corner: int = actual_corners[inbound_corner]
+#        var expected_corner: int = expected_corners[inbound_corner]
+#        var additional_matching_types: Dictionary = Su.subtile_manifest \
+#                .fallback_corner_type_matches[expected_corner]
+#        # Determine the priority-contribution for this inbound corner.
+#        if actual_corner == expected_corner or \
+#                additional_matching_types.has(actual_corner):
+#            priority += 0.01
+#        elif additional_matching_types.has(-actual_corner):
+#            priority += 0.001
+#        else:
+#            # Do nothing for non-matching corners.
+#            pass
+#
+#    return priority
