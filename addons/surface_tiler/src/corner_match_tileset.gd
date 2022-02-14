@@ -28,28 +28,34 @@ extends TileSet
 #             Vector2>>)>>>>
 var subtile_corner_types: Dictionary
 
+var inner_tile_set: CornerMatchInnerTileset
 
-func _forward_subtile_selection(
+# Dictionary<int, int>
+var _tile_id_to_angle_type := {}
+
+
+func tile_get_angle_type(tile_id: int) -> int:
+    if tile_id == TileMap.INVALID_CELL:
+        return CellAngleType.EMPTY
+    elif _tile_id_to_angle_type.has(tile_id):
+        return _tile_id_to_angle_type[tile_id]
+    else:
+        return CellAngleType.EMPTY
+
+
+func get_quadrants(
+        cell_position: Vector2,
         tile_id: int,
-        bitmask: int,
-        tile_map: Object,
-        cell_position: Vector2):
-    if Engine.editor_hint or \
-            Su.subtile_manifest.supports_runtime_autotiling:
-        var proximity := CellProximity.new(
-                tile_map,
-                self,
-                cell_position,
-                tile_id)
-        var quadrant_positions := _choose_quadrants(proximity)
-        # FIXME: LEFT OFF HERE: -----------------------------
-        # - Pass along the quadrant positions to the inner tile-map.
-        pass
+        tile_map: TileMap) -> Array:
+    if !Engine.editor_hint and \
+            !Su.subtile_manifest.supports_runtime_autotiling:
+        return _get_error_quadrants()
     
-    return Vector2.ZERO
-
-
-func _choose_quadrants(proximity: CellProximity) -> Array:
+    var proximity := CellProximity.new(
+            tile_map,
+            self,
+            cell_position,
+            tile_id)
     var target_corners := CellCorners.new(proximity)
     
     if !target_corners.get_are_corners_valid():
@@ -80,7 +86,7 @@ func _choose_quadrants(proximity: CellProximity) -> Array:
                 0,
                 0)
         var quadrant_position: Vector2 = best_position_and_weight[0]
-        var quadrant_weight: Vector2 = best_position_and_weight[1]
+        var quadrant_weight: float = best_position_and_weight[1]
         
         if quadrant_weight < \
                 Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:

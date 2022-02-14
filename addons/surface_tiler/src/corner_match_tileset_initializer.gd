@@ -4,7 +4,7 @@ extends Node
 
 
 func initialize_tileset(tile_set_config: Dictionary) -> void:
-    var tile_set: CornerMatchTileset = tile_set_config.tile_set
+    var outer_tile_set: CornerMatchTileset = tile_set_config.tile_set
     tile_set_config.tile_set_quadrants_texture = \
             load(tile_set_config.tile_set_quadrants_path)
     
@@ -13,12 +13,15 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
                 .parse_corner_type_annotation_key(
                     Su.subtile_manifest.corner_type_annotation_key_path,
                     tile_set_config.quadrant_size)
-    tile_set.subtile_corner_types = Su.subtile_manifest.tile_set_image_parser \
-            .parse_tile_set_corner_type_annotations(
-                corner_type_annotation_key,
-                Su.subtile_manifest.corner_types_to_swap_for_bottom_quadrants,
-                tile_set_config.tile_set_corner_type_annotations_path,
-                tile_set_config.quadrant_size)
+    var subtile_corner_types: Dictionary = \
+            Su.subtile_manifest.tile_set_image_parser \
+                .parse_tile_set_corner_type_annotations(
+                    corner_type_annotation_key,
+                    Su.subtile_manifest \
+                        .corner_types_to_swap_for_bottom_quadrants,
+                    tile_set_config.tile_set_corner_type_annotations_path,
+                    tile_set_config.quadrant_size)
+    outer_tile_set.subtile_corner_types = subtile_corner_types
     
     var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
             .create_tileset_shapes(tile_set_config)
@@ -27,33 +30,73 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
     var occlusion_shapes: Dictionary = shapes.occlusion_shapes
     
-    _initialize_tile(
-            tile_set,
-            CellAngleType.A90,
+    var inner_tile_set := CornerMatchInnerTileset.new()
+    outer_tile_set.inner_tile_set = inner_tile_set
+    
+    _initialize_inner_tile(
+            inner_tile_set,
+            subtile_corner_types,
             collision_shapes,
             occlusion_shapes,
             tile_set_config)
+    
+    _initialize_outer_tile(
+            outer_tile_set,
+            CellAngleType.A90,
+            tile_set_config)
     if tile_set_config.are_45_degree_subtiles_used:
-        _initialize_tile(
-                tile_set,
+        _initialize_outer_tile(
+                outer_tile_set,
                 CellAngleType.A45,
-                collision_shapes,
-                occlusion_shapes,
                 tile_set_config)
     if tile_set_config.are_27_degree_subtiles_used:
-        _initialize_tile(
-                tile_set,
+        _initialize_outer_tile(
+                outer_tile_set,
                 CellAngleType.A27,
-                collision_shapes,
-                occlusion_shapes,
                 tile_set_config)
 
 
-func _initialize_tile(
-        tile_set: CornerMatchTileset,
-        angle_type: int,
+func _initialize_inner_tile(
+        tile_set: CornerMatchInnerTileset,
+        subtile_corner_types: Dictionary,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary,
+        tile_set_config: Dictionary) -> void:
+    var tile_name: String = Su.subtile_manifest.INNER_TILESET_TILE_NAME
+    
+    var tile_id := tile_set.find_tile_by_name(tile_name)
+    if tile_id >= 0:
+        # Clear any pre-existing state for this tile.
+        tile_set.remove_tile(tile_id)
+    else:
+        tile_id = tile_set.get_last_unused_tile_id()
+    tile_set.create_tile(tile_id)
+    
+    var quadrants_texture_size: Vector2 = \
+            tile_set_config.tile_set_quadrants_texture.get_size()
+    var tile_region := Rect2(Vector2.ZERO, quadrants_texture_size)
+    
+    var subtile_size: Vector2 = Vector2.ONE * tile_set_config.quadrant_size
+    
+    tile_set.tile_set_name(tile_id, tile_name)
+    tile_set.tile_set_texture(tile_id, \
+            tile_set_config.tile_set_quadrants_texture)
+    tile_set.tile_set_region(tile_id, tile_region)
+    tile_set.tile_set_tile_mode(tile_id, TileSet.AUTO_TILE)
+    tile_set.autotile_set_size(tile_id, subtile_size)
+    tile_set.autotile_set_bitmask_mode(tile_id, TileSet.BITMASK_3X3_MINIMAL)
+    
+    _set_inner_tile_shapes_for_quadrants(
+            tile_set,
+            tile_id,
+            subtile_corner_types,
+            collision_shapes,
+            occlusion_shapes)
+
+
+func _initialize_outer_tile(
+        tile_set: CornerMatchTileset,
+        angle_type: int,
         tile_set_config: Dictionary) -> void:
     var tile_name_suffix: String
     match angle_type:
@@ -77,32 +120,33 @@ func _initialize_tile(
         tile_id = tile_set.get_last_unused_tile_id()
     tile_set.create_tile(tile_id)
     
-    var quadrants_texture_size: Vector2 = \
-            tile_set_config.tile_set_quadrants_texture.get_size()
-    var tile_region := Rect2(Vector2.ZERO, quadrants_texture_size)
+    tile_set._tile_id_to_angle_type[tile_id] = angle_type
+    
+    var empty_texture: Texture = load(Sc.images.TRANSPARENT_PIXEL_PATH)
+    var empty_texture_size: Vector2 = empty_texture.get_size()
+    var tile_region := Rect2(Vector2.ZERO, empty_texture_size)
+    
+    # FIXME: LEFT OFF HERE: -------------------------
+    # - Do I need to scale the subtile/texture?
+    # - Maybe I actually need to use the underlying quadrants texture, so that
+    #   I can show the correct tile icon.
     
     var subtile_size: Vector2 = \
             Vector2.ONE * tile_set_config.quadrant_size * 2
     
     tile_set.tile_set_name(tile_id, tile_name)
-    tile_set.tile_set_texture(tile_id, \
-            tile_set_config.tile_set_quadrants_texture)
+    tile_set.tile_set_texture(tile_id, empty_texture)
     tile_set.tile_set_region(tile_id, tile_region)
     tile_set.tile_set_tile_mode(tile_id, TileSet.AUTO_TILE)
     tile_set.autotile_set_size(tile_id, subtile_size)
     tile_set.autotile_set_bitmask_mode(tile_id, TileSet.BITMASK_3X3_MINIMAL)
     
-    _tile_set_icon_coordinate(
+    _set_outer_tile_icon_coordinates(
             tile_set,
             tile_id)
-    _tile_set_shapes_for_quadrants(
-            tile_set,
-            tile_id,
-            collision_shapes,
-            occlusion_shapes)
 
 
-func _tile_set_icon_coordinate(
+func _set_outer_tile_icon_coordinates(
         tile_set: CornerMatchTileset,
         tile_id: int) -> void:
     # FIXME: LEFT OFF HERE: ----------------------------
@@ -110,14 +154,15 @@ func _tile_set_icon_coordinate(
     pass
 
 
-func _tile_set_shapes_for_quadrants(
-        tile_set: CornerMatchTileset,
+func _set_inner_tile_shapes_for_quadrants(
+        tile_set: CornerMatchInnerTileset,
         tile_id: int,
+        subtile_corner_types: Dictionary,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
-    for corner_direction in tile_set.subtile_corner_types:
+    for corner_direction in subtile_corner_types:
         var self_corner_type_map: Dictionary = \
-                tile_set.subtile_corner_types[corner_direction]
+                subtile_corner_types[corner_direction]
         for self_corner_type in self_corner_type_map:
             var h_opp_corner_type_map: Dictionary = \
                     self_corner_type_map[self_corner_type]
@@ -148,7 +193,7 @@ func _tile_set_shapes_for_quadrants(
 
 
 func _set_shapes_for_quadrant(
-        tile_set: CornerMatchTileset,
+        tile_set: CornerMatchInnerTileset,
         tile_id: int,
         quadrant_position: Vector2,
         corner_type: int,

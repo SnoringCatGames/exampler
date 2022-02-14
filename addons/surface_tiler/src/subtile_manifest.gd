@@ -20,6 +20,8 @@ var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
     SubtileDepth.INTERIOR: 0.11,
 }
 
+const INNER_TILESET_TILE_NAME := "corner_match_inner_tile"
+
 ###
 
 # Dictionary<int, String>

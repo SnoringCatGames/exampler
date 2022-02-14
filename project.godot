@@ -355,6 +355,16 @@ _global_script_classes=[ {
 "path": "res://addons/surface_tiler/src/corner_direction.gd"
 }, {
 "base": "TileMap",
+"class": "CornerMatchInnerTilemap",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/corner_match_inner_tilemap.gd"
+}, {
+"base": "TileSet",
+"class": "CornerMatchInnerTileset",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/corner_match_inner_tileset.gd"
+}, {
+"base": "TileMap",
 "class": "CornerMatchTilemap",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/corner_match_tilemap.gd"
@@ -2294,6 +2304,8 @@ _global_script_class_icons={
 "ContinuousEdgeTrajectoryLegendItem": "",
 "ControlRow": "",
 "CornerDirection": "",
+"CornerMatchInnerTilemap": "",
+"CornerMatchInnerTileset": "",
 "CornerMatchTilemap": "",
 "CornerMatchTileset": "",
 "CornerMatchTilesetInitializer": "",
