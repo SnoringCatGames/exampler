@@ -2,32 +2,6 @@ class_name FallbackSubtileCorners
 extends Reference
 
 
-
-# FIXME: LEFT OFF HERE: --------------- REMOVE: Old mapping.
-#    SubtileCorner.EXT_CLIPPED_90_90: [-SubtileCorner.EXT_CLIPPED_45_45],
-#
-#    SubtileCorner.EXT_45_FLOOR_TO_90: [-SubtileCorner.EXT_45_FLOOR],
-#    SubtileCorner.EXT_45_FLOOR_TO_45_CONVEX: [-SubtileCorner.EXT_45_FLOOR],
-#    SubtileCorner.EXT_45_CEILING_TO_90: [-SubtileCorner.EXT_45_CEILING],
-#    SubtileCorner.EXT_45_CEILING_TO_45_CONVEX: [-SubtileCorner.EXT_45_CEILING],
-#
-#
-#    SubtileCorner.EXT_CLIPPED_27_SHALLOW: [-SubtileCorner.EXT_CLIPPED_45_45],
-#    SubtileCorner.EXT_CLIPPED_27_STEEP: [-SubtileCorner.EXT_CLIPPED_45_45],
-#    SubtileCorner.EXT_27_FLOOR_SHALLOW_CLOSE: [-SubtileCorner.EXT_90H],
-#    SubtileCorner.EXT_27_FLOOR_STEEP_CLOSE: [-SubtileCorner.EXT_90V],
-#
-#
-#    SubtileCorner.EXT_27_CEILING_SHALLOW_CLOSE: [-SubtileCorner.EXT_90H],
-#    SubtileCorner.EXT_27_CEILING_STEEP_CLOSE: [-SubtileCorner.EXT_90V],
-#
-#
-#    SubtileCorner.EXT_CLIPPED_90H_45: [-SubtileCorner.EXT_CLIPPED_45_45],
-#    SubtileCorner.EXT_CLIPPED_90V_45: [-SubtileCorner.EXT_CLIPPED_45_45],
-#    SubtileCorner.EXT_90H_TO_45_CONVEX: [-SubtileCorner.EXT_90H],
-#    SubtileCorner.EXT_90V_TO_45_CONVEX: [-SubtileCorner.EXT_90V],
-
-
 # NOTE:
 # -   This mapping enables us to match one corner type with another.
 # -   Each mapping multiplier must be between 0.5 and 1.0, inclusive.
@@ -38,13 +12,6 @@ extends Reference
 # - Would there be a simpler way to allow the tile-set author to configure which
 #   slopes are allowed to transition into which others?
 const FALLBACKS := {
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # - Update fallback mappings.
-    
     SubtileCorner.UNKNOWN: [],
     SubtileCorner.ERROR: [],
     SubtileCorner.EMPTY: [],
@@ -103,24 +70,46 @@ const FALLBACKS := {
     
     SubtileCorner.EXT_90H_45_CONCAVE: [
         [SubtileCorner.EXT_EXT_45_CLIPPED, 0.8],
-        [SubtileCorner.EXT_90_90_CONCAVE, 0.2],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.6],
     ],
     SubtileCorner.EXT_90V_45_CONCAVE: [
         [SubtileCorner.EXT_EXT_45_CLIPPED, 0.8],
-        [SubtileCorner.EXT_90_90_CONCAVE, 0.2],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.6],
     ],
     
-    SubtileCorner.EXT_INT_90H_45_CONVEX: [],
-    SubtileCorner.EXT_INT_90V_45_CONVEX: [],
+    SubtileCorner.EXT_INT_90H_45_CONVEX: [
+        [SubtileCorner.INT_45_FLOOR, 0.8],
+    ],
+    SubtileCorner.EXT_INT_90V_45_CONVEX: [
+        [SubtileCorner.INT_45_FLOOR, 0.8],
+    ],
     
-    SubtileCorner.EXT_INT_90H_45_CONCAVE: [],
-    SubtileCorner.EXT_INT_90V_45_CONCAVE: [],
+    SubtileCorner.EXT_INT_90H_45_CONCAVE: [
+        [SubtileCorner.EXT_INT_45_CEILING, 0.8],
+    ],
+    SubtileCorner.EXT_INT_90V_45_CONCAVE: [
+        [SubtileCorner.EXT_INT_45_FLOOR, 0.8],
+    ],
     
-    SubtileCorner.INT_EXT_90H_45_CONCAVE: [],
-    SubtileCorner.INT_EXT_90V_45_CONCAVE: [],
+    SubtileCorner.INT_EXT_90H_45_CONCAVE: [
+        [SubtileCorner.INT_INT_45_CLIPPED, 0.8],
+        [SubtileCorner.INT_EXT_90V_45_CONCAVE, 0.8],
+        [SubtileCorner.EXT_INT_45_CEILING, 0.6],
+        [SubtileCorner.EXT_INT_90H_45_CONCAVE, 0.6],
+    ],
+    SubtileCorner.INT_EXT_90V_45_CONCAVE: [
+        [SubtileCorner.INT_INT_45_CLIPPED, 0.8],
+        [SubtileCorner.INT_EXT_90H_45_CONCAVE, 0.8],
+        [SubtileCorner.EXT_INT_45_FLOOR, 0.6],
+        [SubtileCorner.EXT_INT_90V_45_CONCAVE, 0.6],
+    ],
     
-    SubtileCorner.INT_INT_90H_45_CONCAVE: [],
-    SubtileCorner.INT_INT_90V_45_CONCAVE: [],
+    SubtileCorner.INT_INT_90H_45_CONCAVE: [
+        [SubtileCorner.INT_45_FLOOR, 0.8],
+    ],
+    SubtileCorner.INT_INT_90V_45_CONCAVE: [
+        [SubtileCorner.INT_45_CEILING, 0.8],
+    ],
     
     ### Complex 90-45-degree combinations.
     
@@ -131,20 +120,46 @@ const FALLBACKS := {
     SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: [],
     SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: [],
     
-    SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE: [],
-    SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE: [],
+    SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE: [
+        [SubtileCorner.EXT_INT_45_CEILING, 0.7],
+    ],
+    SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE: [
+        [SubtileCorner.EXT_INT_45_FLOOR, 0.7],
+    ],
     
-    SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE: [],
-    SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE: [],
+    SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE: [
+        [SubtileCorner.EXT_INT_90H, 0.7],
+        [SubtileCorner.EXT_INT_45_CEILING, 0.6],
+    ],
+    SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE: [
+        [SubtileCorner.EXT_INT_90V, 0.7],
+        [SubtileCorner.EXT_INT_45_FLOOR, 0.6],
+    ],
     
     
-    SubtileCorner.INT_90H_INT_EXT_45_CLIPPED: [],
-    SubtileCorner.INT_90V_INT_EXT_45_CLIPPED: [],
-    SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED: [],
+    SubtileCorner.INT_90H_INT_EXT_45_CLIPPED: [
+        [SubtileCorner.INT_EXT_45_CLIPPED, 0.7],
+    ],
+    SubtileCorner.INT_90V_INT_EXT_45_CLIPPED: [
+        [SubtileCorner.INT_EXT_45_CLIPPED, 0.7],
+    ],
+    SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED: [
+        [SubtileCorner.INT_90_90_CONVEX, 0.75],
+        [SubtileCorner.INT_EXT_45_CLIPPED, 0.65],
+    ],
     
-    SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: [],
-    SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING: [],
-    SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR: [],
+    SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: [
+        [SubtileCorner.INT_45_FLOOR_45_CEILING, 0.8],
+    ],
+    SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING: [
+        [SubtileCorner.INT_45_FLOOR_45_CEILING, 0.8],
+        [SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, 0.8],
+    ],
+    SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR: [
+        [SubtileCorner.INT_45_FLOOR_45_CEILING, 0.8],
+        [SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, 0.8],
+        [SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING, 0.8],
+    ],
     
     SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE: [],
     SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE: [],

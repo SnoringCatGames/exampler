@@ -127,7 +127,8 @@ func _get_best_quadrant_match(
                     i + 1,
                     weight)
         
-    elif Su.subtile_manifest.allows_fallback_corner_matches:
+    elif i > 0 or \
+            Su.subtile_manifest.allows_fallback_corner_matches:
         # Consider possible fallback corner-type matches, since there is no
         # quadrant configured for this specific corner-type.
         var best_fallback_position := Vector2.INF
@@ -169,7 +170,8 @@ func _get_best_quadrant_match(
                         best_fallback_weight = fallback_position_and_weight[1]
         
         if best_fallback_weight < 0 and \
-                Su.subtile_manifest.allows_same_depth_corner_matches:
+                (i > 0 or \
+                Su.subtile_manifest.allows_same_depth_corner_matches):
             # There were no matching fallbacks.
             # Now we consider all other corner-types of the correct depth.
             var target_depth: int = \
