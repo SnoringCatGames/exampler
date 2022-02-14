@@ -3,6 +3,9 @@ extends Node
 
 
 func get_target_top_left_corner(proximity: CellProximity) -> int:
+    if proximity.get_is_empty():
+        return SubtileCorner.EMPTY
+    
     if proximity.is_top_empty:
         if proximity.is_left_empty:
             if proximity.get_is_90_floor():
@@ -353,6 +356,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
 
 
 func get_target_top_right_corner(proximity: CellProximity) -> int:
+    if proximity.get_is_empty():
+        return SubtileCorner.EMPTY
+    
     if proximity.is_top_empty:
         if proximity.is_right_empty:
             if proximity.get_is_90_floor():
@@ -703,6 +709,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
 
 
 func get_target_bottom_left_corner(proximity: CellProximity) -> int:
+    if proximity.get_is_empty():
+        return SubtileCorner.EMPTY
+    
     if proximity.is_bottom_empty:
         if proximity.is_left_empty:
             if proximity.get_is_90_ceiling():
@@ -1053,6 +1062,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
 
 
 func get_target_bottom_right_corner(proximity: CellProximity) -> int:
+    if proximity.get_is_empty():
+        return SubtileCorner.EMPTY
+    
     if proximity.is_bottom_empty:
         if proximity.is_right_empty:
             if proximity.get_is_90_ceiling():

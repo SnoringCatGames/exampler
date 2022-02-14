@@ -28,7 +28,11 @@ extends TileSet
 #             Vector2>>)>>>>
 var subtile_corner_types: Dictionary
 
+var are_45_degree_subtiles_used: bool
+var are_27_degree_subtiles_used: bool
+
 var inner_tile_set: CornerMatchInnerTileset
+var inner_tile_id: int setget ,_get_inner_tile_id
 
 # Dictionary<int, int>
 var _tile_id_to_angle_type := {}
@@ -183,7 +187,7 @@ func _get_best_quadrant_match(
             var target_depth: int = \
                     SubtileCornerToDepth.CORNERS_TO_DEPTHS[target_corner_type]
             for other_corner_type in \
-                    Su.manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+                    Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
                 var other_depth: int = SubtileCornerToDepth.CORNERS_TO_DEPTHS \
                         [other_corner_type]
                 if other_depth != target_depth:
@@ -258,3 +262,14 @@ func _get_error_quadrants() -> Array:
         bl_quadrant_position,
         br_quadrant_position,
     ]
+
+
+func _is_tile_bound(
+        drawn_id: int,
+        neighbor_id: int) -> bool:
+    return _tile_id_to_angle_type.has(drawn_id) and \
+            _tile_id_to_angle_type.has(neighbor_id)
+
+
+func _get_inner_tile_id() -> int:
+    return inner_tile_set.tile_id

@@ -37,9 +37,14 @@ func _ready() -> void:
         property_list_changed_notify()
     assert(tile_set is CornerMatchTileset)
     
+    # FIXME: LEFT OFF HERE: ----------------------------------
+    # - I'm not seeing anything render here.
+    # - Pull this out into a separate location, also controlled by the level scene.
+    # - Then explicitly set a couple quadrant-subtiles there in order to test that things work.
+    # - I will also need to make sure that the inner tilmap saves to the level .tres file.
     inner_tilemap = CornerMatchInnerTilemap.new()
     inner_tilemap.tile_set = tile_set.inner_tile_set
-    add_child(inner_tilemap)
+    get_parent().call_deferred("add_child", inner_tilemap)
 
 
 func _enter_tree() -> void:
@@ -168,6 +173,14 @@ func _on_cell_tile_changed(
             cell_position,
             tile_id,
             previous_tile_id)
+    if tile_id == INVALID_CELL or \
+            previous_tile_id == INVALID_CELL:
+        # FIXME: LEFT OFF HERE: ------------------
+        # - Does this work correctly with the current tile-set setup?
+        call_deferred(
+                "update_bitmask_region",
+                cell_position + Vector2(-2, -2),
+                cell_position + Vector2(2, 2))
 
 
 func _delegate_quadrant_updates(
@@ -185,14 +198,22 @@ func _delegate_quadrant_updates(
         Vector2(1,1),
     ]
     
-    for i in quadrants:
+    for i in quadrants.size():
         var quadrant_position: Vector2 = quadrants[i]
         var inner_cell_offset: Vector2 = cell_offsets[i]
         var inner_cell_position := cell_position * 2 + inner_cell_offset
+        # FIXME: LEFT OFF HERE: ------------------------------------ REMOVE
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>> inner_tilemap.set_cell")
+        print("inner_cell_position.x = " + \
+                str(Vector2(inner_cell_position.x, inner_cell_position.y)))
+        print("quadrant_position = " + \
+                str(quadrant_position))
+        print(inner_tilemap.tile_set.get_tiles_ids())
+        print(inner_tilemap.tile_set.tile_get_texture(tile_set.inner_tile_id).get_size())
         inner_tilemap.set_cell(
                 inner_cell_position.x,
                 inner_cell_position.y,
-                Su.subtile_manifest.INNER_TILESET_TILE_NAME,
+                tile_set.inner_tile_id,
                 false,
                 false,
                 false,

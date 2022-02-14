@@ -5,6 +5,11 @@ extends Node
 
 func initialize_tileset(tile_set_config: Dictionary) -> void:
     var outer_tile_set: CornerMatchTileset = tile_set_config.tile_set
+    outer_tile_set.are_45_degree_subtiles_used = \
+            tile_set_config.are_45_degree_subtiles_used
+    outer_tile_set.are_27_degree_subtiles_used = \
+            tile_set_config.are_27_degree_subtiles_used
+    
     tile_set_config.tile_set_quadrants_texture = \
             load(tile_set_config.tile_set_quadrants_path)
     
@@ -20,7 +25,8 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
                     Su.subtile_manifest \
                         .corner_types_to_swap_for_bottom_quadrants,
                     tile_set_config.tile_set_corner_type_annotations_path,
-                    tile_set_config.quadrant_size)
+                    tile_set_config.quadrant_size,
+                    outer_tile_set)
     outer_tile_set.subtile_corner_types = subtile_corner_types
     
     var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
@@ -39,6 +45,7 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
             collision_shapes,
             occlusion_shapes,
             tile_set_config)
+    outer_tile_set.inner_tile_id = inner_tile_set.tile_id
     
     _initialize_outer_tile(
             outer_tile_set,
@@ -71,6 +78,7 @@ func _initialize_inner_tile(
     else:
         tile_id = tile_set.get_last_unused_tile_id()
     tile_set.create_tile(tile_id)
+    tile_set.tile_id = tile_id
     
     var quadrants_texture_size: Vector2 = \
             tile_set_config.tile_set_quadrants_texture.get_size()

@@ -38,6 +38,9 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_tr_t = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_right_corner(top_proximity)
+    else:
+        self.inbound_tl_t = SubtileCorner.EMPTY
+        self.inbound_tr_t = SubtileCorner.EMPTY
     
     if proximity.get_is_present(0, 1):
         var bottom_proximity := CellProximity.new(
@@ -50,6 +53,9 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_br_b = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_top_right_corner(bottom_proximity)
+    else:
+        self.inbound_bl_b = SubtileCorner.EMPTY
+        self.inbound_br_b = SubtileCorner.EMPTY
     
     if proximity.get_is_present(-1, 0):
         var left_proximity := CellProximity.new(
@@ -62,6 +68,9 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_bl_l = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_right_corner(left_proximity)
+    else:
+        self.inbound_tl_l = SubtileCorner.EMPTY
+        self.inbound_bl_l = SubtileCorner.EMPTY
     
     if proximity.get_is_present(1, 0):
         var right_proximity := CellProximity.new(
@@ -74,6 +83,9 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_br_r = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_left_corner(right_proximity)
+    else:
+        self.inbound_tr_r = SubtileCorner.EMPTY
+        self.inbound_br_r = SubtileCorner.EMPTY
 
 
 func to_string() -> String:

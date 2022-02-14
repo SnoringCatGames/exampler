@@ -115,7 +115,8 @@ func parse_tile_set_corner_type_annotations(
         corner_type_annotation_key: Dictionary,
         corner_types_to_swap_for_bottom_quadrants: Dictionary,
         tile_set_corner_type_annotations_path: String,
-        quadrant_size: int) -> Dictionary:
+        quadrant_size: int,
+        outer_tile_set: CornerMatchTileset) -> Dictionary:
     var subtile_size := quadrant_size * 2
     
     var texture: Texture = load(tile_set_corner_type_annotations_path)
@@ -150,7 +151,7 @@ func parse_tile_set_corner_type_annotations(
                     image,
                     tile_set_corner_type_annotations_path)
     
-    _validate_quadrants(subtile_corner_types)
+    _validate_quadrants(subtile_corner_types, outer_tile_set)
     
     image.unlock()
     
@@ -459,6 +460,7 @@ func _parse_corner_type_annotation(
     
     _record_autotile_coord(
             subtile_corner_types,
+            CornerDirection.TOP_LEFT,
             tl_quadrant_position / quadrant_size,
             tl_corner_type,
             tr_corner_type,
@@ -467,6 +469,7 @@ func _parse_corner_type_annotation(
             tl_v_inbound_corner_type)
     _record_autotile_coord(
             subtile_corner_types,
+            CornerDirection.TOP_RIGHT,
             tr_quadrant_position / quadrant_size,
             tr_corner_type,
             tl_corner_type,
@@ -475,6 +478,7 @@ func _parse_corner_type_annotation(
             tr_v_inbound_corner_type)
     _record_autotile_coord(
             subtile_corner_types,
+            CornerDirection.BOTTOM_LEFT,
             bl_quadrant_position / quadrant_size,
             bl_corner_type,
             br_corner_type,
@@ -483,6 +487,7 @@ func _parse_corner_type_annotation(
             bl_v_inbound_corner_type)
     _record_autotile_coord(
             subtile_corner_types,
+            CornerDirection.BOTTOM_RIGHT,
             br_quadrant_position / quadrant_size,
             br_corner_type,
             bl_corner_type,
@@ -493,6 +498,7 @@ func _parse_corner_type_annotation(
 
 static func _record_autotile_coord(
         subtile_corner_types: Dictionary,
+        corner_direction: int,
         autotile_coord: Vector2,
         self_corner_type: int,
         h_opp_corner_type: int,
@@ -504,7 +510,7 @@ static func _record_autotile_coord(
             v_inbound_corner_type != SubtileCorner.UNKNOWN
     
     # CornerDirection mapping.
-    var map: Dictionary = subtile_corner_types[CornerDirection.TOP_LEFT]
+    var map: Dictionary = subtile_corner_types[corner_direction]
     
     # Self corner-type mapping.
     if !map.has(self_corner_type):
@@ -759,10 +765,9 @@ static func _get_quadrant_annotation(
     }
 
 
-static func _validate_quadrants(subtile_corner_types: Dictionary) -> void:
-    # Dictionary<CornerDirection, Dictionary<int, Vector2>>
-    pass
-    
+static func _validate_quadrants(
+        subtile_corner_types: Dictionary,
+        outer_tile_set: CornerMatchTileset) -> void:
     # FIXME: LEFT OFF HERE: ----------------------
     # - Check that many corner-types are defined at least once for all four
     #   corner-directions.
@@ -772,12 +777,87 @@ static func _validate_quadrants(subtile_corner_types: Dictionary) -> void:
     # - All 90s
     # - Some basic 45s, if configured to use 45s
     # - Some basic 27s, if configured to use 27s
-#    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
-#        assert(subtile_corner_types[corner_direction].)
     
     # FIXME: LEFT OFF HERE: --------------------------------------
     # - Anything else to validate?
     # - Check notes...
+    
+    # FIXME: LEFT OFF HERE: --------------------------------------
+    # - Abandon the below config-based checks, and instead parse a separate
+    #   min-required-corner-types image.
+    
+    # [self, h_opp, v_opp]
+    var REQUIRED_90_QUADRANT_CORNER_TYPES := [
+        [SubtileCorner.ERROR, SubtileCorner.ERROR, SubtileCorner.ERROR],
+        [SubtileCorner.EMPTY, SubtileCorner.EMPTY, SubtileCorner.EMPTY],
+        
+        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX],
+        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90V],
+        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H, SubtileCorner.EXT_90_90_CONVEX],
+        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H, SubtileCorner.EXT_90V],
+        [SubtileCorner.EXT_90H, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_INT_90_90_CONVEX],
+        [SubtileCorner.EXT_90V, SubtileCorner.EXT_INT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX],
+        [SubtileCorner.EXT_90H, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONCAVE],
+        [SubtileCorner.EXT_90V, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONVEX],
+        
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONCAVE],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90V, SubtileCorner.EXT_90_90_CONCAVE],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90H],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90V, SubtileCorner.EXT_90H],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90_90_CONVEX],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONCAVE],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90V, SubtileCorner.EXT_INT_90_90_CONVEX],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90_90_CONVEX, SubtileCorner.EXT_90H],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90_90_CONVEX, SubtileCorner.EXT_INT_90_90_CONVEX],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90H],
+        [SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_INT_90V, SubtileCorner.EXT_90_90_CONCAVE],
+        
+        # FIXME: LEFT OFF HERE: --------------------
+        # - Finish adding 90 cases.
+        #   - All self-types that include an EXT_90_90_CONCAVE neighbor.
+        #   - All int-based types.
+#        [SubtileCorner., SubtileCorner., SubtileCorner.],
+        
+        [SubtileCorner.EXT_90H, SubtileCorner.EXT_90H, SubtileCorner.EXT_90_90_CONCAVE],
+        [SubtileCorner.EXT_90V, SubtileCorner.EXT_90_90_CONCAVE, SubtileCorner.EXT_90V],
+        
+        [SubtileCorner.EXT_90H, SubtileCorner.EXT_90H, SubtileCorner.EXT_90H],
+        [SubtileCorner.EXT_90V, SubtileCorner.EXT_90V, SubtileCorner.EXT_90V],
+        [SubtileCorner.EXT_90H, SubtileCorner.EXT_90H, SubtileCorner.EXT_INT_90H],
+        [SubtileCorner.EXT_90V, SubtileCorner.EXT_INT_90V, SubtileCorner.EXT_90V],
+    ]
+    
+    # [self, h_opp, v_opp]
+    var REQUIRED_45_QUADRANT_CORNER_TYPES := [
+#        [SubtileCorner., SubtileCorner., SubtileCorner.],
+    ]
+    
+    # [self, h_opp, v_opp]
+    var REQUIRED_27_QUADRANT_CORNER_TYPES := [
+#        [SubtileCorner., SubtileCorner., SubtileCorner.],
+    ]
+    
+    var required_corner_types_collection := \
+            [REQUIRED_90_QUADRANT_CORNER_TYPES]
+    if outer_tile_set.are_45_degree_subtiles_used:
+        required_corner_types_collection.push_back(
+                REQUIRED_45_QUADRANT_CORNER_TYPES)
+    if outer_tile_set.are_27_degree_subtiles_used:
+        required_corner_types_collection.push_back(
+                REQUIRED_27_QUADRANT_CORNER_TYPES)
+    
+    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+        var direction_map: Dictionary = subtile_corner_types[corner_direction]
+        for required_corner_types in required_corner_types_collection:
+            for corner_types in required_corner_types:
+                var self_corner_type: int = corner_types[0]
+                var h_opp_corner_type: int = corner_types[1]
+                var v_opp_corner_type: int = corner_types[2]
+                assert(direction_map.has(self_corner_type))
+                var self_map: Dictionary = direction_map[self_corner_type]
+                assert(self_map.has(h_opp_corner_type))
+                var h_opp_map: Dictionary = self_map[h_opp_corner_type]
+                assert(h_opp_map.has(v_opp_corner_type))
 
 
 static func _get_log_string(
