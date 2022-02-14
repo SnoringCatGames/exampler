@@ -1,13 +1,9 @@
-class_name FallbackSubtileCornerMatches
+class_name FallbackSubtileCorners
 extends Reference
 
 
 
 # FIXME: LEFT OFF HERE: --------------- REMOVE: Old mapping.
-#    SubtileCorner.EMPTY: [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE, SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE],
-#
-#    SubtileCorner.EXT_90_90_CONVEX: [SubtileCorner.EMPTY],
-#
 #    SubtileCorner.EXT_CLIPPED_90_90: [-SubtileCorner.EXT_CLIPPED_45_45],
 #
 #    SubtileCorner.EXT_45_FLOOR_TO_90: [-SubtileCorner.EXT_45_FLOOR],
@@ -30,46 +26,37 @@ extends Reference
 #    SubtileCorner.EXT_CLIPPED_90V_45: [-SubtileCorner.EXT_CLIPPED_45_45],
 #    SubtileCorner.EXT_90H_TO_45_CONVEX: [-SubtileCorner.EXT_90H],
 #    SubtileCorner.EXT_90V_TO_45_CONVEX: [-SubtileCorner.EXT_90V],
-#    SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE: [SubtileCorner.EMPTY, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE],
-#    SubtileCorner.EXT_90V_TO_45_CONVEX_ACUTE: [SubtileCorner.EMPTY, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90H_TO_45_CONVEX_ACUTE],
-
-
-
-
 
 
 # NOTE:
 # -   This mapping enables us to match one corner type with another.
-# -   Defining a value as negative will configure it as a valid match, but with
-#     a lower-priority than a positive value.
-# -   This maps from an expected target corner type to what is actually
-#     configured in the given tile-set.
+# -   Each mapping multiplier must be between 0.5 and 1.0, inclusive.
+# -   Reverse mappings are automatically added. DO NOT INCLUDE THEM HERE.
+#     -   E.g., if A maps to B, then B should not map to A.
 # FIXME: LEFT OFF HERE: -----------------------------------------
 # - Should this be configurable by the tileset author?
 # - Would there be a simpler way to allow the tile-set author to configure which
 #   slopes are allowed to transition into which others?
 const FALLBACKS := {
-    # FIXME: LEFT OFF HERE: ----------------------------------------
-    # FIXME: LEFT OFF HERE: ----------------------------------------
-    # FIXME: LEFT OFF HERE: ----------------------------------------
-    # FIXME: LEFT OFF HERE: ----------------------------------------
-    # FIXME: LEFT OFF HERE: ----------------------------------------
+    # FIXME: LEFT OFF HERE: -----------------------------------------
+    # FIXME: LEFT OFF HERE: -----------------------------------------
+    # FIXME: LEFT OFF HERE: -----------------------------------------
+    # FIXME: LEFT OFF HERE: -----------------------------------------
+    # FIXME: LEFT OFF HERE: -----------------------------------------
     # - Update fallback mappings.
     
     SubtileCorner.UNKNOWN: [],
     SubtileCorner.ERROR: [],
-    SubtileCorner.EMPTY: [
-        [SubtileCorner.EXT_90_90_CONVEX, 1.0],
-        [SubtileCorner.EXT_90H_45_CONVEX_ACUTE, 1.0],
-        [SubtileCorner.EXT_90V_45_CONVEX_ACUTE, 1.0],
-    ],
+    SubtileCorner.EMPTY: [],
     SubtileCorner.FULLY_INTERIOR: [],
     
     ### 90-degree.
     
     SubtileCorner.EXT_90H: [],
     SubtileCorner.EXT_90V: [],
-    SubtileCorner.EXT_90_90_CONVEX: [],
+    SubtileCorner.EXT_90_90_CONVEX: [
+        [SubtileCorner.EMPTY, 1.0],
+    ],
     SubtileCorner.EXT_90_90_CONCAVE: [],
     
     SubtileCorner.EXT_INT_90H: [],
@@ -100,14 +87,28 @@ const FALLBACKS := {
     
     ### 90-to-45-degree.
     
-    SubtileCorner.EXT_90H_45_CONVEX_ACUTE: [],
-    SubtileCorner.EXT_90V_45_CONVEX_ACUTE: [],
+    SubtileCorner.EXT_90H_45_CONVEX_ACUTE: [
+        [SubtileCorner.EMPTY, 1.0],
+    ],
+    SubtileCorner.EXT_90V_45_CONVEX_ACUTE: [
+        [SubtileCorner.EMPTY, 1.0],
+    ],
     
-    SubtileCorner.EXT_90H_45_CONVEX: [],
-    SubtileCorner.EXT_90V_45_CONVEX: [],
+    SubtileCorner.EXT_90H_45_CONVEX: [
+        [SubtileCorner.EXT_90H, 0.8],
+    ],
+    SubtileCorner.EXT_90V_45_CONVEX: [
+        [SubtileCorner.EXT_90V, 0.8],
+    ],
     
-    SubtileCorner.EXT_90H_45_CONCAVE: [],
-    SubtileCorner.EXT_90V_45_CONCAVE: [],
+    SubtileCorner.EXT_90H_45_CONCAVE: [
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.8],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.2],
+    ],
+    SubtileCorner.EXT_90V_45_CONCAVE: [
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.8],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.2],
+    ],
     
     SubtileCorner.EXT_INT_90H_45_CONVEX: [],
     SubtileCorner.EXT_INT_90V_45_CONVEX: [],

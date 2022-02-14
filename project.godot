@@ -710,9 +710,9 @@ _global_script_classes=[ {
 "path": "res://addons/surfacer/src/gui/legend/fall_range_without_jump_distance_legend_item.gd"
 }, {
 "base": "Reference",
-"class": "FallbackSubtileCornerMatches",
+"class": "FallbackSubtileCorners",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/fallback_subtile_corner_matches.gd"
+"path": "res://addons/surface_tiler/src/fallback_subtile_corners.gd"
 }, {
 "base": "TextControlRow",
 "class": "FastestTimeControlRow",
@@ -1759,6 +1759,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/subtile_corner.gd"
 }, {
+"base": "Reference",
+"class": "SubtileCornerToDepth",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/subtile_corner_to_depth.gd"
+}, {
+"base": "Reference",
+"class": "SubtileDepth",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/subtile_depth.gd"
+}, {
 "base": "Node",
 "class": "SubtileManifest",
 "language": "GDScript",
@@ -2355,7 +2365,7 @@ _global_script_class_icons={
 "FallRangeWithJumpDistanceLegendItem": "",
 "FallRangeWithoutJumpDistanceAnnotationElement": "",
 "FallRangeWithoutJumpDistanceLegendItem": "",
-"FallbackSubtileCornerMatches": "",
+"FallbackSubtileCorners": "",
 "FastestTimeControlRow": "",
 "FloorDashAction": "",
 "FloorDefaultAction": "",
@@ -2565,6 +2575,8 @@ _global_script_class_icons={
 "StyleBoxFlatScalable": "",
 "StyleBoxTextureScalable": "",
 "SubtileCorner": "",
+"SubtileCornerToDepth": "",
+"SubtileDepth": "",
 "SubtileManifest": "",
 "SubtileTargetCornerCalculator": "",
 "Surface": "",

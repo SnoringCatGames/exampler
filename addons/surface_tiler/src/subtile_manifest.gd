@@ -12,6 +12,14 @@ extends Node
 # FIXME: LEFT OFF HERE: --------------------------------
 var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 0.5
 
+# NOTE: These values should be between 0.1 and 0.5, exclusive.
+var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
+    SubtileDepth.UNKNOWN: 0.11,
+    SubtileDepth.EXTERIOR: 0.4,
+    SubtileDepth.MID: 0.15,
+    SubtileDepth.INTERIOR: 0.11,
+}
+
 ###
 
 # Dictionary<int, String>
@@ -36,7 +44,8 @@ var forces_convex_collision_shapes: bool
 #     -   The level author can then see the error-indicator subtile and change
 #         their level topography to instead use whichever subtiles are
 #         available.
-var allows_partial_matches: bool
+var allows_fallback_corner_matches: bool
+var allows_same_depth_corner_matches: bool
 
 # -   If false, then custom corner-match autotiling behavior will not happen at
 #     runtime, and will only happen when editing within the scene editor.
@@ -70,7 +79,10 @@ func register_manifest(manifest: Dictionary) -> void:
     self.autotile_name_prefix = manifest.autotile_name_prefix
     self.forces_convex_collision_shapes = \
             manifest.forces_convex_collision_shapes
-    self.allows_partial_matches = manifest.allows_partial_matches
+    self.allows_fallback_corner_matches = \
+            manifest.allows_fallback_corner_matches
+    self.allows_same_depth_corner_matches = \
+            manifest.allows_same_depth_corner_matches
     self.supports_runtime_autotiling = manifest.supports_runtime_autotiling
     
     self.corner_type_annotation_key_path = \
@@ -125,7 +137,7 @@ func register_manifest(manifest: Dictionary) -> void:
         assert(tile_set_config.are_45_degree_subtiles_used is bool)
         assert(tile_set_config.are_27_degree_subtiles_used is bool)
     
-    _validate_fallback_corner_type_matches()
+    _parse_fallback_corner_types()
     _parse_corner_types_to_swap_for_bottom_quadrants(manifest)
     
     for tile_set_config in tile_set_configs:
@@ -170,11 +182,41 @@ func get_subtile_corner_string(type: int) -> String:
     return SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]
 
 
-func _validate_fallback_corner_type_matches() -> void:
-    # Check that the corner-type enum values match the
-    # corner-type-to-matching-types map.
+func _parse_fallback_corner_types() -> void:
+    # Validate FallbackSubtileCorners.
     assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
-            FallbackSubtileCornerMatches.MATCHES.size())
+            FallbackSubtileCorners.FALLBACKS.size())
     for corner_type in SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
-        assert(FallbackSubtileCornerMatches.MATCHES.has(corner_type))
-        assert(FallbackSubtileCornerMatches.MATCHES[corner_type] is Array)
+        assert(FallbackSubtileCorners.FALLBACKS.has(corner_type))
+        assert(FallbackSubtileCorners.FALLBACKS[corner_type] is Array)
+        for fallback in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            assert(fallback is Array)
+            assert(fallback.size() == 2)
+            assert(fallback[0] is int)
+            assert(fallback[1] is float)
+            assert(fallback[1] >= 0.5 and fallback[1] <= 1.0)
+    
+    # Validate SubtileCornerToDepth.
+    assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
+            SubtileCornerToDepth.CORNERS_TO_DEPTHS.size())
+    for corner_type in SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS.has(corner_type))
+        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS[corner_type] is int)
+    
+    # Validate SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.
+    for weight_multiplier in \
+            SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.values():
+        assert(weight_multiplier > 0.1 and weight_multiplier < 0.5)
+    
+    # Record reverse-mappings for FallbackSubtileCorners.
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        for fallback in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            var fallback_corner_type: int = fallback[0]
+            var is_reverse_mapping_present := false
+            for fallback_fallback in \
+                    FallbackSubtileCorners.FALLBACKS[fallback_corner_type]:
+                if fallback_fallback[0] == corner_type:
+                    is_reverse_mapping_present = true
+            if !is_reverse_mapping_present:
+                FallbackSubtileCorners.FALLBACKS[fallback_corner_type] \
+                        .push_back([corner_type, fallback[1]])
