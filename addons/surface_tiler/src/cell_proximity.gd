@@ -111,7 +111,7 @@ func to_string(uses_newlines := false) -> String:
             neighbors.push_back(neighbors_presence[i])
     
     var world_position_string := Sc.utils.get_vector_string(
-            Sc.geometry.tile_map_to_world(position, tile_map), 2)
+            get_world_position(), 2)
     var grid_position_string := Sc.utils.get_vector_string(position, 0)
     var neighbors_string := Sc.utils.join(neighbors)
     
@@ -137,6 +137,10 @@ func to_string(uses_newlines := false) -> String:
             grid_position_string,
             neighbors_string,
         ]
+
+
+func get_world_position() -> Vector2:
+    return Sc.geometry.tile_map_to_world(position, tile_map)
 
 
 func get_angle_type(relative_x := 0, relative_y := 0) -> int:

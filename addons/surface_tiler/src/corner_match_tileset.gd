@@ -66,6 +66,18 @@ func get_quadrants(
     var quadrant_positions := []
     quadrant_positions.resize(4)
     
+    # FIXME: LEFT OFF HERE: -------------- Remove. Useful for debugging.
+    if proximity.get_world_position() == Vector2(2112, -2560):
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(">>")
+        print(proximity.to_string())
+        print(target_corners.to_string(true))
+        print(">>")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print_subtile_corner_types(
+                CornerDirection.TOP_RIGHT,
+                SubtileCorner.INT_90_90_CONCAVE)
+    
     for i in CornerDirection.OUTBOUND_CORNERS.size():
         var corner_direction: int = CornerDirection.OUTBOUND_CORNERS[i]
         
@@ -110,7 +122,7 @@ func _get_best_quadrant_match(
         i: int,
         weight: float) -> Array:
     var target_corner_type: int = target_corner_types[i]
-    var current_weight_contribution := 1.0 / pow(10,i)
+    var current_weight_contribution := 1.0 / pow(1000,i)
     
     if corner_type_map_or_position.has(target_corner_type):
         # There is a quadrant configured for this specific corner-type.
@@ -151,7 +163,7 @@ func _get_best_quadrant_match(
                 var fallback_weight := \
                         weight + \
                         current_weight_contribution * \
-                        fallback_corner_weight_multiplier
+                        fallback_corner_weight_multiplier * 0.1
                 
                 if fallback_corner_type_map_or_position is Vector2:
                     # Base case: We found a position.
@@ -195,7 +207,7 @@ func _get_best_quadrant_match(
                     var other_weight := \
                             weight + \
                             current_weight_contribution * \
-                            other_corner_weight_multiplier
+                            other_corner_weight_multiplier * 0.01
                     
                     if other_corner_type_map_or_position is Vector2:
                         # Base case: We found a position.
@@ -280,3 +292,87 @@ func _get_inner_tile_id() -> int:
 
 func get_cell_size() -> Vector2:
     return autotile_get_size(_angle_type_to_tile_id[CellAngleType.A90])
+
+
+func print_subtile_corner_types(
+        target_corner_direction := -1,
+        target_self_corner_type := -1,
+        target_h_opp_corner_type := -1,
+        target_v_opp_corner_type := -1,
+        target_h_inbound_corner_type := -1,
+        target_v_inbound_corner_type := -1) -> void:
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>> CornerMatchTileset.subtile_corner_types         >>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    for corner_direction in _sort(subtile_corner_types.keys()):
+        if target_corner_direction >= 0 and \
+                target_corner_direction != corner_direction:
+            continue
+        print(CornerDirection.get_string(corner_direction))
+        var self_corner_type_map: Dictionary = \
+                subtile_corner_types[corner_direction]
+        for self_corner_type in _sort(self_corner_type_map.keys()):
+            if target_self_corner_type >= 0 and \
+                    target_self_corner_type != self_corner_type:
+                continue
+            print("  Self: " + Su.subtile_manifest \
+                    .get_subtile_corner_string(self_corner_type))
+            var h_opp_corner_type_map: Dictionary = \
+                    self_corner_type_map[self_corner_type]
+            for h_opp_corner_type in _sort(h_opp_corner_type_map.keys()):
+                if target_h_opp_corner_type >= 0 and \
+                        target_h_opp_corner_type != corner_direction:
+                    continue
+                print("    H-opp: " + Su.subtile_manifest \
+                        .get_subtile_corner_string(h_opp_corner_type))
+                var v_opp_corner_type_map: Dictionary = \
+                        h_opp_corner_type_map[h_opp_corner_type]
+                for v_opp_corner_type in _sort(v_opp_corner_type_map.keys()):
+                    if target_v_opp_corner_type >= 0 and \
+                            target_v_opp_corner_type != corner_direction:
+                        continue
+                    var position_or_h_inbound_corner_type_map = \
+                            v_opp_corner_type_map[v_opp_corner_type]
+                    if position_or_h_inbound_corner_type_map is Vector2:
+                        print("      V-opp: " + Su.subtile_manifest \
+                                .get_subtile_corner_string(v_opp_corner_type) +
+                                " => Position: " +
+                                str(position_or_h_inbound_corner_type_map))
+                    else:
+                        print("      V-opp: " + Su.subtile_manifest \
+                                .get_subtile_corner_string(v_opp_corner_type))
+                        for h_inbound_corner_type in \
+                                _sort(position_or_h_inbound_corner_type_map \
+                                    .keys()):
+                            if target_h_inbound_corner_type >= 0 and \
+                                    target_h_inbound_corner_type != \
+                                        corner_direction:
+                                continue
+                            print("        H-inbound: " +
+                                    Su.subtile_manifest \
+                                        .get_subtile_corner_string(
+                                            h_inbound_corner_type))
+                            var v_inbound_corner_type_map: Dictionary = \
+                                    position_or_h_inbound_corner_type_map \
+                                        [h_inbound_corner_type]
+                            for v_inbound_corner_type in \
+                                    _sort(v_inbound_corner_type_map.keys()):
+                                if target_v_inbound_corner_type >= 0 and \
+                                        target_v_inbound_corner_type != \
+                                            corner_direction:
+                                    continue
+                                var position: Vector2 = \
+                                        v_inbound_corner_type_map \
+                                            [v_inbound_corner_type]
+                                print("          V-inbound: " +
+                                        Su.subtile_manifest \
+                                            .get_subtile_corner_string(
+                                                v_inbound_corner_type) +
+                                        " => Position: " + 
+                                        str(position))
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+
+func _sort(arr: Array) -> Array:
+    arr.sort()
+    return arr
