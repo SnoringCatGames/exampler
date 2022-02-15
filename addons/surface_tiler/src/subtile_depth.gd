@@ -5,6 +5,7 @@ extends Reference
 enum {
     UNKNOWN,
     EXTERIOR,
-    MID,
-    INTERIOR,
+    EXT_INT,
+    INT_EXT,
+    FULLY_INTERIOR,
 }

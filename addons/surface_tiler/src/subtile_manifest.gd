@@ -18,26 +18,37 @@ var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
     SubtileDepth.UNKNOWN: {
         SubtileDepth.UNKNOWN: 0.11,
         SubtileDepth.EXTERIOR: 0.101,
-        SubtileDepth.MID: 0.101,
-        SubtileDepth.INTERIOR: 0.101,
+        SubtileDepth.EXT_INT: 0.101,
+        SubtileDepth.INT_EXT: 0.101,
+        SubtileDepth.FULLY_INTERIOR: 0.101,
     },
     SubtileDepth.EXTERIOR: {
         SubtileDepth.UNKNOWN: 0.101,
         SubtileDepth.EXTERIOR: 0.4,
-        SubtileDepth.MID: 0.25,
-        SubtileDepth.INTERIOR: 0.11,
+        SubtileDepth.EXT_INT: 0.35,
+        SubtileDepth.INT_EXT: 0.23,
+        SubtileDepth.FULLY_INTERIOR: 0.11,
     },
-    SubtileDepth.MID: {
+    SubtileDepth.EXT_INT: {
         SubtileDepth.UNKNOWN: 0.101,
-        SubtileDepth.EXTERIOR: 0.25,
-        SubtileDepth.MID: 0.3,
-        SubtileDepth.INTERIOR: 0.15,
+        SubtileDepth.EXTERIOR: 0.35,
+        SubtileDepth.EXT_INT: 0.38,
+        SubtileDepth.INT_EXT: 0.25,
+        SubtileDepth.FULLY_INTERIOR: 0.13,
     },
-    SubtileDepth.INTERIOR: {
+    SubtileDepth.INT_EXT: {
+        SubtileDepth.UNKNOWN: 0.101,
+        SubtileDepth.EXTERIOR: 0.23,
+        SubtileDepth.EXT_INT: 0.25,
+        SubtileDepth.INT_EXT: 0.3,
+        SubtileDepth.FULLY_INTERIOR: 0.15,
+    },
+    SubtileDepth.FULLY_INTERIOR: {
         SubtileDepth.UNKNOWN: 0.101,
         SubtileDepth.EXTERIOR: 0.11,
-        SubtileDepth.MID: 0.15,
-        SubtileDepth.INTERIOR: 0.2,
+        SubtileDepth.EXT_INT: 0.13,
+        SubtileDepth.INT_EXT: 0.15,
+        SubtileDepth.FULLY_INTERIOR: 0.2,
     },
 }
 

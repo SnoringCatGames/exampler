@@ -7,7 +7,7 @@ const CORNERS_TO_DEPTHS := {
     
     SubtileCorner.ERROR: SubtileDepth.UNKNOWN,
     SubtileCorner.EMPTY: SubtileDepth.UNKNOWN,
-    SubtileCorner.FULLY_INTERIOR: SubtileDepth.UNKNOWN,
+    SubtileCorner.FULLY_INTERIOR: SubtileDepth.FULLY_INTERIOR,
     
     ### 90-degree.
     
@@ -16,15 +16,15 @@ const CORNERS_TO_DEPTHS := {
     SubtileCorner.EXT_90_90_CONVEX: SubtileDepth.EXTERIOR,
     SubtileCorner.EXT_90_90_CONCAVE: SubtileDepth.EXTERIOR,
     
-    SubtileCorner.EXT_INT_90H: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90V: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90_90_CONVEX: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90_90_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_90H: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90V: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90_90_CONVEX: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90_90_CONCAVE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90H: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_90V: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_90_90_CONVEX: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_90_90_CONCAVE: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_90H: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_90V: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_90_90_CONVEX: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_90_90_CONCAVE: SubtileDepth.INT_EXT,
     
     ### 45-degree.
     
@@ -32,15 +32,15 @@ const CORNERS_TO_DEPTHS := {
     SubtileCorner.EXT_45_CEILING: SubtileDepth.EXTERIOR,
     SubtileCorner.EXT_EXT_45_CLIPPED: SubtileDepth.EXTERIOR,
     
-    SubtileCorner.EXT_INT_45_FLOOR: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_45_CEILING: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_45_CLIPPED: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_45_FLOOR: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_45_CEILING: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_45_CLIPPED: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_EXT_45_CLIPPED: SubtileDepth.MID,
+    SubtileCorner.INT_EXT_45_CLIPPED: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_45_FLOOR: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_45_CEILING: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_INT_45_CLIPPED: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_45_FLOOR: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_45_CEILING: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_45_CLIPPED: SubtileDepth.INT_EXT,
     
     ### 90-to-45-degree.
     
@@ -53,56 +53,56 @@ const CORNERS_TO_DEPTHS := {
     SubtileCorner.EXT_90H_45_CONCAVE: SubtileDepth.EXTERIOR,
     SubtileCorner.EXT_90V_45_CONCAVE: SubtileDepth.EXTERIOR,
     
-    SubtileCorner.EXT_INT_90H_45_CONVEX: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90V_45_CONVEX: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_90H_45_CONVEX: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90V_45_CONVEX: SubtileDepth.EXT_INT,
     
-    SubtileCorner.EXT_INT_90H_45_CONCAVE: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90V_45_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_90H_45_CONCAVE: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90V_45_CONCAVE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_EXT_90H_45_CONCAVE: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_EXT_90V_45_CONCAVE: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_EXT_90H_45_CONCAVE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_EXT_90V_45_CONCAVE: SubtileDepth.INT_EXT,
     
-    SubtileCorner.INT_INT_90H_45_CONCAVE: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_INT_90V_45_CONCAVE: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_INT_90H_45_CONCAVE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_90V_45_CONCAVE: SubtileDepth.INT_EXT,
     
     ### Complex 90-45-degree combinations.
     
-    SubtileCorner.EXT_INT_45_FLOOR_45_CEILING: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_45_FLOOR_45_CEILING: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_45_FLOOR_45_CEILING: SubtileDepth.INT_EXT,
     
-    SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: SubtileDepth.MID,
-    SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: SubtileDepth.MID,
+    SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE: SubtileDepth.MID,
-    SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE: SubtileDepth.MID,
+    SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE: SubtileDepth.MID,
-    SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE: SubtileDepth.EXT_INT,
     
     
-    SubtileCorner.INT_90H_INT_EXT_45_CLIPPED: SubtileDepth.MID,
-    SubtileCorner.INT_90V_INT_EXT_45_CLIPPED: SubtileDepth.MID,
-    SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED: SubtileDepth.MID,
+    SubtileCorner.INT_90H_INT_EXT_45_CLIPPED: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90V_INT_EXT_45_CLIPPED: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING: SubtileDepth.INTERIOR,
-    SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR: SubtileDepth.INTERIOR,
+    SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR: SubtileDepth.INT_EXT,
     
-    SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE: SubtileDepth.MID,
-    SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR: SubtileDepth.MID,
-    SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING: SubtileDepth.MID,
-    SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING: SubtileDepth.MID,
+    SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE: SubtileDepth.MID,
-    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.MID,
+    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.EXT_INT,
     
-    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING: SubtileDepth.MID,
-    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR: SubtileDepth.MID,
+    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR: SubtileDepth.EXT_INT,
     
     ### 27-degree.
     
