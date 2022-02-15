@@ -36,15 +36,8 @@ var inner_tile_id: int setget ,_get_inner_tile_id
 
 # Dictionary<int, int>
 var _tile_id_to_angle_type := {}
-
-
-func tile_get_angle_type(tile_id: int) -> int:
-    if tile_id == TileMap.INVALID_CELL:
-        return CellAngleType.EMPTY
-    elif _tile_id_to_angle_type.has(tile_id):
-        return _tile_id_to_angle_type[tile_id]
-    else:
-        return CellAngleType.EMPTY
+# Dictionary<int, int>
+var _angle_type_to_tile_id := {}
 
 
 func get_quadrants(
@@ -271,5 +264,18 @@ func _is_tile_bound(
             _tile_id_to_angle_type.has(neighbor_id)
 
 
+func tile_get_angle_type(tile_id: int) -> int:
+    if tile_id == TileMap.INVALID_CELL:
+        return CellAngleType.EMPTY
+    elif _tile_id_to_angle_type.has(tile_id):
+        return _tile_id_to_angle_type[tile_id]
+    else:
+        return CellAngleType.EMPTY
+
+
 func _get_inner_tile_id() -> int:
     return inner_tile_set.tile_id
+
+
+func get_cell_size() -> Vector2:
+    return autotile_get_size(_angle_type_to_tile_id[CellAngleType.A90])

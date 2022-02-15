@@ -37,14 +37,26 @@ func _ready() -> void:
         property_list_changed_notify()
     assert(tile_set is CornerMatchTileset)
     
-    # FIXME: LEFT OFF HERE: ----------------------------------
-    # - I'm not seeing anything render here.
-    # - Pull this out into a separate location, also controlled by the level scene.
-    # - Then explicitly set a couple quadrant-subtiles there in order to test that things work.
-    # - I will also need to make sure that the inner tilmap saves to the level .tres file.
-    inner_tilemap = CornerMatchInnerTilemap.new()
-    inner_tilemap.tile_set = tile_set.inner_tile_set
-    get_parent().call_deferred("add_child", inner_tilemap)
+    var children := Sc.utils.get_children_by_type(self, CornerMatchInnerTilemap)
+    if children.empty():
+        inner_tilemap = CornerMatchInnerTilemap.new()
+        inner_tilemap.tile_set = tile_set.inner_tile_set
+        call_deferred("_attach_inner_tilemap")
+    else:
+        inner_tilemap = children[0]
+    
+    self.cell_size = tile_set.get_cell_size()
+    inner_tilemap.cell_size = tile_set.inner_tile_set.get_cell_size()
+
+
+func _attach_inner_tilemap() -> void:
+    var parent := get_parent()
+    var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
+    parent.add_child(inner_tilemap)
+    inner_tilemap.owner = \
+            ancestor if \
+            is_instance_valid(ancestor) else \
+            parent
 
 
 func _enter_tree() -> void:

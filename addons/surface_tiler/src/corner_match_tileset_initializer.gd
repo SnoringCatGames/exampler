@@ -129,6 +129,7 @@ func _initialize_outer_tile(
     tile_set.create_tile(tile_id)
     
     tile_set._tile_id_to_angle_type[tile_id] = angle_type
+    tile_set._angle_type_to_tile_id[angle_type] = tile_id
     
     var empty_texture: Texture = load(Sc.images.TRANSPARENT_PIXEL_PATH)
     var empty_texture_size: Vector2 = empty_texture.get_size()
