@@ -3,6 +3,15 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
+# FIXME: LEFT OFF HERE: ---------------------------------------------
+# - INT_INT_EXT_90H_45 (instead of INT_90H)
+# - INT_INT_EXT_90V_45 (instead of INT_90V)
+# - INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE (instead of INT_90_90_CONVEX)
+# - INT_H_INT_INT_EXT_90H_45_CONCAVE (instead of INT_90_90_CONVEX)
+# - INT_V_INT_INT_EXT_90V_45_CONCAVE (instead of INT_90_90_CONVEX)
+# - Remove debugging tiles from tileset image.
+
+
 func get_target_top_left_corner(proximity: CellProximity) -> int:
     if !proximity.get_is_a_corner_match_subtile():
         return SubtileCorner.EMPTY
@@ -258,28 +267,26 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         else:
                             # This is an interior floor.
                             return SubtileCorner.INT_90H
+                    elif proximity.get_is_90_right_wall(-1,0):
+                        # This is an interior right-wall.
+                        return SubtileCorner.INT_90V
                     else:
-                        # All neighbors are present, except for the opposite corner.
-                        if proximity.get_is_90_right_wall(-1,0):
-                            # This is an interior right-wall.
-                            return SubtileCorner.INT_90V
+                        if proximity.get_is_top_left_corner_clipped_90_90(-1,-1):
+                            # This is an interior 90-90 concave corner.
+                            return SubtileCorner.INT_90_90_CONCAVE
                         else:
-                            if proximity.get_is_top_left_corner_clipped_90_90(-1,-1):
-                                # This is an interior 90-90 concave corner.
-                                return SubtileCorner.INT_90_90_CONCAVE
+                            # This is a deeply-interior corner.
+                            if proximity.get_is_bottom_right_corner_clipped_90_90():
+                                return SubtileCorner.EXT_INT_90_90_CONCAVE
+                            elif proximity.get_is_bottom_right_corner_clipped_45_45():
+                                return SubtileCorner.INT_INT_45_CLIPPED
+                            elif proximity.get_is_bottom_right_corner_clipped_90H_45():
+                                return SubtileCorner.INT_EXT_90H_45_CONCAVE
+                            elif proximity.get_is_bottom_right_corner_clipped_90V_45():
+                                return SubtileCorner.INT_EXT_90V_45_CONCAVE
                             else:
-                                # This is a deeply-interior corner.
-                                if proximity.get_is_bottom_right_corner_clipped_90_90():
-                                    return SubtileCorner.EXT_INT_90_90_CONCAVE
-                                elif proximity.get_is_bottom_right_corner_clipped_45_45():
-                                    return SubtileCorner.INT_INT_45_CLIPPED
-                                elif proximity.get_is_bottom_right_corner_clipped_90H_45():
-                                    return SubtileCorner.INT_EXT_90H_45_CONCAVE
-                                elif proximity.get_is_bottom_right_corner_clipped_90V_45():
-                                    return SubtileCorner.INT_EXT_90V_45_CONCAVE
-                                else:
-                                    # FIXME: LEFT OFF HERE: -------- A27
-                                    pass
+                                # FIXME: LEFT OFF HERE: -------- A27
+                                pass
                 else:
                     _log_error(
                             "get_target_top_left_corner, " + \
