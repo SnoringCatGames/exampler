@@ -15,10 +15,30 @@ var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 0.5
 
 # NOTE: These values should be between 0.1 and 0.5, exclusive.
 var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
-    SubtileDepth.UNKNOWN: 0.11,
-    SubtileDepth.EXTERIOR: 0.4,
-    SubtileDepth.MID: 0.15,
-    SubtileDepth.INTERIOR: 0.11,
+    SubtileDepth.UNKNOWN: {
+        SubtileDepth.UNKNOWN: 0.11,
+        SubtileDepth.EXTERIOR: 0.101,
+        SubtileDepth.MID: 0.101,
+        SubtileDepth.INTERIOR: 0.101,
+    },
+    SubtileDepth.EXTERIOR: {
+        SubtileDepth.UNKNOWN: 0.101,
+        SubtileDepth.EXTERIOR: 0.4,
+        SubtileDepth.MID: 0.25,
+        SubtileDepth.INTERIOR: 0.11,
+    },
+    SubtileDepth.MID: {
+        SubtileDepth.UNKNOWN: 0.101,
+        SubtileDepth.EXTERIOR: 0.25,
+        SubtileDepth.MID: 0.3,
+        SubtileDepth.INTERIOR: 0.15,
+    },
+    SubtileDepth.INTERIOR: {
+        SubtileDepth.UNKNOWN: 0.101,
+        SubtileDepth.EXTERIOR: 0.11,
+        SubtileDepth.MID: 0.15,
+        SubtileDepth.INTERIOR: 0.2,
+    },
 }
 
 const INNER_TILESET_TILE_NAME := "corner_match_inner_tile"
@@ -48,7 +68,7 @@ var forces_convex_collision_shapes: bool
 #         their level topography to instead use whichever subtiles are
 #         available.
 var allows_fallback_corner_matches: bool
-var allows_same_depth_corner_matches: bool
+var allows_non_fallback_corner_matches: bool
 
 # -   If false, then custom corner-match autotiling behavior will not happen at
 #     runtime, and will only happen when editing within the scene editor.
@@ -84,8 +104,8 @@ func register_manifest(manifest: Dictionary) -> void:
             manifest.forces_convex_collision_shapes
     self.allows_fallback_corner_matches = \
             manifest.allows_fallback_corner_matches
-    self.allows_same_depth_corner_matches = \
-            manifest.allows_same_depth_corner_matches
+    self.allows_non_fallback_corner_matches = \
+            manifest.allows_non_fallback_corner_matches
     self.supports_runtime_autotiling = manifest.supports_runtime_autotiling
     
     self.corner_type_annotation_key_path = \
@@ -207,9 +227,10 @@ func _parse_fallback_corner_types() -> void:
         assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS[corner_type] is int)
     
     # Validate SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.
-    for weight_multiplier in \
+    for weight_multipliers in \
             SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.values():
-        assert(weight_multiplier > 0.1 and weight_multiplier < 0.5)
+        for weight_multiplier in weight_multipliers.values():
+            assert(weight_multiplier > 0.1 and weight_multiplier < 0.5)
     
     # Record reverse-mappings for FallbackSubtileCorners.
     for corner_type in FallbackSubtileCorners.FALLBACKS:

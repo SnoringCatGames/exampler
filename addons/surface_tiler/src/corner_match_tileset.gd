@@ -59,7 +59,7 @@ func get_quadrants(
         Sc.logger.warning(
             "Not all target corners are valid:\n%s\n%s" % [
             proximity.to_string(),
-            target_corners.to_string(),
+            target_corners.to_string(true),
         ])
         return _get_error_quadrants()
     
@@ -94,7 +94,7 @@ func get_quadrants(
                 str(quadrant_position),
                 str(quadrant_weight),
                 proximity.to_string(),
-                target_corners.to_string(),
+                target_corners.to_string(true),
             ])
             return _get_error_quadrants()
         
@@ -174,7 +174,7 @@ func _get_best_quadrant_match(
         
         if best_fallback_weight < 0 and \
                 (i > 0 or \
-                Su.subtile_manifest.allows_same_depth_corner_matches):
+                Su.subtile_manifest.allows_non_fallback_corner_matches):
             # There were no matching fallbacks.
             # Now we consider all other corner-types of the correct depth.
             var target_depth: int = \
@@ -183,10 +183,6 @@ func _get_best_quadrant_match(
                     Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
                 var other_depth: int = SubtileCornerToDepth.CORNERS_TO_DEPTHS \
                         [other_corner_type]
-                if other_depth != target_depth:
-                    # Only consider un-matched corner-types if they are at
-                    # least at the right depth.
-                    continue
                 
                 if corner_type_map_or_position.has(other_corner_type):
                     # There is a quadrant configured for this other corner-type.
@@ -195,7 +191,7 @@ func _get_best_quadrant_match(
                     var other_corner_weight_multiplier: float = \
                             Su.subtile_manifest \
                                 .SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER \
-                                [other_depth]
+                                [target_depth][other_depth]
                     var other_weight := \
                             weight + \
                             current_weight_contribution * \
@@ -270,7 +266,12 @@ func tile_get_angle_type(tile_id: int) -> int:
     elif _tile_id_to_angle_type.has(tile_id):
         return _tile_id_to_angle_type[tile_id]
     else:
-        return CellAngleType.EMPTY
+        # Non-corner-match-tiles are treated as 90-degree surfaces.
+        return CellAngleType.A90
+
+
+func get_is_a_corner_match_subtile(tile_id: int) -> bool:
+    return _tile_id_to_angle_type.has(tile_id)
 
 
 func _get_inner_tile_id() -> int:

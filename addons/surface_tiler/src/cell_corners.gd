@@ -88,7 +88,7 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_br_r = SubtileCorner.EMPTY
 
 
-func to_string() -> String:
+func to_string(uses_newlines := false) -> String:
     var corner_strings := []
     for corner_directions in [
             CornerDirection.OUTBOUND_CORNERS,
@@ -103,7 +103,11 @@ func to_string() -> String:
                     corner_direction_string,
                     corner_type_string,
                ])
-    return "CellCorners(%s)" % Sc.utils.join(corner_strings, ", ")
+    if uses_newlines:
+        return "CellCorners(\n    %s\n)" % \
+                Sc.utils.join(corner_strings, ",\n    ")
+    else:
+        return "CellCorners(%s)" % Sc.utils.join(corner_strings, ", ")
 
 
 func get_are_corners_valid() -> bool:

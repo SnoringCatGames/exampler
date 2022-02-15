@@ -41,22 +41,15 @@ func _ready() -> void:
     if children.empty():
         inner_tilemap = CornerMatchInnerTilemap.new()
         inner_tilemap.tile_set = tile_set.inner_tile_set
-        call_deferred("_attach_inner_tilemap")
+        inner_tilemap.name = "InnerTileMap_DontEdit"
+        add_child(inner_tilemap)
+        var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
+        inner_tilemap.owner = ancestor
     else:
         inner_tilemap = children[0]
     
     self.cell_size = tile_set.get_cell_size()
     inner_tilemap.cell_size = tile_set.inner_tile_set.get_cell_size()
-
-
-func _attach_inner_tilemap() -> void:
-    var parent := get_parent()
-    var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
-    parent.add_child(inner_tilemap)
-    inner_tilemap.owner = \
-            ancestor if \
-            is_instance_valid(ancestor) else \
-            parent
 
 
 func _enter_tree() -> void:
@@ -157,9 +150,6 @@ func set_cell(
                     tile_id)
 
 
-# FIXME: --------------------------------
-# - Make sure this doesn't trigger set_cell() under the hood, which would cause
-#   our signal to emit twice.
 func set_cellv(
         position: Vector2,
         tile_id: int,

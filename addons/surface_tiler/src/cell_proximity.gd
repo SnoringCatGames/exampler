@@ -68,58 +68,75 @@ func _init(
     self.angle_type = get_angle_type(0,0)
 
 
-static func get_cell_actual_bitmask(
+func get_cell_actual_bitmask(
         position: Vector2,
         tile_map: TileMap) -> int:
     var bitmask := 0
-    if tile_map.get_cellv(position + Vector2(-1, -1)) != TileMap.INVALID_CELL:
+    if get_is_present(-1, -1):
         bitmask |= TileSet.BIND_TOPLEFT
-    if tile_map.get_cellv(position + Vector2(0, -1)) != TileMap.INVALID_CELL:
+    if get_is_present(0, -1):
         bitmask |= TileSet.BIND_TOP
-    if tile_map.get_cellv(position + Vector2(1, -1)) != TileMap.INVALID_CELL:
+    if get_is_present(1, -1):
         bitmask |= TileSet.BIND_TOPRIGHT
-    if tile_map.get_cellv(position + Vector2(-1, 0)) != TileMap.INVALID_CELL:
+    if get_is_present(-1, 0):
         bitmask |= TileSet.BIND_LEFT
-    if tile_map.get_cellv(position) != TileMap.INVALID_CELL:
+    if get_is_present(position.x, position.y):
         bitmask |= TileSet.BIND_CENTER
-    if tile_map.get_cellv(position + Vector2(1, 0)) != TileMap.INVALID_CELL:
+    if get_is_present(1, 0):
         bitmask |= TileSet.BIND_RIGHT
-    if tile_map.get_cellv(position + Vector2(-1, 1)) != TileMap.INVALID_CELL:
+    if get_is_present(-1, 1):
         bitmask |= TileSet.BIND_BOTTOMLEFT
-    if tile_map.get_cellv(position + Vector2(0, 1)) != TileMap.INVALID_CELL:
+    if get_is_present(0, 1):
         bitmask |= TileSet.BIND_BOTTOM
-    if tile_map.get_cellv(position + Vector2(1, 1)) != TileMap.INVALID_CELL:
+    if get_is_present(1, 1):
         bitmask |= TileSet.BIND_BOTTOMRIGHT
     return bitmask
 
 
-func to_string() -> String:
+func to_string(uses_newlines := false) -> String:
     var neighbors := []
     var neighbors_presence := [
-        "tl", is_top_left_present,
-        "t", is_top_present,
-        "tr", is_top_right_present,
-        "l", is_left_present,
-        "c", is_center_present,
-        "r", is_right_present,
-        "bl", is_bottom_left_present,
-        "b", is_bottom_present,
-        "br", is_bottom_right_present,
+        "tl", _get_is_top_left_present(),
+        "t", _get_is_top_present(),
+        "tr", _get_is_top_right_present(),
+        "l", _get_is_left_present(),
+        "c", _get_is_center_present(),
+        "r", _get_is_right_present(),
+        "bl", _get_is_bottom_left_present(),
+        "b", _get_is_bottom_present(),
+        "br", _get_is_bottom_right_present(),
     ]
     for i in range(0, neighbors_presence.size(), 2):
         if neighbors_presence[i + 1]:
             neighbors.push_back(neighbors_presence[i])
-    return (
-        "CellProximity(" +
-        "world_position=%s, " +
-        "grid_position=%s, " +
-        "neighbors=%s)"
-    ) % [
-        Sc.utils.get_vector_string(
-                Sc.geometry.tile_map_to_world(position, tile_map), 2),
-        Sc.utils.get_vector_string(position, 0),
-        Sc.utils.join(neighbors),
-    ]
+    
+    var world_position_string := Sc.utils.get_vector_string(
+            Sc.geometry.tile_map_to_world(position, tile_map), 2)
+    var grid_position_string := Sc.utils.get_vector_string(position, 0)
+    var neighbors_string := Sc.utils.join(neighbors)
+    
+    if uses_newlines:
+        return (
+            "CellProximity(\n" +
+            "    world_position=%s,\n" +
+            "    grid_position=%s,\n" +
+            "    neighbors=%s\n)"
+        ) % [
+            world_position_string,
+            grid_position_string,
+            neighbors_string,
+        ]
+    else:
+        return (
+            "CellProximity(" +
+            "world_position=%s, " +
+            "grid_position=%s, " +
+            "neighbors=%s)"
+        ) % [
+            world_position_string,
+            grid_position_string,
+            neighbors_string,
+        ]
 
 
 func get_angle_type(relative_x := 0, relative_y := 0) -> int:
@@ -143,6 +160,13 @@ func get_is_empty(relative_x := 0, relative_y := 0) -> bool:
     return !tile_set._is_tile_bound(tile_id, neighbor_id)
 
 
+func get_is_a_corner_match_subtile(relative_x := 0, relative_y := 0) -> bool:
+    var neighbor_id := tile_map.get_cell(
+            position.x + relative_x,
+            position.y + relative_y)
+    return tile_set.get_is_a_corner_match_subtile(neighbor_id)
+
+
 func _get_is_angle_type_90() -> bool:
     return angle_type == CellAngleType.A90
 
@@ -153,6 +177,48 @@ func _get_is_angle_type_45() -> bool:
 
 func _get_is_angle_type_27() -> bool:
     return angle_type == CellAngleType.A27
+
+
+func get_are_adjacent_sides_and_corner_present(corner_direction: int) -> bool:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return !!(bitmask & TileSet.BIND_TOP) and \
+                    !!(bitmask & TileSet.BIND_LEFT) and \
+                    !!(bitmask & TileSet.BIND_TOPLEFT)
+        CornerDirection.TOP_RIGHT:
+            return !!(bitmask & TileSet.BIND_TOP) and \
+                    !!(bitmask & TileSet.BIND_RIGHT) and \
+                    !!(bitmask & TileSet.BIND_TOPRIGHT)
+        CornerDirection.BOTTOM_LEFT:
+            return !!(bitmask & TileSet.BIND_BOTTOM) and \
+                    !!(bitmask & TileSet.BIND_LEFT) and \
+                    !!(bitmask & TileSet.BIND_BOTTOMLEFT)
+        CornerDirection.BOTTOM_RIGHT:
+            return !!(bitmask & TileSet.BIND_BOTTOM) and \
+                    !!(bitmask & TileSet.BIND_RIGHT) and \
+                    !!(bitmask & TileSet.BIND_BOTTOMRIGHT)
+        _:
+            Sc.logger.error(
+                    "CellProximity.get_are_adjacent_sides_and_corner_present")
+            return false
+
+
+func get_are_all_sides_present() -> bool:
+    return !!(bitmask & TileSet.BIND_TOP) and \
+           !!(bitmask & TileSet.BIND_LEFT) and \
+           !!(bitmask & TileSet.BIND_RIGHT) and \
+           !!(bitmask & TileSet.BIND_BOTTOM)
+
+
+func get_are_all_sides_and_corners_present() -> bool:
+    return !!(bitmask & TileSet.BIND_TOPLEFT) and \
+           !!(bitmask & TileSet.BIND_TOP) and \
+           !!(bitmask & TileSet.BIND_TOPRIGHT) and \
+           !!(bitmask & TileSet.BIND_LEFT) and \
+           !!(bitmask & TileSet.BIND_RIGHT) and \
+           !!(bitmask & TileSet.BIND_BOTTOMLEFT) and \
+           !!(bitmask & TileSet.BIND_BOTTOM) and \
+           !!(bitmask & TileSet.BIND_BOTTOMRIGHT)
 
 
 func _get_is_top_left_present() -> bool:
