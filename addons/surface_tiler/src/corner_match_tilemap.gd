@@ -179,20 +179,27 @@ func _on_cell_tile_changed(
         cell_position: Vector2,
         tile_id: int,
         previous_tile_id: int) -> void:
-    _delegate_quadrant_updates(cell_position, tile_id)
+    if tile_id == INVALID_CELL or \
+            previous_tile_id == INVALID_CELL:
+        _delegate_quadrant_updates(cell_position, tile_id)
+        
+        # Update all nearby neighbor cells.
+        for y in 5:
+            for x in 5:
+                var neighbor_position := \
+                        cell_position + Vector2(x - 2, y - 2)
+                if neighbor_position == cell_position:
+                    # We already updated this cell.
+                    continue
+                _delegate_quadrant_updates(
+                        neighbor_position,
+                        tile_id)
+    
     emit_signal(
             "cell_tile_changed",
             cell_position,
             tile_id,
             previous_tile_id)
-    if tile_id == INVALID_CELL or \
-            previous_tile_id == INVALID_CELL:
-        # FIXME: LEFT OFF HERE: ------------------
-        # - Does this work correctly with the current tile-set setup?
-        call_deferred(
-                "update_bitmask_region",
-                cell_position + Vector2(-2, -2),
-                cell_position + Vector2(2, 2))
 
 
 func _delegate_quadrant_updates(
@@ -202,26 +209,16 @@ func _delegate_quadrant_updates(
             cell_position,
             tile_id,
             self)
-    
     var cell_offsets := [
         Vector2(0,0),
         Vector2(1,0),
         Vector2(0,1),
         Vector2(1,1),
     ]
-    
     for i in quadrants.size():
         var quadrant_position: Vector2 = quadrants[i]
         var inner_cell_offset: Vector2 = cell_offsets[i]
         var inner_cell_position := cell_position * 2 + inner_cell_offset
-        # FIXME: LEFT OFF HERE: ------------------------------------ REMOVE
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>> inner_tilemap.set_cell")
-        print("inner_cell_position.x = " + \
-                str(Vector2(inner_cell_position.x, inner_cell_position.y)))
-        print("quadrant_position = " + \
-                str(quadrant_position))
-        print(inner_tilemap.tile_set.get_tiles_ids())
-        print(inner_tilemap.tile_set.tile_get_texture(tile_set.inner_tile_id).get_size())
         inner_tilemap.set_cell(
                 inner_cell_position.x,
                 inner_cell_position.y,
