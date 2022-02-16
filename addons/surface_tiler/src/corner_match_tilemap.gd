@@ -40,20 +40,21 @@ func _ready() -> void:
     var children := Sc.utils.get_children_by_type(self, CornerMatchInnerTilemap)
     if children.empty():
         inner_tilemap = CornerMatchInnerTilemap.new()
-        inner_tilemap.tile_set = tile_set.inner_tile_set
         inner_tilemap.name = "InnerTileMap_DontEdit"
         add_child(inner_tilemap)
         var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
         inner_tilemap.owner = ancestor
     else:
         inner_tilemap = children[0]
+    inner_tilemap.tile_set = tile_set
     
-    self.cell_size = tile_set.get_cell_size()
-    inner_tilemap.cell_size = tile_set.inner_tile_set.get_cell_size()
+    self.cell_size = tile_set.get_outer_cell_size()
+    inner_tilemap.cell_size = tile_set.get_inner_cell_size()
+    
+    assert(cell_size == Sc.level_session.config.cell_size)
 
 
 func _enter_tree() -> void:
-    cell_size = Sc.level_session.config.cell_size
     position = Vector2.ZERO
     property_list_changed_notify()
 

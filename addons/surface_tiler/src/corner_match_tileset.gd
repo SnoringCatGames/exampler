@@ -31,8 +31,8 @@ var subtile_corner_types: Dictionary
 var are_45_degree_subtiles_used: bool
 var are_27_degree_subtiles_used: bool
 
-var inner_tile_set: CornerMatchInnerTileset
-var inner_tile_id: int setget ,_get_inner_tile_id
+var inner_tile_id: int
+var inner_tile_name: String
 
 # Dictionary<int, int>
 var _tile_id_to_angle_type := {}
@@ -302,12 +302,12 @@ func get_is_a_corner_match_subtile(tile_id: int) -> bool:
     return _tile_id_to_angle_type.has(tile_id)
 
 
-func _get_inner_tile_id() -> int:
-    return inner_tile_set.tile_id
-
-
-func get_cell_size() -> Vector2:
+func get_outer_cell_size() -> Vector2:
     return autotile_get_size(_angle_type_to_tile_id[CellAngleType.A90])
+
+
+func get_inner_cell_size() -> Vector2:
+    return autotile_get_size(inner_tile_id)
 
 
 func print_subtile_corner_types(
