@@ -34,6 +34,10 @@ var are_27_degree_subtiles_used: bool
 var inner_tile_id: int
 var inner_tile_name: String
 
+var error_quadrants: Array
+var empty_quadrants: Array
+var clear_quadarnts := [Vector2.INF, Vector2.INF, Vector2.INF, Vector2.INF]
+
 # Dictionary<int, int>
 var _tile_id_to_angle_type := {}
 # Dictionary<int, int>
@@ -46,7 +50,7 @@ func get_quadrants(
         tile_map: TileMap) -> Array:
     if !Engine.editor_hint and \
             !Su.subtile_manifest.supports_runtime_autotiling:
-        return _get_error_quadrants()
+        return error_quadrants
     
     var proximity := CellProximity.new(
             tile_map,
@@ -61,7 +65,7 @@ func get_quadrants(
             proximity.to_string(),
             target_corners.to_string(true),
         ])
-        return _get_error_quadrants()
+        return error_quadrants
     
     var quadrant_positions := []
     quadrant_positions.resize(4)
@@ -108,11 +112,18 @@ func get_quadrants(
                 proximity.to_string(),
                 target_corners.to_string(true),
             ])
-            return _get_error_quadrants()
+            return error_quadrants
         
         quadrant_positions[i] = quadrant_position
     
-    return quadrant_positions
+    # If the matching quadrants represent the normal empty subtile, with no
+    # interesting inbound neighbor matches, then we return Vector2.INF values,
+    # so that the tilemap can clear the cell instead of assigning the empty
+    # subtile.
+    for i in quadrant_positions.size():
+        if quadrant_positions[i] != empty_quadrants[i]:
+            return quadrant_positions
+    return clear_quadarnts
 
 
 # Array<Vector2, float>
@@ -250,35 +261,6 @@ func _get_best_quadrant_match(
         
     else:
         return [Vector2.INF, -INF]
-
-
-func _get_error_quadrants() -> Array:
-    var tl_quadrant_position: Vector2 = subtile_corner_types \
-            [CornerDirection.TOP_LEFT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
-    var tr_quadrant_position: Vector2 = subtile_corner_types \
-            [CornerDirection.TOP_RIGHT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
-    var bl_quadrant_position: Vector2 = subtile_corner_types \
-            [CornerDirection.BOTTOM_LEFT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
-    var br_quadrant_position: Vector2 = subtile_corner_types \
-            [CornerDirection.BOTTOM_RIGHT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
-    return [
-        tl_quadrant_position,
-        tr_quadrant_position,
-        bl_quadrant_position,
-        br_quadrant_position,
-    ]
 
 
 func _is_tile_bound(

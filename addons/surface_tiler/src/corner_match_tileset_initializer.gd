@@ -28,6 +28,8 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
                     tile_set_config.quadrant_size,
                     tile_set)
     tile_set.subtile_corner_types = subtile_corner_types
+    tile_set.empty_quadrants = _get_empty_quadrants(subtile_corner_types)
+    tile_set.error_quadrants = _get_error_quadrants(subtile_corner_types)
     
     var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
             .create_tileset_shapes(tile_set_config)
@@ -241,3 +243,89 @@ func _set_shapes_for_quadrant(
                 tile_id,
                 quadrant_position,
                 TileSet.BIND_CENTER)
+
+
+func _get_error_quadrants(subtile_corner_types: Dictionary) -> Array:
+    var tl_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.TOP_LEFT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var tr_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.TOP_RIGHT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var bl_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.BOTTOM_LEFT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    var br_quadrant_position: Vector2 = subtile_corner_types \
+            [CornerDirection.BOTTOM_RIGHT] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR] \
+            [SubtileCorner.ERROR]
+    return [
+        tl_quadrant_position,
+        tr_quadrant_position,
+        bl_quadrant_position,
+        br_quadrant_position,
+    ]
+
+
+func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
+    var tl_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [CornerDirection.TOP_LEFT] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY]
+    var tl_quadrant_position: Vector2
+    if tl_quadrant_position_or_h_inbound_map is Vector2:
+        tl_quadrant_position = tl_quadrant_position_or_h_inbound_map
+    else:
+        tl_quadrant_position = tl_quadrant_position_or_h_inbound_map \
+                [SubtileCorner.UNKNOWN] \
+                [SubtileCorner.UNKNOWN]
+    var tr_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [CornerDirection.TOP_RIGHT] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY]
+    var tr_quadrant_position: Vector2
+    if tr_quadrant_position_or_h_inbound_map is Vector2:
+        tr_quadrant_position = tr_quadrant_position_or_h_inbound_map
+    else:
+        tr_quadrant_position = tr_quadrant_position_or_h_inbound_map \
+                [SubtileCorner.UNKNOWN] \
+                [SubtileCorner.UNKNOWN]
+    var bl_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [CornerDirection.BOTTOM_LEFT] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY]
+    var bl_quadrant_position: Vector2
+    if bl_quadrant_position_or_h_inbound_map is Vector2:
+        bl_quadrant_position = bl_quadrant_position_or_h_inbound_map
+    else:
+        bl_quadrant_position = bl_quadrant_position_or_h_inbound_map \
+                [SubtileCorner.UNKNOWN] \
+                [SubtileCorner.UNKNOWN]
+    var br_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [CornerDirection.BOTTOM_RIGHT] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY] \
+            [SubtileCorner.EMPTY]
+    var br_quadrant_position: Vector2
+    if br_quadrant_position_or_h_inbound_map is Vector2:
+        br_quadrant_position = br_quadrant_position_or_h_inbound_map
+    else:
+        br_quadrant_position = br_quadrant_position_or_h_inbound_map \
+                [SubtileCorner.UNKNOWN] \
+                [SubtileCorner.UNKNOWN]
+    return [
+        tl_quadrant_position,
+        tr_quadrant_position,
+        bl_quadrant_position,
+        br_quadrant_position,
+    ]

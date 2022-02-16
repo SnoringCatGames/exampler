@@ -210,11 +210,18 @@ func _delegate_quadrant_updates(
         var quadrant_position: Vector2 = quadrants[i]
         var inner_cell_offset: Vector2 = cell_offsets[i]
         var inner_cell_position := cell_position * 2 + inner_cell_offset
-        inner_tilemap.set_cell(
-                inner_cell_position.x,
-                inner_cell_position.y,
-                tile_set.inner_tile_id,
-                false,
-                false,
-                false,
-                quadrant_position)
+        if quadrant_position == Vector2.INF:
+            # Clear the cell.
+            inner_tilemap.set_cell(
+                    inner_cell_position.x,
+                    inner_cell_position.y,
+                    -1)
+        else:
+            inner_tilemap.set_cell(
+                    inner_cell_position.x,
+                    inner_cell_position.y,
+                    tile_set.inner_tile_id,
+                    false,
+                    false,
+                    false,
+                    quadrant_position)
