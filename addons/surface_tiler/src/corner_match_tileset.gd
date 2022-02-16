@@ -121,8 +121,17 @@ func _get_best_quadrant_match(
         target_corner_types: Array,
         i: int,
         weight: float) -> Array:
+    var iteration_exponent: int
+    match i:
+        0: iteration_exponent = 0
+        1, 2: iteration_exponent = 1
+        3, 4: iteration_exponent = 2
+        _:
+            Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
+    
+    var current_weight_contribution := 1.0 / pow(1000,iteration_exponent)
+    var is_inbound_iteration := i > 2
     var target_corner_type: int = target_corner_types[i]
-    var current_weight_contribution := 1.0 / pow(1000,i)
     
     if corner_type_map_or_position.has(target_corner_type):
         # There is a quadrant configured for this specific corner-type.
@@ -200,10 +209,17 @@ func _get_best_quadrant_match(
                     # There is a quadrant configured for this other corner-type.
                     var other_corner_type_map_or_position = \
                             corner_type_map_or_position[other_corner_type]
-                    var other_corner_weight_multiplier: float = \
-                            Su.subtile_manifest \
-                                .SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER \
-                                [target_depth][other_depth]
+                    
+                    var other_corner_weight_multiplier: float
+                    if is_inbound_iteration:
+                        if other_corner_type == SubtileCorner.UNKNOWN:
+                            pass
+                    else:
+                        other_corner_weight_multiplier = \
+                                Su.subtile_manifest \
+                                    .SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER \
+                                    [target_depth][other_depth]
+                    
                     var other_weight := \
                             weight + \
                             current_weight_contribution * \

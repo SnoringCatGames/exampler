@@ -15,40 +15,43 @@ var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 0.5
 
 # NOTE: These values should be between 0 and 1, exclusive.
 var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
+    # NOTE: We need UNKNOWNs to match with high weight, so that a mapping
+    #       without inbound corners will rank higher than a mapping with the
+    #       wrong inbound corners.
     SubtileDepth.UNKNOWN: {
-        SubtileDepth.UNKNOWN: 0.1,
-        SubtileDepth.EXTERIOR: 0.01,
-        SubtileDepth.EXT_INT: 0.01,
-        SubtileDepth.INT_EXT: 0.01,
-        SubtileDepth.FULLY_INTERIOR: 0.01,
+        SubtileDepth.UNKNOWN: 0.9,
+        SubtileDepth.EXTERIOR: 0.9,
+        SubtileDepth.EXT_INT: 0.9,
+        SubtileDepth.INT_EXT: 0.9,
+        SubtileDepth.FULLY_INTERIOR: 0.9,
     },
     SubtileDepth.EXTERIOR: {
-        SubtileDepth.UNKNOWN: 0.01,
-        SubtileDepth.EXTERIOR: 0.9,
-        SubtileDepth.EXT_INT: 0.6,
-        SubtileDepth.INT_EXT: 0.3,
-        SubtileDepth.FULLY_INTERIOR: 0.22,
+        SubtileDepth.UNKNOWN: 0.9,
+        SubtileDepth.EXTERIOR: 0.8,
+        SubtileDepth.EXT_INT: 0.5,
+        SubtileDepth.INT_EXT: 0.2,
+        SubtileDepth.FULLY_INTERIOR: 0.12,
     },
     SubtileDepth.EXT_INT: {
-        SubtileDepth.UNKNOWN: 0.01,
-        SubtileDepth.EXTERIOR: 0.6,
-        SubtileDepth.EXT_INT: 0.8,
-        SubtileDepth.INT_EXT: 0.4,
-        SubtileDepth.FULLY_INTERIOR: 0.26,
+        SubtileDepth.UNKNOWN: 0.9,
+        SubtileDepth.EXTERIOR: 0.5,
+        SubtileDepth.EXT_INT: 0.7,
+        SubtileDepth.INT_EXT: 0.3,
+        SubtileDepth.FULLY_INTERIOR: 0.16,
     },
     SubtileDepth.INT_EXT: {
-        SubtileDepth.UNKNOWN: 0.01,
-        SubtileDepth.EXTERIOR: 0.3,
-        SubtileDepth.EXT_INT: 0.4,
-        SubtileDepth.INT_EXT: 0.5,
-        SubtileDepth.FULLY_INTERIOR: 0.35,
+        SubtileDepth.UNKNOWN: 0.9,
+        SubtileDepth.EXTERIOR: 0.2,
+        SubtileDepth.EXT_INT: 0.3,
+        SubtileDepth.INT_EXT: 0.4,
+        SubtileDepth.FULLY_INTERIOR: 0.25,
     },
     SubtileDepth.FULLY_INTERIOR: {
-        SubtileDepth.UNKNOWN: 0.01,
-        SubtileDepth.EXTERIOR: 0.22,
-        SubtileDepth.EXT_INT: 0.26,
-        SubtileDepth.INT_EXT: 0.35,
-        SubtileDepth.FULLY_INTERIOR: 0.4,
+        SubtileDepth.UNKNOWN: 0.9,
+        SubtileDepth.EXTERIOR: 0.12,
+        SubtileDepth.EXT_INT: 0.16,
+        SubtileDepth.INT_EXT: 0.25,
+        SubtileDepth.FULLY_INTERIOR: 0.3,
     },
 }
 
