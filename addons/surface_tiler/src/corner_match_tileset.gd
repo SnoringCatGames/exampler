@@ -71,16 +71,16 @@ func get_quadrants(
     quadrant_positions.resize(4)
     
     # TODO: Remove. Useful for debugging.
-#    if proximity.get_world_position() == Vector2(2112, -2560):
-#        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-#        print(">>")
-#        print(proximity.to_string())
-#        print(target_corners.to_string(true))
-#        print(">>")
-#        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-#        print_subtile_corner_types(
-#                CornerDirection.TOP_RIGHT,
-#                SubtileCorner.INT_90_90_CONCAVE)
+    if proximity.get_world_position() == Vector2(32, -192):
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(">>")
+        print(proximity.to_string())
+        print(target_corners.to_string(true))
+        print(">>")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print_subtile_corner_types(
+                CornerDirection.TOP_LEFT,
+                SubtileCorner.EXT_90H_45_CONVEX)
     
     for i in CornerDirection.OUTBOUND_CORNERS.size():
         var corner_direction: int = CornerDirection.OUTBOUND_CORNERS[i]

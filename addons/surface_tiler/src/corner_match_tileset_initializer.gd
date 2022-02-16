@@ -84,7 +84,7 @@ func _initialize_inner_tile(
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary,
         tile_set_config: Dictionary) -> void:
-    var tile_name: String = Su.subtile_manifest.inner_autotile_name
+    var tile_name: String = "*" + Su.subtile_manifest.inner_autotile_name
     
     var tile_id := tile_set.find_tile_by_name(tile_name)
     if tile_id >= 0:
@@ -122,19 +122,25 @@ func _initialize_outer_tile(
         tile_set: CornerMatchTileset,
         angle_type: int,
         tile_set_config: Dictionary) -> void:
+    var tile_name_prefix: String
     var tile_name_suffix: String
     match angle_type:
         CellAngleType.A90:
+            tile_name_prefix = "***"
             tile_name_suffix = "90"
         CellAngleType.A45:
+            tile_name_prefix = "**"
             tile_name_suffix = "45"
         CellAngleType.A27:
+            tile_name_prefix = "*"
             tile_name_suffix = "27"
         _:
             Sc.logger.error("CornerMatchTilesetInitializer._initialize_tile")
     
     var tile_name: String = \
-            Su.subtile_manifest.outer_autotile_name_prefix + tile_name_suffix
+            tile_name_prefix + \
+            Su.subtile_manifest.outer_autotile_name + \
+            tile_name_suffix
     
     var tile_id := tile_set.find_tile_by_name(tile_name)
     if tile_id >= 0:
