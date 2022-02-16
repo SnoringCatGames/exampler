@@ -60,6 +60,11 @@ func parse_corner_type_annotation_key(
             var corner_type := int(
                     quadrant_row_index * quadrant_column_count + \
                     quadrant_column_index)
+            if corner_type >= \
+                    Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size():
+                # We've reached the end of the annotation key, and any remaining
+                # cells should be empty.
+                break
             var annotation := _get_quadrant_annotation(
                     quadrant_position,
                     quadrant_size,
