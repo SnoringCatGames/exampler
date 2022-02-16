@@ -222,3 +222,22 @@ func _set_shapes_for_quadrant(
                 tile_id,
                 occlusion_shape,
                 quadrant_position)
+        var all_neighbors_bitmask := \
+                TileSet.BIND_TOPLEFT | \
+                TileSet.BIND_TOP | \
+                TileSet.BIND_TOPRIGHT | \
+                TileSet.BIND_LEFT | \
+                TileSet.BIND_CENTER | \
+                TileSet.BIND_RIGHT | \
+                TileSet.BIND_BOTTOMLEFT | \
+                TileSet.BIND_BOTTOM | \
+                TileSet.BIND_BOTTOMRIGHT
+        tile_set.autotile_set_bitmask(
+                tile_id,
+                quadrant_position,
+                all_neighbors_bitmask)
+    else:
+        tile_set.autotile_set_bitmask(
+                tile_id,
+                quadrant_position,
+                TileSet.BIND_CENTER)

@@ -40,7 +40,7 @@ func _ready() -> void:
     var children := Sc.utils.get_children_by_type(self, CornerMatchInnerTilemap)
     if children.empty():
         inner_tilemap = CornerMatchInnerTilemap.new()
-        inner_tilemap.name = "InnerTileMap_DontEdit"
+        inner_tilemap.name = "InnerTileMap"
         add_child(inner_tilemap)
         var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
         inner_tilemap.owner = ancestor
