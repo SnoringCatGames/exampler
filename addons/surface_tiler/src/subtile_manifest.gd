@@ -60,7 +60,8 @@ var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
 # Dictionary<int, String>
 var SUBTILE_CORNER_TYPE_VALUE_TO_KEY: Dictionary
 
-var autotile_name_prefix: String
+var outer_autotile_name_prefix: String
+var inner_autotile_name := "__INNER_TILE__"
 var forces_convex_collision_shapes: bool
 
 # -   If true, the autotiling logic will try to find the best match given which
@@ -111,7 +112,9 @@ var tile_set_configs: Array
 
 
 func register_manifest(manifest: Dictionary) -> void:
-    self.autotile_name_prefix = manifest.autotile_name_prefix
+    self.outer_autotile_name_prefix = manifest.outer_autotile_name_prefix
+    if manifest.has("inner_autotile_name"):
+        self.inner_autotile_name = manifest.inner_autotile_name
     self.forces_convex_collision_shapes = \
             manifest.forces_convex_collision_shapes
     self.allows_fallback_corner_matches = \

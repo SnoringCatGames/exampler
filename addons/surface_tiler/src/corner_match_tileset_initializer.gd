@@ -66,8 +66,7 @@ func _initialize_inner_tile(
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary,
         tile_set_config: Dictionary) -> void:
-    var tile_name: String = \
-            "__DO_NOT_EDIT__INNER_TILE_" + Su.subtile_manifest.autotile_name_prefix
+    var tile_name: String = Su.subtile_manifest.inner_autotile_name
     
     var tile_id := tile_set.find_tile_by_name(tile_name)
     if tile_id >= 0:
@@ -117,7 +116,7 @@ func _initialize_outer_tile(
             Sc.logger.error("CornerMatchTilesetInitializer._initialize_tile")
     
     var tile_name: String = \
-            Su.subtile_manifest.autotile_name_prefix + tile_name_suffix
+            Su.subtile_manifest.outer_autotile_name_prefix + tile_name_suffix
     
     var tile_id := tile_set.find_tile_by_name(tile_name)
     if tile_id >= 0:
