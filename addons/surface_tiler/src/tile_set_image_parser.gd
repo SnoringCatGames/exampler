@@ -556,7 +556,8 @@ static func _record_autotile_coord(
             map[h_inbound_corner_type] = {}
         map = map[h_inbound_corner_type]
         
-        map[v_inbound_corner_type] = autotile_coord
+        if !map.has(v_inbound_corner_type):
+            map[v_inbound_corner_type] = autotile_coord
         
     else:
         if map.has(v_opp_corner_type) and \
@@ -572,9 +573,11 @@ static func _record_autotile_coord(
                 map[SubtileCorner.UNKNOWN] = {}
             map = map[SubtileCorner.UNKNOWN]
             
-            map[SubtileCorner.UNKNOWN] = autotile_coord
+            if !map.has(SubtileCorner.UNKNOWN):
+                map[SubtileCorner.UNKNOWN] = autotile_coord
         else:
-            map[v_opp_corner_type] = autotile_coord
+            if !map.has(v_opp_corner_type):
+                map[v_opp_corner_type] = autotile_coord
 
 
 static func _get_corner_type_from_annotation(

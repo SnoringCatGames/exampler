@@ -159,8 +159,8 @@ func _set_outer_tile_icon_coordinates(
         tile_set: CornerMatchTileset,
         tile_id: int) -> void:
     # FIXME: LEFT OFF HERE: ----------------------------
-#    autotile_set_icon_coordinate(tile_id, )
-    pass
+    var icon_coordinate := Vector2.ZERO
+    tile_set.autotile_set_icon_coordinate(tile_id, icon_coordinate)
 
 
 func _set_inner_tile_shapes_for_quadrants(

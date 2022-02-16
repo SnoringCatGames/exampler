@@ -4,13 +4,23 @@ extends Node
 
 
 func create_tileset_shapes(tile_set_config: Dictionary) -> Dictionary:
+    var shape_types_to_swap := {}
+    for corner_type_to_swap in \
+            Su.subtile_manifest.corner_types_to_swap_for_bottom_quadrants:
+        var shape_type_to_swap: int = \
+                QuadrantShapeType.get_shape_type_for_corner_type(
+                    corner_type_to_swap)
+        shape_types_to_swap[shape_type_to_swap] = true
+    
     # Use this to memoize and dedup shape instances.
     # Dictionary<
     #   QuadrantShapeType,
     #   Dictionary<
     #     CornerDirection,
     #     [Shape2D, OccluderPolygon2D]>>
-    var shape_type_to_shapes := _create_shape_type_to_shapes(tile_set_config)
+    var shape_type_to_shapes := _create_shape_type_to_shapes(
+            tile_set_config,
+            shape_types_to_swap)
     
     # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
     var collision_shapes := {}
@@ -40,8 +50,13 @@ func create_tileset_shapes(tile_set_config: Dictionary) -> Dictionary:
 #     Dictionary<
 #       SubtileCorner,
 #       [Array<Vector2>, Shape2D, OccluderPolygon2D]>>>
-func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
+func _create_shape_type_to_shapes(
+        tile_set_config: Dictionary,
+        shape_types_to_swap: Dictionary) -> Dictionary:
     var shape_type_to_shapes := {}
+    
+    # FIXME: LEFT OFF HERE: ---------------------------------------
+    # - 
     
     for shape_type in QuadrantShapeType.VALUES:
         var corner_direction_to_shapes := {}
@@ -51,7 +66,8 @@ func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
             var vertices := _get_shape_vertices(
                     shape_type,
                     corner_direction,
-                    tile_set_config)
+                    tile_set_config,
+                    shape_types_to_swap)
             
             var collision_shape: Shape2D
             var occlusion_shape: OccluderPolygon2D
@@ -82,27 +98,31 @@ func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
 func _get_shape_vertices(
         shape_type: int,
         corner_direction: int,
-        tile_set_config: Dictionary) -> Array:
+        tile_set_config: Dictionary,
+        shape_types_to_swap: Dictionary) -> Array:
     var vertices := _get_shape_vertices_for_shape_type_at_top_left(
             shape_type,
             tile_set_config)
-    assert(vertices.size() % 2 == 0)
     
-    # Flip vertically if needed.
-    if !CornerDirection.get_is_top(corner_direction):
-        for vertex_index in vertices.size() / 2:
-            var coordinate_index: int = vertex_index * 2 + 1
-            vertices[coordinate_index] = \
-                    tile_set_config.quadrant_size - \
-                    vertices[coordinate_index]
-    
-    # Flip horizontally if needed.
-    if !CornerDirection.get_is_left(corner_direction):
-        for vertex_index in vertices.size() / 2:
-            var coordinate_index: int = vertex_index * 2
-            vertices[coordinate_index] = \
-                    tile_set_config.quadrant_size - \
-                    vertices[coordinate_index]
+    var is_a_shape_type_to_swap := shape_types_to_swap.has(shape_type)
+    if is_a_shape_type_to_swap:
+        # Flip horizontally if needed.
+        if CornerDirection.get_is_top(corner_direction) != \
+                CornerDirection.get_is_left(corner_direction):
+            for vertex_index in vertices.size():
+                vertices[vertex_index].x = \
+                        tile_set_config.quadrant_size - vertices[vertex_index].x
+    else:
+        # Flip vertically if needed.
+        if !CornerDirection.get_is_top(corner_direction):
+            for vertex_index in vertices.size():
+                vertices[vertex_index].y = \
+                        tile_set_config.quadrant_size - vertices[vertex_index].y
+        # Flip horizontally if needed.
+        if !CornerDirection.get_is_left(corner_direction):
+            for vertex_index in vertices.size():
+                vertices[vertex_index].x = \
+                        tile_set_config.quadrant_size - vertices[vertex_index].x
     
     return vertices
 
@@ -118,72 +138,72 @@ func _get_shape_vertices_for_shape_type_at_top_left(
             return []
         QuadrantShapeType.FULL_SQUARE:
             return [
-                0, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
+                Vector2(0, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(0, quadrant_size),
             ]
         QuadrantShapeType.CLIPPED_CORNER_90_90:
             return [
-                0, collision_margin,
-                collision_margin, collision_margin,
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
+                Vector2(0, collision_margin),
+                Vector2(collision_margin, collision_margin),
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(0, quadrant_size),
             ]
         QuadrantShapeType.CLIPPED_CORNER_45:
             return [
-                0, collision_margin,
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
+                Vector2(0, collision_margin),
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(0, quadrant_size),
             ]
         QuadrantShapeType.MARGIN_TOP_90:
             return [
-                0, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size,
-                0, quadrant_size,
+                Vector2(0, collision_margin),
+                Vector2(quadrant_size, collision_margin),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(0, quadrant_size),
             ]
         QuadrantShapeType.MARGIN_SIDE_90:
             return [
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size,
-                collision_margin, quadrant_size,
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(collision_margin, quadrant_size),
             ]
         QuadrantShapeType.MARGIN_TOP_AND_SIDE_90:
             return [
-                collision_margin, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size,
-                collision_margin, quadrant_size,
+                Vector2(collision_margin, collision_margin),
+                Vector2(quadrant_size, collision_margin),
+                Vector2(quadrant_size, quadrant_size),
+                Vector2(collision_margin, quadrant_size),
             ]
         QuadrantShapeType.FLOOR_45_N:
             return [
-                0, collision_margin,
-                quadrant_size - collision_margin, quadrant_size,
-                0, quadrant_size,
+                Vector2(0, collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(0, quadrant_size),
             ]
         QuadrantShapeType.CEILING_45_N:
             return [
-                collision_margin, 0,
-                quadrant_size, 0,
-                quadrant_size, quadrant_size - collision_margin,
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
             ]
         QuadrantShapeType.EXT_90H_45_CONVEX_ACUTE:
             return [
-                collision_margin * 2, collision_margin,
-                quadrant_size, collision_margin,
-                quadrant_size, quadrant_size - collision_margin,
+                Vector2(collision_margin * 2, collision_margin),
+                Vector2(quadrant_size, collision_margin),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
             ]
         QuadrantShapeType.EXT_90V_45_CONVEX_ACUTE:
             return [
-                collision_margin, collision_margin * 2,
-                quadrant_size - collision_margin, quadrant_size,
-                collision_margin, quadrant_size,
+                Vector2(collision_margin, collision_margin * 2),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(collision_margin, quadrant_size),
             ]
         _:
             Sc.logger.error(

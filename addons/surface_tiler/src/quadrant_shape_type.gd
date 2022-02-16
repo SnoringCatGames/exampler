@@ -70,10 +70,12 @@ static func get_shape_type_for_corner_type(corner_type: int) -> int:
             return CEILING_45_N
         SubtileCorner.EXT_EXT_45_CLIPPED:
             return CLIPPED_CORNER_45
+        SubtileCorner.EXT_INT_45_CLIPPED:
+            return FULL_SQUARE
+#            return CLIPPED_CORNER_45_OPP # FIXME: LEFT OFF HERE: ----------------- Use this; Also, add more types, and require more parameterization, in order to get complex quadrant shapes with clips out of both diagonal corners.
         
         SubtileCorner.EXT_INT_45_FLOOR, \
         SubtileCorner.EXT_INT_45_CEILING, \
-        SubtileCorner.EXT_INT_45_CLIPPED, \
         SubtileCorner.INT_EXT_45_CLIPPED, \
         SubtileCorner.INT_45_FLOOR, \
         SubtileCorner.INT_45_CEILING, \
