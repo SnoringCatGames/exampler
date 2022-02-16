@@ -32,10 +32,26 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
     tile_set.error_quadrants = _get_error_quadrants(subtile_corner_types)
     
     var shapes: Dictionary = Su.subtile_manifest.shape_calculator \
-            .create_tileset_shapes(tile_set_config)
-    # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
+            .create_tileset_shapes(subtile_corner_types, tile_set_config)
+    # Dictionary<
+    #   CornerDirection,
+    #   Dictionary<
+    #     SubtileCorner,
+    #     Dictionary<
+    #       SubtileCorner,
+    #       Dictionary<
+    #         SubtileCorner,
+    #         Shape2D>>>>
     var collision_shapes: Dictionary = shapes.collision_shapes
-    # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
+    # Dictionary<
+    #   CornerDirection,
+    #   Dictionary<
+    #     SubtileCorner,
+    #     Dictionary<
+    #       SubtileCorner,
+    #       Dictionary<
+    #         SubtileCorner,
+    #         OccluderPolygon2D>>>>
     var occlusion_shapes: Dictionary = shapes.occlusion_shapes
     
     _initialize_inner_tile(
@@ -175,15 +191,20 @@ func _set_inner_tile_shapes_for_quadrants(
         for self_corner_type in self_corner_type_map:
             var h_opp_corner_type_map: Dictionary = \
                     self_corner_type_map[self_corner_type]
-            for v_opp_corner_type_map in h_opp_corner_type_map.values():
-                for position_or_h_inbound_corner_type_map in \
-                        v_opp_corner_type_map.values():
+            for h_opp_corner_type in h_opp_corner_type_map:
+                var v_opp_corner_type_map: Dictionary = \
+                        h_opp_corner_type_map[h_opp_corner_type]
+                for v_opp_corner_type in v_opp_corner_type_map:
+                    var position_or_h_inbound_corner_type_map = \
+                            v_opp_corner_type_map[v_opp_corner_type]
                     if position_or_h_inbound_corner_type_map is Vector2:
                         _set_shapes_for_quadrant(
                                 tile_set,
                                 tile_id,
                                 position_or_h_inbound_corner_type_map,
                                 self_corner_type,
+                                h_opp_corner_type,
+                                v_opp_corner_type,
                                 corner_direction,
                                 collision_shapes,
                                 occlusion_shapes)
@@ -196,6 +217,8 @@ func _set_inner_tile_shapes_for_quadrants(
                                         tile_id,
                                         position,
                                         self_corner_type,
+                                        h_opp_corner_type,
+                                        v_opp_corner_type,
                                         corner_direction,
                                         collision_shapes,
                                         occlusion_shapes)
@@ -205,14 +228,23 @@ func _set_shapes_for_quadrant(
         tile_set: CornerMatchTileset,
         tile_id: int,
         quadrant_position: Vector2,
-        corner_type: int,
+        self_corner_type: int,
+        h_opp_corner_type: int,
+        v_opp_corner_type: int,
         corner_direction: int,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
-    var collision_shape: Shape2D = \
-            collision_shapes[corner_direction][corner_type]
-    var occlusion_shape: OccluderPolygon2D = \
-            occlusion_shapes[corner_direction][corner_type]
+    var collision_shape: Shape2D = collision_shapes \
+            [corner_direction] \
+            [self_corner_type] \
+            [h_opp_corner_type] \
+            [v_opp_corner_type]
+    var occlusion_shape: OccluderPolygon2D = occlusion_shapes \
+            [corner_direction] \
+            [self_corner_type] \
+            [h_opp_corner_type] \
+            [v_opp_corner_type]
+    
     if is_instance_valid(collision_shape):
         tile_set.tile_add_shape(
                 tile_id,
@@ -224,25 +256,23 @@ func _set_shapes_for_quadrant(
                 tile_id,
                 occlusion_shape,
                 quadrant_position)
-        var all_neighbors_bitmask := \
-                TileSet.BIND_TOPLEFT | \
-                TileSet.BIND_TOP | \
-                TileSet.BIND_TOPRIGHT | \
-                TileSet.BIND_LEFT | \
-                TileSet.BIND_CENTER | \
-                TileSet.BIND_RIGHT | \
-                TileSet.BIND_BOTTOMLEFT | \
-                TileSet.BIND_BOTTOM | \
-                TileSet.BIND_BOTTOMRIGHT
-        tile_set.autotile_set_bitmask(
-                tile_id,
-                quadrant_position,
-                all_neighbors_bitmask)
-    else:
-        tile_set.autotile_set_bitmask(
-                tile_id,
-                quadrant_position,
-                TileSet.BIND_CENTER)
+    
+    var bitmask := \
+            TileSet.BIND_TOPLEFT | \
+            TileSet.BIND_TOP | \
+            TileSet.BIND_TOPRIGHT | \
+            TileSet.BIND_LEFT | \
+            TileSet.BIND_CENTER | \
+            TileSet.BIND_RIGHT | \
+            TileSet.BIND_BOTTOMLEFT | \
+            TileSet.BIND_BOTTOM | \
+            TileSet.BIND_BOTTOMRIGHT if \
+            is_instance_valid(collision_shape) else \
+            TileSet.BIND_CENTER
+    tile_set.autotile_set_bitmask(
+            tile_id,
+            quadrant_position,
+            bitmask)
 
 
 func _get_error_quadrants(subtile_corner_types: Dictionary) -> Array:

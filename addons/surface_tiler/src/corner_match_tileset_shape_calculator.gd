@@ -3,13 +3,30 @@ class_name CornerMatchTilesetShapeCalculator
 extends Node
 
 
-func create_tileset_shapes(tile_set_config: Dictionary) -> Dictionary:
+# Dictionary<
+#   ("collision_shapes"|"occlusion_shapes"),
+#   Dictionary<
+#     CornerDirection,
+#     Dictionary<
+#       SubtileCorner,
+#       Dictionary<
+#         SubtileCorner,
+#         Dictionary<
+#           SubtileCorner,
+#           (Shape2D|OccluderPolygon2D)>>>>>
+func create_tileset_shapes(
+        subtile_corner_types: Dictionary,
+        tile_set_config: Dictionary) -> Dictionary:
+    # These corner-type shapes need to be flipped differently, because of how
+    # floors vs ceilings are treated.
     var shape_types_to_swap := {}
     for corner_type_to_swap in \
             Su.subtile_manifest.corner_types_to_swap_for_bottom_quadrants:
         var shape_type_to_swap: int = \
                 QuadrantShapeType.get_shape_type_for_corner_type(
-                    corner_type_to_swap)
+                    corner_type_to_swap,
+                    SubtileCorner.UNKNOWN,
+                    SubtileCorner.UNKNOWN)
         shape_types_to_swap[shape_type_to_swap] = true
     
     # Use this to memoize and dedup shape instances.
@@ -22,21 +39,66 @@ func create_tileset_shapes(tile_set_config: Dictionary) -> Dictionary:
             tile_set_config,
             shape_types_to_swap)
     
-    # Dictionary<CornerDirection, Dictionary<SubtileCorner, Shape2D>>
+    # Dictionary<
+    #   CornerDirection,
+    #   Dictionary<
+    #     SubtileCorner,
+    #     Dictionary<
+    #       SubtileCorner,
+    #       Dictionary<
+    #         SubtileCorner,
+    #         Shape2D>>>>
     var collision_shapes := {}
-    # Dictionary<CornerDirection, Dictionary<SubtileCorner, OccluderPolygon2D>>
+    # Dictionary<
+    #   CornerDirection,
+    #   Dictionary<
+    #     SubtileCorner,
+    #     Dictionary<
+    #       SubtileCorner,
+    #       Dictionary<
+    #         SubtileCorner,
+    #         OccluderPolygon2D>>>>
     var occlusion_shapes := {}
     
-    for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+    for corner_direction in subtile_corner_types:
         collision_shapes[corner_direction] = {}
         occlusion_shapes[corner_direction] = {}
-        for corner_type in Su.subtile_manifest.SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
-            var shape_type := QuadrantShapeType.get_shape_type_for_corner_type(
-                    corner_type)
-            var shapes: Array = \
-                    shape_type_to_shapes[shape_type][corner_direction]
-            collision_shapes[corner_direction][corner_type] = shapes[0]
-            occlusion_shapes[corner_direction][corner_type] = shapes[1]
+        var self_corner_type_map: Dictionary = \
+                subtile_corner_types[corner_direction]
+        for self_corner_type in self_corner_type_map:
+            collision_shapes[corner_direction][self_corner_type] = {}
+            occlusion_shapes[corner_direction][self_corner_type] = {}
+            var h_opp_corner_type_map: Dictionary = \
+                    self_corner_type_map[self_corner_type]
+            for h_opp_corner_type in h_opp_corner_type_map:
+                collision_shapes \
+                        [corner_direction] \
+                        [self_corner_type] \
+                        [h_opp_corner_type] = {}
+                occlusion_shapes \
+                        [corner_direction] \
+                        [self_corner_type] \
+                        [h_opp_corner_type] = {}
+                var v_opp_corner_type_map: Dictionary = \
+                        h_opp_corner_type_map[h_opp_corner_type]
+                for v_opp_corner_type in v_opp_corner_type_map:
+                    var shape_type := \
+                            QuadrantShapeType.get_shape_type_for_corner_type(
+                                self_corner_type,
+                                h_opp_corner_type,
+                                v_opp_corner_type)
+                    var shapes: Array = \
+                            shape_type_to_shapes[shape_type][corner_direction]
+                    collision_shapes \
+                            [corner_direction] \
+                            [self_corner_type] \
+                            [h_opp_corner_type] \
+                            [v_opp_corner_type] = shapes[0]
+                    occlusion_shapes \
+                            [corner_direction] \
+                            [self_corner_type] \
+                            [h_opp_corner_type] \
+                            [v_opp_corner_type] = shapes[1]
     
     return {
         collision_shapes = collision_shapes,
@@ -54,9 +116,6 @@ func _create_shape_type_to_shapes(
         tile_set_config: Dictionary,
         shape_types_to_swap: Dictionary) -> Dictionary:
     var shape_type_to_shapes := {}
-    
-    # FIXME: LEFT OFF HERE: ---------------------------------------
-    # - 
     
     for shape_type in QuadrantShapeType.VALUES:
         var corner_direction_to_shapes := {}
@@ -136,6 +195,7 @@ func _get_shape_vertices_for_shape_type_at_top_left(
     match shape_type:
         QuadrantShapeType.EMPTY:
             return []
+        
         QuadrantShapeType.FULL_SQUARE:
             return [
                 Vector2(0, 0),
@@ -205,6 +265,51 @@ func _get_shape_vertices_for_shape_type_at_top_left(
                 Vector2(quadrant_size - collision_margin, quadrant_size),
                 Vector2(collision_margin, quadrant_size),
             ]
+        
+        QuadrantShapeType.FULL_SQUARE_CLIPPED_CORNER_45_OPP:
+            return [
+                Vector2(0, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(0, quadrant_size),
+            ]
+        QuadrantShapeType.CLIPPED_CORNER_90_90_CLIPPED_CORNER_45_OPP:
+            return [
+                Vector2(0, collision_margin),
+                Vector2(collision_margin, collision_margin),
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(0, quadrant_size),
+            ]
+        QuadrantShapeType.CLIPPED_CORNER_45_CLIPPED_CORNER_45_OPP:
+            return [
+                Vector2(0, collision_margin),
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(0, quadrant_size),
+            ]
+        QuadrantShapeType.MARGIN_TOP_90_CLIPPED_CORNER_45_OPP:
+            return [
+                Vector2(0, collision_margin),
+                Vector2(quadrant_size, collision_margin),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(0, quadrant_size),
+            ]
+        QuadrantShapeType.MARGIN_SIDE_90_CLIPPED_CORNER_45_OPP:
+            return [
+                Vector2(collision_margin, 0),
+                Vector2(quadrant_size, 0),
+                Vector2(quadrant_size, quadrant_size - collision_margin),
+                Vector2(quadrant_size - collision_margin, quadrant_size),
+                Vector2(collision_margin, quadrant_size),
+            ]
+        
         _:
             Sc.logger.error(
                     "CornerMatchTilesetShapeCalculator" +
