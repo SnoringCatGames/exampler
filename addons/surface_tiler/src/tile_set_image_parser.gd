@@ -119,7 +119,6 @@ func parse_corner_type_annotation_key(
 #             Vector2>>)>>>>
 func parse_tile_set_corner_type_annotations(
         corner_type_annotation_key: Dictionary,
-        corner_types_to_swap_for_bottom_quadrants: Dictionary,
         tile_set_corner_type_annotations_path: String,
         quadrant_size: int,
         outer_tile_set: CornerMatchTileset) -> Dictionary:
@@ -151,7 +150,6 @@ func parse_tile_set_corner_type_annotations(
             _parse_corner_type_annotation(
                     subtile_corner_types,
                     corner_type_annotation_key,
-                    corner_types_to_swap_for_bottom_quadrants,
                     subtile_position,
                     quadrant_size,
                     image,
@@ -167,7 +165,6 @@ func parse_tile_set_corner_type_annotations(
 func _parse_corner_type_annotation(
         subtile_corner_types: Dictionary,
         corner_type_annotation_key: Dictionary,
-        corner_types_to_swap_for_bottom_quadrants: Dictionary,
         subtile_position: Vector2,
         quadrant_size: int,
         image: Image,
@@ -396,22 +393,18 @@ func _parse_corner_type_annotation(
     var tl_corner_type := _get_corner_type_from_annotation(
             tl_corner_annotation,
             corner_type_annotation_key,
-            corner_types_to_swap_for_bottom_quadrants,
             CornerDirection.TOP_LEFT)
     var tr_corner_type := _get_corner_type_from_annotation(
             tr_corner_annotation,
             corner_type_annotation_key,
-            corner_types_to_swap_for_bottom_quadrants,
             CornerDirection.TOP_RIGHT)
     var bl_corner_type := _get_corner_type_from_annotation(
             bl_corner_annotation,
             corner_type_annotation_key,
-            corner_types_to_swap_for_bottom_quadrants,
             CornerDirection.BOTTOM_LEFT)
     var br_corner_type := _get_corner_type_from_annotation(
             br_corner_annotation,
             corner_type_annotation_key,
-            corner_types_to_swap_for_bottom_quadrants,
             CornerDirection.BOTTOM_RIGHT)
     
     # Also map inbound annotations to their corner-types.
@@ -419,49 +412,41 @@ func _parse_corner_type_annotation(
             _get_corner_type_from_annotation(
                 tl_h_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_TL_L)
     var tl_v_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 tl_v_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_TL_T)
     var tr_h_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 tr_h_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_TR_R)
     var tr_v_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 tr_v_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_TR_T)
     var bl_h_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 bl_h_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_BL_L)
     var bl_v_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 bl_v_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_BL_B)
     var br_h_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 br_h_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_BR_R)
     var br_v_inbound_corner_type := \
             _get_corner_type_from_annotation(
                 br_v_inbound_corner_annotation,
                 corner_type_annotation_key,
-                corner_types_to_swap_for_bottom_quadrants,
                 CornerDirection.INBOUND_BR_B)
     
     _record_autotile_coord(
@@ -583,18 +568,13 @@ static func _record_autotile_coord(
 static func _get_corner_type_from_annotation(
         annotation: Dictionary,
         corner_type_annotation_key: Dictionary,
-        corner_types_to_swap_for_bottom_quadrants: Dictionary,
         corner_direction: int) -> int:
     if !CornerDirection.get_is_outbound(corner_direction) and \
             annotation.bits == 0:
         return SubtileCorner.UNKNOWN
     var corner_type: int = \
             corner_type_annotation_key[annotation.color][annotation.bits]
-    if !CornerDirection.get_is_top(corner_direction) and \
-            corner_types_to_swap_for_bottom_quadrants.has(corner_type):
-        return corner_types_to_swap_for_bottom_quadrants[corner_type]
-    else:
-        return corner_type
+    return corner_type
 
 
 static func _validate_tileset_annotation(

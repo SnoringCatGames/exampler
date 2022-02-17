@@ -17,27 +17,13 @@ extends Node
 func create_tileset_shapes(
         subtile_corner_types: Dictionary,
         tile_set_config: Dictionary) -> Dictionary:
-    # These corner-type shapes need to be flipped differently, because of how
-    # floors vs ceilings are treated.
-    var shape_types_to_swap := {}
-    for corner_type_to_swap in \
-            Su.subtile_manifest.corner_types_to_swap_for_bottom_quadrants:
-        var shape_type_to_swap: int = \
-                QuadrantShapeType.get_shape_type_for_corner_type(
-                    corner_type_to_swap,
-                    SubtileCorner.UNKNOWN,
-                    SubtileCorner.UNKNOWN)
-        shape_types_to_swap[shape_type_to_swap] = true
-    
     # Use this to memoize and dedup shape instances.
     # Dictionary<
     #   QuadrantShapeType,
     #   Dictionary<
     #     CornerDirection,
     #     [Shape2D, OccluderPolygon2D]>>
-    var shape_type_to_shapes := _create_shape_type_to_shapes(
-            tile_set_config,
-            shape_types_to_swap)
+    var shape_type_to_shapes := _create_shape_type_to_shapes(tile_set_config)
     
     # Dictionary<
     #   CornerDirection,
@@ -112,9 +98,7 @@ func create_tileset_shapes(
 #     Dictionary<
 #       SubtileCorner,
 #       [Array<Vector2>, Shape2D, OccluderPolygon2D]>>>
-func _create_shape_type_to_shapes(
-        tile_set_config: Dictionary,
-        shape_types_to_swap: Dictionary) -> Dictionary:
+func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
     var shape_type_to_shapes := {}
     
     for shape_type in QuadrantShapeType.VALUES:
@@ -125,8 +109,7 @@ func _create_shape_type_to_shapes(
             var vertices := _get_shape_vertices(
                     shape_type,
                     corner_direction,
-                    tile_set_config,
-                    shape_types_to_swap)
+                    tile_set_config)
             
             var collision_shape: Shape2D
             var occlusion_shape: OccluderPolygon2D
@@ -157,31 +140,22 @@ func _create_shape_type_to_shapes(
 func _get_shape_vertices(
         shape_type: int,
         corner_direction: int,
-        tile_set_config: Dictionary,
-        shape_types_to_swap: Dictionary) -> Array:
+        tile_set_config: Dictionary) -> Array:
     var vertices := _get_shape_vertices_for_shape_type_at_top_left(
             shape_type,
             tile_set_config)
     
-    var is_a_shape_type_to_swap := shape_types_to_swap.has(shape_type)
-    if is_a_shape_type_to_swap:
-        # Flip horizontally if needed.
-        if CornerDirection.get_is_top(corner_direction) != \
-                CornerDirection.get_is_left(corner_direction):
-            for vertex_index in vertices.size():
-                vertices[vertex_index].x = \
-                        tile_set_config.quadrant_size - vertices[vertex_index].x
-    else:
-        # Flip vertically if needed.
-        if !CornerDirection.get_is_top(corner_direction):
-            for vertex_index in vertices.size():
-                vertices[vertex_index].y = \
-                        tile_set_config.quadrant_size - vertices[vertex_index].y
-        # Flip horizontally if needed.
-        if !CornerDirection.get_is_left(corner_direction):
-            for vertex_index in vertices.size():
-                vertices[vertex_index].x = \
-                        tile_set_config.quadrant_size - vertices[vertex_index].x
+    # Flip vertically if needed.
+    if !CornerDirection.get_is_top(corner_direction):
+        for vertex_index in vertices.size():
+            vertices[vertex_index].y = \
+                    tile_set_config.quadrant_size - vertices[vertex_index].y
+    
+    # Flip horizontally if needed.
+    if !CornerDirection.get_is_left(corner_direction):
+        for vertex_index in vertices.size():
+            vertices[vertex_index].x = \
+                    tile_set_config.quadrant_size - vertices[vertex_index].x
     
     return vertices
 

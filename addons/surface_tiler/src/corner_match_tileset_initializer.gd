@@ -22,8 +22,6 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
             Su.subtile_manifest.tile_set_image_parser \
                 .parse_tile_set_corner_type_annotations(
                     corner_type_annotation_key,
-                    Su.subtile_manifest \
-                        .corner_types_to_swap_for_bottom_quadrants,
                     tile_set_config.tile_set_corner_type_annotations_path,
                     tile_set_config.quadrant_size,
                     tile_set)

@@ -94,9 +94,6 @@ var subtile_target_corner_calculator: SubtileTargetCornerCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
 var initializer: CornerMatchTilesetInitializer
 
-# Dictionary<int, int>
-var corner_types_to_swap_for_bottom_quadrants: Dictionary
-
 # Array<{
 #   tile_set: CornerMatchTileset,
 #   tile_set_quadrants_path: String,
@@ -176,24 +173,9 @@ func register_manifest(manifest: Dictionary) -> void:
         assert(tile_set_config.are_27_degree_subtiles_used is bool)
     
     _parse_fallback_corner_types()
-    _parse_corner_types_to_swap_for_bottom_quadrants(manifest)
     
     for tile_set_config in tile_set_configs:
         initializer.initialize_tileset(tile_set_config)
-
-
-func _parse_corner_types_to_swap_for_bottom_quadrants(
-        manifest: Dictionary) -> void:
-    self.corner_types_to_swap_for_bottom_quadrants = {}
-    for corner_type_pair in manifest.corner_types_to_swap_for_bottom_quadrants:
-        assert(corner_type_pair is Array and \
-                corner_type_pair.size() == 2 and \
-                corner_type_pair[0] is int and \
-                corner_type_pair[1] is int)
-        self.corner_types_to_swap_for_bottom_quadrants[corner_type_pair[0]] = \
-                corner_type_pair[1]
-        self.corner_types_to_swap_for_bottom_quadrants[corner_type_pair[1]] = \
-                corner_type_pair[0]
 
 
 # This hacky function exists for a couple reasons:
