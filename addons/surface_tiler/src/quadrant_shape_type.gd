@@ -117,11 +117,11 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.EXT_INT_45_CLIPPED:
                 return FULL_SQUARE
             
-            SubtileCorner.EXT_INT_45_FLOOR, \
-            SubtileCorner.EXT_INT_45_CEILING, \
+            SubtileCorner.EXT_INT_45_H_SIDE, \
+            SubtileCorner.EXT_INT_45_V_SIDE, \
             SubtileCorner.INT_EXT_45_CLIPPED, \
-            SubtileCorner.INT_45_FLOOR, \
-            SubtileCorner.INT_45_CEILING, \
+            SubtileCorner.INT_45_H_SIDE, \
+            SubtileCorner.INT_45_V_SIDE, \
             SubtileCorner.INT_INT_45_CLIPPED:
                 return FULL_SQUARE
             
@@ -167,12 +167,12 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_90H_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90V_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED, \
-            SubtileCorner.INT_90H_INT_45_FLOOR, \
-            SubtileCorner.INT_90V_INT_45_FLOOR, \
-            SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR, \
-            SubtileCorner.INT_90H_INT_45_CEILING, \
-            SubtileCorner.INT_90V_INT_45_CEILING, \
-            SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING, \
+            SubtileCorner.INT_90H_INT_45_H_SIDE, \
+            SubtileCorner.INT_90V_INT_45_H_SIDE, \
+            SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE, \
+            SubtileCorner.INT_90H_INT_45_V_SIDE, \
+            SubtileCorner.INT_90V_INT_45_V_SIDE, \
+            SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE, \
             SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING, \
@@ -180,19 +180,19 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_H_INT_INT_EXT_90V_45_CONCAVE, \
             SubtileCorner.INT_V_INT_INT_EXT_90H_45_CONCAVE, \
             SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-            SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-            SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR, \
+            SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE, \
+            SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE, \
             SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE, \
             SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR:
+            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE:
                 return FULL_SQUARE
             
             # FIXME: LEFT OFF HERE: -------- A27
@@ -250,11 +250,11 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.EXT_INT_45_CLIPPED:
                 return FULL_SQUARE_CLIPPED_CORNER_45_OPP
             
-            SubtileCorner.EXT_INT_45_FLOOR, \
-            SubtileCorner.EXT_INT_45_CEILING, \
+            SubtileCorner.EXT_INT_45_H_SIDE, \
+            SubtileCorner.EXT_INT_45_V_SIDE, \
             SubtileCorner.INT_EXT_45_CLIPPED, \
-            SubtileCorner.INT_45_FLOOR, \
-            SubtileCorner.INT_45_CEILING, \
+            SubtileCorner.INT_45_H_SIDE, \
+            SubtileCorner.INT_45_V_SIDE, \
             SubtileCorner.INT_INT_45_CLIPPED:
                 return FULL_SQUARE_CLIPPED_CORNER_45_OPP
             
@@ -300,12 +300,12 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_90H_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90V_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED, \
-            SubtileCorner.INT_90H_INT_45_FLOOR, \
-            SubtileCorner.INT_90V_INT_45_FLOOR, \
-            SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR, \
-            SubtileCorner.INT_90H_INT_45_CEILING, \
-            SubtileCorner.INT_90V_INT_45_CEILING, \
-            SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING, \
+            SubtileCorner.INT_90H_INT_45_H_SIDE, \
+            SubtileCorner.INT_90V_INT_45_H_SIDE, \
+            SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE, \
+            SubtileCorner.INT_90H_INT_45_V_SIDE, \
+            SubtileCorner.INT_90V_INT_45_V_SIDE, \
+            SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE, \
             SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING, \
@@ -313,19 +313,19 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_H_INT_INT_EXT_90V_45_CONCAVE, \
             SubtileCorner.INT_V_INT_INT_EXT_90H_45_CONCAVE, \
             SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-            SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-            SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR, \
+            SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE, \
+            SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE, \
             SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE, \
             SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
             SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING, \
-            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR:
+            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE, \
+            SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE:
                 return FULL_SQUARE_CLIPPED_CORNER_45_OPP
             
             # FIXME: LEFT OFF HERE: -------- A27

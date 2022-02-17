@@ -213,7 +213,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_right_wall(-1,0):
                         return SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_FLOOR
+                        return SubtileCorner.EXT_INT_45_H_SIDE
                 elif proximity.get_is_top_right_corner_clipped_90V_45():
                     if proximity.get_is_90_right_wall(-1,0):
                         return SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE
@@ -232,7 +232,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_floor(0,-1):
                         return SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_CEILING
+                        return SubtileCorner.EXT_INT_45_V_SIDE
                 elif proximity.get_is_bottom_left_corner_clipped_90H_45():
                     if proximity.get_is_90_floor(0,-1):
                         return SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE
@@ -264,9 +264,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_neg_ceiling(-1,1):
                                     return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING
                                 else:
-                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                             elif proximity.get_is_45_neg_ceiling(-1,1):
-                                return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                                return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90_90_CONVEX
                         else:
@@ -278,9 +278,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_45_neg_ceiling(-1,1):
                                         return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                                     else:
-                                        return SubtileCorner.INT_90H_INT_45_FLOOR
+                                        return SubtileCorner.INT_90H_INT_45_H_SIDE
                                 elif proximity.get_is_45_neg_ceiling(-1,1):
-                                    return SubtileCorner.INT_90H_INT_45_CEILING
+                                    return SubtileCorner.INT_90H_INT_45_V_SIDE
                                 else:
                                     return SubtileCorner.INT_90H
                     elif proximity.get_is_90_right_wall(-1,0):
@@ -292,9 +292,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_neg_ceiling(-1,1):
                                     return SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING
                                 else:
-                                    return SubtileCorner.INT_90V_INT_45_FLOOR
+                                    return SubtileCorner.INT_90V_INT_45_H_SIDE
                             elif proximity.get_is_45_neg_ceiling(-1,1):
-                                return SubtileCorner.INT_90V_INT_45_CEILING
+                                return SubtileCorner.INT_90V_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90V
                     else:
@@ -345,9 +345,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_ceiling(-1,1):
                             return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                            return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_ceiling(-1,1):
-                        return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                        return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90_90_CONVEX
             else:
@@ -362,9 +362,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_ceiling(-1,1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90H_INT_45_FLOOR
+                            return SubtileCorner.INT_90H_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_ceiling(-1,1):
-                        return SubtileCorner.INT_90H_INT_45_CEILING
+                        return SubtileCorner.INT_90H_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90H
         else:
@@ -382,9 +382,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_ceiling(-1,1):
                             return SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90V_INT_45_FLOOR
+                            return SubtileCorner.INT_90V_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_ceiling(-1,1):
-                        return SubtileCorner.INT_90V_INT_45_CEILING
+                        return SubtileCorner.INT_90V_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90V
             else:
@@ -397,15 +397,15 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                                 return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING
                             else:
                                 if proximity.get_is_bottom_left_corner_clipped_90V_45(-1,0):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_neg_ceiling(-2,0):
                                 if proximity.get_is_top_right_corner_clipped_90H_45(0,-1):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE
                             else:
                                 if proximity.get_is_top_right_corner_clipped_90H_45(0,-1):
                                     if proximity.get_is_bottom_left_corner_clipped_90V_45(-1,0):
@@ -432,23 +432,23 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_bottom_left_corner_clipped_90V_45(-1,0):
                                         return SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                                     else:
-                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING
+                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
                                     if proximity.get_is_bottom_left_corner_clipped_90V_45(-1,0):
-                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR
+                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                     else:
                                         return SubtileCorner.INT_45_FLOOR_45_CEILING
                             else:
                                 if proximity.get_is_top_right_corner_clipped_90H_45(-1,0):
                                     return SubtileCorner.INT_INT_EXT_90H_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_FLOOR
+                                    return SubtileCorner.INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_neg_ceiling(-2,0):
                                 if proximity.get_is_bottom_left_corner_clipped_90V_45(-1,0):
                                     return SubtileCorner.INT_INT_EXT_90V_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_CEILING
+                                    return SubtileCorner.INT_45_V_SIDE
                             else:
                                 return SubtileCorner.FULLY_INTERIOR
     
@@ -660,7 +660,7 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_left_wall(1,0):
                         return SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_FLOOR
+                        return SubtileCorner.EXT_INT_45_H_SIDE
                 elif proximity.get_is_top_left_corner_clipped_90V_45():
                     if proximity.get_is_90_left_wall(1,0):
                         return SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE
@@ -679,7 +679,7 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_floor(0,-1):
                         return SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_CEILING
+                        return SubtileCorner.EXT_INT_45_V_SIDE
                 elif proximity.get_is_bottom_right_corner_clipped_90H_45():
                     if proximity.get_is_90_floor(0,-1):
                         return SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE
@@ -711,9 +711,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_pos_ceiling(1,1):
                                     return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING
                                 else:
-                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                             elif proximity.get_is_45_pos_ceiling(1,1):
-                                return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                                return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90_90_CONVEX
                         else:
@@ -725,9 +725,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_45_pos_ceiling(1,1):
                                         return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                                     else:
-                                        return SubtileCorner.INT_90H_INT_45_FLOOR
+                                        return SubtileCorner.INT_90H_INT_45_H_SIDE
                                 elif proximity.get_is_45_pos_ceiling(1,1):
-                                    return SubtileCorner.INT_90H_INT_45_CEILING
+                                    return SubtileCorner.INT_90H_INT_45_V_SIDE
                                 else:
                                     return SubtileCorner.INT_90H
                     elif proximity.get_is_90_left_wall(1,0):
@@ -739,9 +739,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_pos_ceiling(1,1):
                                     return SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING
                                 else:
-                                    return SubtileCorner.INT_90V_INT_45_FLOOR
+                                    return SubtileCorner.INT_90V_INT_45_H_SIDE
                             elif proximity.get_is_45_pos_ceiling(1,1):
-                                return SubtileCorner.INT_90V_INT_45_CEILING
+                                return SubtileCorner.INT_90V_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90V
                     else:
@@ -792,9 +792,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_ceiling(1,1):
                             return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                            return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_ceiling(1,1):
-                        return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                        return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90_90_CONVEX
             else:
@@ -809,9 +809,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_ceiling(1,1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90H_INT_45_FLOOR
+                            return SubtileCorner.INT_90H_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_ceiling(1,1):
-                        return SubtileCorner.INT_90H_INT_45_CEILING
+                        return SubtileCorner.INT_90H_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90H
         else:
@@ -829,9 +829,9 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_ceiling(1,1):
                             return SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING
                         else:
-                            return SubtileCorner.INT_90V_INT_45_FLOOR
+                            return SubtileCorner.INT_90V_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_ceiling(1,1):
-                        return SubtileCorner.INT_90V_INT_45_CEILING
+                        return SubtileCorner.INT_90V_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90V
             else:
@@ -844,15 +844,15 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                 return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING
                             else:
                                 if proximity.get_is_bottom_right_corner_clipped_90V_45(1,0):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_pos_ceiling(-2,0):
                                 if proximity.get_is_top_left_corner_clipped_90H_45(0,-1):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE
                             else:
                                 if proximity.get_is_top_left_corner_clipped_90H_45(0,-1):
                                     if proximity.get_is_bottom_right_corner_clipped_90V_45(1,0):
@@ -879,23 +879,23 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_bottom_right_corner_clipped_90V_45(1,0):
                                         return SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                                     else:
-                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_CEILING
+                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
                                     if proximity.get_is_bottom_right_corner_clipped_90V_45(1,0):
-                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_FLOOR
+                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                     else:
                                         return SubtileCorner.INT_45_FLOOR_45_CEILING
                             else:
                                 if proximity.get_is_top_left_corner_clipped_90H_45(1,0):
                                     return SubtileCorner.INT_INT_EXT_90H_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_FLOOR
+                                    return SubtileCorner.INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_pos_ceiling(-2,0):
                                 if proximity.get_is_bottom_right_corner_clipped_90V_45(1,0):
                                     return SubtileCorner.INT_INT_EXT_90V_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_CEILING
+                                    return SubtileCorner.INT_45_V_SIDE
                             else:
                                 return SubtileCorner.FULLY_INTERIOR
     
@@ -1107,7 +1107,7 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_right_wall(-1,0):
                         return SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_CEILING
+                        return SubtileCorner.EXT_INT_45_H_SIDE
                 elif proximity.get_is_bottom_right_corner_clipped_90V_45():
                     if proximity.get_is_90_right_wall(-1,0):
                         return SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE
@@ -1126,7 +1126,7 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_ceiling(0,1):
                         return SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_FLOOR
+                        return SubtileCorner.EXT_INT_45_V_SIDE
                 elif proximity.get_is_top_left_corner_clipped_90H_45():
                     if proximity.get_is_90_ceiling(0,1):
                         return SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE
@@ -1158,9 +1158,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_pos_floor(-1,-1):
                                     return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING_45_FLOOR
                                 else:
-                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                             elif proximity.get_is_45_pos_floor(-1,-1):
-                                return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                                return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90_90_CONVEX
                         else:
@@ -1172,9 +1172,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_45_pos_floor(-1,-1):
                                         return SubtileCorner.INT_90H_INT_45_CEILING_45_FLOOR
                                     else:
-                                        return SubtileCorner.INT_90H_INT_45_CEILING
+                                        return SubtileCorner.INT_90H_INT_45_H_SIDE
                                 elif proximity.get_is_45_pos_floor(-1,-1):
-                                    return SubtileCorner.INT_90H_INT_45_FLOOR
+                                    return SubtileCorner.INT_90H_INT_45_V_SIDE
                                 else:
                                     return SubtileCorner.INT_90H
                     elif proximity.get_is_90_right_wall(-1,0):
@@ -1186,9 +1186,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_pos_floor(-1,-1):
                                     return SubtileCorner.INT_90V_INT_45_CEILING_45_FLOOR
                                 else:
-                                    return SubtileCorner.INT_90V_INT_45_CEILING
+                                    return SubtileCorner.INT_90V_INT_45_H_SIDE
                             elif proximity.get_is_45_pos_floor(-1,-1):
-                                return SubtileCorner.INT_90V_INT_45_FLOOR
+                                return SubtileCorner.INT_90V_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90V
                     else:
@@ -1239,9 +1239,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_floor(-1,-1):
                             return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                            return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_floor(-1,-1):
-                        return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                        return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90_90_CONVEX
             else:
@@ -1256,9 +1256,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_floor(-1,-1):
                             return SubtileCorner.INT_90H_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90H_INT_45_CEILING
+                            return SubtileCorner.INT_90H_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_floor(-1,-1):
-                        return SubtileCorner.INT_90H_INT_45_FLOOR
+                        return SubtileCorner.INT_90H_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90H
         else:
@@ -1276,9 +1276,9 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_pos_floor(-1,-1):
                             return SubtileCorner.INT_90V_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90V_INT_45_CEILING
+                            return SubtileCorner.INT_90V_INT_45_H_SIDE
                     elif proximity.get_is_45_pos_floor(-1,-1):
-                        return SubtileCorner.INT_90V_INT_45_FLOOR
+                        return SubtileCorner.INT_90V_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90V
             else:
@@ -1291,15 +1291,15 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                                 return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING_45_FLOOR
                             else:
                                 if proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_pos_floor(-2,0):
                                 if proximity.get_is_bottom_right_corner_clipped_90H_45(0,1):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE
                             else:
                                 if proximity.get_is_bottom_right_corner_clipped_90H_45(0,1):
                                     if proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
@@ -1326,23 +1326,23 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
                                         return SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                                     else:
-                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_FLOOR
+                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
                                     if proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
-                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_CEILING
+                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                     else:
                                         return SubtileCorner.INT_45_CEILING_45_FLOOR
                             else:
                                 if proximity.get_is_bottom_right_corner_clipped_90H_45(-1,0):
                                     return SubtileCorner.INT_INT_EXT_90H_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_CEILING
+                                    return SubtileCorner.INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_pos_floor(-2,0):
                                 if proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
                                     return SubtileCorner.INT_INT_EXT_90V_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_FLOOR
+                                    return SubtileCorner.INT_45_V_SIDE
                             else:
                                 return SubtileCorner.FULLY_INTERIOR
     
@@ -1554,7 +1554,7 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_left_wall(1,0):
                         return SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_CEILING
+                        return SubtileCorner.EXT_INT_45_H_SIDE
                 elif proximity.get_is_bottom_left_corner_clipped_90V_45():
                     if proximity.get_is_90_left_wall(1,0):
                         return SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE
@@ -1573,7 +1573,7 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     if proximity.get_is_90_ceiling(0,1):
                         return SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE
                     else:
-                        return SubtileCorner.EXT_INT_45_FLOOR
+                        return SubtileCorner.EXT_INT_45_V_SIDE
                 elif proximity.get_is_top_right_corner_clipped_90H_45():
                     if proximity.get_is_90_ceiling(0,1):
                         return SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE
@@ -1605,9 +1605,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_neg_floor(1,-1):
                                     return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING_45_FLOOR
                                 else:
-                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                             elif proximity.get_is_45_neg_floor(1,-1):
-                                return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                                return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90_90_CONVEX
                         else:
@@ -1619,9 +1619,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_45_neg_floor(1,-1):
                                         return SubtileCorner.INT_90H_INT_45_CEILING_45_FLOOR
                                     else:
-                                        return SubtileCorner.INT_90H_INT_45_CEILING
+                                        return SubtileCorner.INT_90H_INT_45_H_SIDE
                                 elif proximity.get_is_45_neg_floor(1,-1):
-                                    return SubtileCorner.INT_90H_INT_45_FLOOR
+                                    return SubtileCorner.INT_90H_INT_45_V_SIDE
                                 else:
                                     return SubtileCorner.INT_90H
                     elif proximity.get_is_90_left_wall(1,0):
@@ -1633,9 +1633,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                                 if proximity.get_is_45_neg_floor(1,-1):
                                     return SubtileCorner.INT_90V_INT_45_CEILING_45_FLOOR
                                 else:
-                                    return SubtileCorner.INT_90V_INT_45_CEILING
+                                    return SubtileCorner.INT_90V_INT_45_H_SIDE
                             elif proximity.get_is_45_neg_floor(1,-1):
-                                return SubtileCorner.INT_90V_INT_45_FLOOR
+                                return SubtileCorner.INT_90V_INT_45_V_SIDE
                             else:
                                 return SubtileCorner.INT_90V
                     else:
@@ -1686,9 +1686,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_floor(1,-1):
                             return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING
+                            return SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_floor(1,-1):
-                        return SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR
+                        return SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90_90_CONVEX
             else:
@@ -1703,9 +1703,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_floor(1,-1):
                             return SubtileCorner.INT_90H_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90H_INT_45_CEILING
+                            return SubtileCorner.INT_90H_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_floor(1,-1):
-                        return SubtileCorner.INT_90H_INT_45_FLOOR
+                        return SubtileCorner.INT_90H_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90H
         else:
@@ -1723,9 +1723,9 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         if proximity.get_is_45_neg_floor(1,-1):
                             return SubtileCorner.INT_90V_INT_45_CEILING_45_FLOOR
                         else:
-                            return SubtileCorner.INT_90V_INT_45_CEILING
+                            return SubtileCorner.INT_90V_INT_45_H_SIDE
                     elif proximity.get_is_45_neg_floor(1,-1):
-                        return SubtileCorner.INT_90V_INT_45_FLOOR
+                        return SubtileCorner.INT_90V_INT_45_V_SIDE
                     else:
                         return SubtileCorner.INT_90V
             else:
@@ -1738,15 +1738,15 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                                 return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING_45_FLOOR
                             else:
                                 if proximity.get_is_top_right_corner_clipped_90V_45(1,0):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_CEILING
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_neg_floor(-2,0):
                                 if proximity.get_is_bottom_left_corner_clipped_90H_45(0,1):
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
-                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR
+                                    return SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE
                             else:
                                 if proximity.get_is_bottom_left_corner_clipped_90H_45(0,1):
                                     if proximity.get_is_top_right_corner_clipped_90V_45(1,0):
@@ -1773,23 +1773,23 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                                     if proximity.get_is_top_right_corner_clipped_90V_45(1,0):
                                         return SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                                     else:
-                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_FLOOR
+                                        return SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE
                                 else:
                                     if proximity.get_is_top_right_corner_clipped_90V_45(1,0):
-                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_CEILING
+                                        return SubtileCorner.INT_INT_90V_45_CONCAVE_INT_45_H_SIDE
                                     else:
                                         return SubtileCorner.INT_45_CEILING_45_FLOOR
                             else:
                                 if proximity.get_is_bottom_left_corner_clipped_90H_45(1,0):
                                     return SubtileCorner.INT_INT_EXT_90H_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_CEILING
+                                    return SubtileCorner.INT_45_H_SIDE
                         else:
                             if proximity.get_is_45_neg_floor(-2,0):
                                 if proximity.get_is_top_right_corner_clipped_90V_45(1,0):
                                     return SubtileCorner.INT_INT_EXT_90V_45_CONCAVE
                                 else:
-                                    return SubtileCorner.INT_45_FLOOR
+                                    return SubtileCorner.INT_45_V_SIDE
                             else:
                                 return SubtileCorner.FULLY_INTERIOR
     
