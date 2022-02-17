@@ -42,7 +42,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90H
                 elif proximity.get_is_45_neg_floor():
-                    return SubtileCorner.EXT_45_FLOOR
+                    return SubtileCorner.EXT_45_H_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
@@ -57,7 +57,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90V
                 elif proximity.get_is_45_neg_ceiling():
-                    return SubtileCorner.EXT_45_CEILING
+                    return SubtileCorner.EXT_45_V_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
@@ -489,7 +489,7 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90H
                 elif proximity.get_is_45_pos_floor():
-                    return SubtileCorner.EXT_45_FLOOR
+                    return SubtileCorner.EXT_45_H_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: RIGHT OFF HERE: -------- A27
                     pass
@@ -504,7 +504,7 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90V
                 elif proximity.get_is_45_pos_ceiling():
-                    return SubtileCorner.EXT_45_CEILING
+                    return SubtileCorner.EXT_45_V_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: RIGHT OFF HERE: -------- A27
                     pass
@@ -936,7 +936,7 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90H
                 elif proximity.get_is_45_pos_ceiling():
-                    return SubtileCorner.EXT_45_CEILING
+                    return SubtileCorner.EXT_45_H_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
@@ -951,7 +951,7 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90V
                 elif proximity.get_is_45_pos_floor():
-                    return SubtileCorner.EXT_45_FLOOR
+                    return SubtileCorner.EXT_45_V_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
@@ -1383,7 +1383,7 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90H
                 elif proximity.get_is_45_neg_ceiling():
-                    return SubtileCorner.EXT_45_CEILING
+                    return SubtileCorner.EXT_45_H_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: RIGHT OFF HERE: -------- A27
                     pass
@@ -1398,7 +1398,7 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     else:
                         return SubtileCorner.EXT_90V
                 elif proximity.get_is_45_neg_floor():
-                    return SubtileCorner.EXT_45_FLOOR
+                    return SubtileCorner.EXT_45_V_SIDE
                 elif proximity.is_angle_type_27:
                     # FIXME: RIGHT OFF HERE: -------- A27
                     pass

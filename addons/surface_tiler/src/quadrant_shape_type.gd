@@ -108,9 +108,9 @@ static func get_shape_type_for_corner_type(
             
             ### 45-degree.
             
-            SubtileCorner.EXT_45_FLOOR:
+            SubtileCorner.EXT_45_H_SIDE:
                 return FLOOR_45_N
-            SubtileCorner.EXT_45_CEILING:
+            SubtileCorner.EXT_45_V_SIDE:
                 return CEILING_45_N
             SubtileCorner.EXT_EXT_45_CLIPPED:
                 return CLIPPED_CORNER_45
@@ -241,9 +241,9 @@ static func get_shape_type_for_corner_type(
             
             ### 45-degree.
             
-            SubtileCorner.EXT_45_FLOOR:
+            SubtileCorner.EXT_45_H_SIDE:
                 return FLOOR_45_N
-            SubtileCorner.EXT_45_CEILING:
+            SubtileCorner.EXT_45_V_SIDE:
                 return CEILING_45_N
             SubtileCorner.EXT_EXT_45_CLIPPED:
                 return CLIPPED_CORNER_45_CLIPPED_CORNER_45_OPP

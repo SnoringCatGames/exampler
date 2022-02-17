@@ -28,8 +28,8 @@ const CORNERS_TO_DEPTHS := {
     
     ### 45-degree.
     
-    SubtileCorner.EXT_45_FLOOR: SubtileDepth.EXTERIOR,
-    SubtileCorner.EXT_45_CEILING: SubtileDepth.EXTERIOR,
+    SubtileCorner.EXT_45_H_SIDE: SubtileDepth.EXTERIOR,
+    SubtileCorner.EXT_45_V_SIDE: SubtileDepth.EXTERIOR,
     SubtileCorner.EXT_EXT_45_CLIPPED: SubtileDepth.EXTERIOR,
     
     SubtileCorner.EXT_INT_45_H_SIDE: SubtileDepth.EXT_INT,

@@ -38,8 +38,8 @@ const FALLBACKS := {
     
     ### 45-degree.
     
-    SubtileCorner.EXT_45_FLOOR: [],
-    SubtileCorner.EXT_45_CEILING: [],
+    SubtileCorner.EXT_45_H_SIDE: [],
+    SubtileCorner.EXT_45_V_SIDE: [],
     SubtileCorner.EXT_EXT_45_CLIPPED: [],
     
     SubtileCorner.EXT_INT_45_H_SIDE: [],

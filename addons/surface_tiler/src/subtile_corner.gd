@@ -36,8 +36,8 @@ enum {
     
     ### 45-degree.
     
-    EXT_45_FLOOR,
-    EXT_45_CEILING,
+    EXT_45_H_SIDE,
+    EXT_45_V_SIDE,
     EXT_EXT_45_CLIPPED,
     
     EXT_INT_45_H_SIDE,
