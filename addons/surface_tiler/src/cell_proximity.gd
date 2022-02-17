@@ -535,6 +535,9 @@ func get_is_45_pos_floor(relative_x := 0, relative_y := 0) -> bool:
         CellAngleType.A90:
             return false
         CellAngleType.A45:
+            if get_is_present(relative_x + 1, relative_y) and \
+                    get_is_present(relative_x, relative_y + 1):
+                return true
             # The angle of A45 caps can be flipped in order to transition
             # smoothly from a diagonal neighbor.
             if get_is_present(relative_x + 1, relative_y) and \
@@ -567,6 +570,9 @@ func get_is_45_neg_floor(relative_x := 0, relative_y := 0) -> bool:
         CellAngleType.A90:
             return false
         CellAngleType.A45:
+            if get_is_present(relative_x - 1, relative_y) and \
+                    get_is_present(relative_x, relative_y + 1):
+                return true
             # The angle of A45 caps can be flipped in order to transition
             # smoothly from a diagonal neighbor.
             if get_is_present(relative_x - 1, relative_y) and \
@@ -599,6 +605,9 @@ func get_is_45_pos_ceiling(relative_x := 0, relative_y := 0) -> bool:
         CellAngleType.A90:
             return false
         CellAngleType.A45:
+            if get_is_present(relative_x - 1, relative_y) and \
+                    get_is_present(relative_x, relative_y - 1):
+                return true
             # The angle of A45 caps can be flipped in order to transition
             # smoothly from a diagonal neighbor.
             if get_is_present(relative_x - 1, relative_y) and \
@@ -631,6 +640,9 @@ func get_is_45_neg_ceiling(relative_x := 0, relative_y := 0) -> bool:
         CellAngleType.A90:
             return false
         CellAngleType.A45:
+            if get_is_present(relative_x + 1, relative_y) and \
+                    get_is_present(relative_x, relative_y - 1):
+                return true
             # The angle of A45 caps can be flipped in order to transition
             # smoothly from a diagonal neighbor.
             if get_is_present(relative_x + 1, relative_y) and \

@@ -9,6 +9,20 @@ extends Node
 # - Copy/edit get_target_top_left_corner for the other corners.
 
 
+
+# FIXME: ---------------
+#    INT_90H_INT_45_FLOOR,
+#    INT_90V_INT_45_FLOOR,
+#    INT_90_90_CONVEX_INT_45_FLOOR,
+#
+#    INT_90H_INT_45_CEILING,
+#    INT_90V_INT_45_CEILING,
+#    INT_90_90_CONVEX_INT_45_CEILING,
+#
+#    INT_90H_INT_45_FLOOR_45_CEILING,
+#    INT_90V_INT_45_FLOOR_45_CEILING,
+#    INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING,
+
 func get_target_top_left_corner(proximity: CellProximity) -> int:
     if !proximity.get_is_a_corner_match_subtile():
         return SubtileCorner.EMPTY
@@ -317,6 +331,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                 if proximity.get_is_45_pos_floor(-1,-1):
                     return SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED
                 else:
+                    # FIXME: ---------
                     return SubtileCorner.INT_90_90_CONVEX
             else:
                 if proximity.get_is_45_pos_floor(-1,-1):
@@ -326,7 +341,16 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                 elif proximity.get_is_top_left_corner_clipped_90V_45(-1,0):
                     return SubtileCorner.INT_90H_INT_INT_EXT_90H_45_CONCAVE
                 else:
-                    return SubtileCorner.INT_90H
+                    # FIXME: ---------
+                    if proximity.get_is_45_neg_floor(1,-1):
+                        if proximity.get_is_45_neg_ceiling(-1,1):
+                            pass
+                        else:
+                            pass
+                    elif proximity.get_is_45_neg_ceiling(-1,1):
+                        pass
+                    else:
+                        return SubtileCorner.INT_90H
         else:
             if proximity.get_is_90_right_wall(-1,0) or \
                     proximity.get_is_90_right_wall(-1,-1) or \
@@ -338,6 +362,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                 elif proximity.get_is_top_left_corner_clipped_90H_45(0,-1):
                     return SubtileCorner.INT_90V_INT_INT_EXT_90V_45_CONCAVE
                 else:
+                    # FIXME: ---------
                     return SubtileCorner.INT_90V
             else:
                 if proximity.get_is_45_pos_floor(-1,-1):
@@ -643,14 +668,17 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                                                 return SubtileCorner.INT_EXT_45_CLIPPED
                                     elif proximity.get_is_90_floor(0,-1):
                                         if proximity.get_is_90_left_wall(1,0):
+                                            # FIXME: ---------
                                             # This is an interior floor and interior left-wall.
                                             return SubtileCorner.INT_90_90_CONVEX
                                         else:
+                                            # FIXME: --------- INT_90H_INT_45_FLOOR_45_CEILING
                                             # This is an interior floor.
                                             return SubtileCorner.INT_90H
                                     else:
                                         # All neighbors are present, except for the opposite corner.
                                         if proximity.get_is_90_left_wall(1,0):
+                                            # FIXME: ---------
                                             # This is an interior left-wall.
                                             return SubtileCorner.INT_90V
                                         else:

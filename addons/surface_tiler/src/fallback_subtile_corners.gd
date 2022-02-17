@@ -155,6 +155,18 @@ const FALLBACKS := {
         [SubtileCorner.INT_EXT_45_CLIPPED, 0.35],
     ],
     
+    SubtileCorner.INT_90H_INT_45_FLOOR: [],
+    SubtileCorner.INT_90V_INT_45_FLOOR: [],
+    SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR: [],
+    
+    SubtileCorner.INT_90H_INT_45_CEILING: [],
+    SubtileCorner.INT_90V_INT_45_CEILING: [],
+    SubtileCorner.INT_90_90_CONVEX_INT_45_CEILING: [],
+    
+    SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING: [],
+    SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING: [],
+    SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING: [],
+    
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE: [
         [SubtileCorner.INT_90_90_CONVEX, 0.6],
     ],
