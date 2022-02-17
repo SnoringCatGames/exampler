@@ -103,8 +103,21 @@ const CORNERS_TO_DEPTHS := {
     SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.INT_EXT,
-    SubtileCorner.INT_H_INT_INT_EXT_90V_45_CONCAVE: SubtileDepth.INT_EXT,
-    SubtileCorner.INT_V_INT_INT_EXT_90H_45_CONCAVE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_90V_INT_INT_EXT_90H_45_CONCAVE: SubtileDepth.INT_EXT,
+    
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE: SubtileDepth.INT_EXT,
+    
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_V_SIDE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_H_SIDE: SubtileDepth.INT_EXT,
+    
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_H_SIDE: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_V_SIDE: SubtileDepth.INT_EXT,
+    
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_FLOOR_45_CEILING: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING: SubtileDepth.INT_EXT,
+    SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING: SubtileDepth.INT_EXT,
     
     SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: SubtileDepth.INT_EXT,
     SubtileCorner.INT_INT_90H_45_CONCAVE_INT_45_V_SIDE: SubtileDepth.INT_EXT,
@@ -112,6 +125,9 @@ const CORNERS_TO_DEPTHS := {
     
     SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE: SubtileDepth.EXT_INT,
     SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE: SubtileDepth.EXT_INT,
+    
+    SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE: SubtileDepth.EXT_INT,
+    SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE: SubtileDepth.EXT_INT,
     
     SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE: SubtileDepth.EXT_INT,
     SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE: SubtileDepth.EXT_INT,
