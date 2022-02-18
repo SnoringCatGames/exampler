@@ -4,6 +4,16 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ---------------------------------------------
+# - Implement the new simple quadrant-connection annotation system.
+# - Think of what old corner-types I can remove now...
+# - Add a couple more corner types:
+#   - EXT_45_CLIPPED_EXT_INT_45_CLIPPED @ (0,32)
+#   - NOPE! ABANDON THE FOLLOWING, since they should be covered by the new
+#     connection annotation.
+#     - INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED @ (8,26)
+#       - INT_90H_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
+#       - INT_90V_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
+#       - INT_90_90_CONVEX_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
 # - Test that all 90-degree top-left corner cases work.
 # - Test 45-degree cases.
 # - Copy/edit get_target_top_left_corner for the other corners.
