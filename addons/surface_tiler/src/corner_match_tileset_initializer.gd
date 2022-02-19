@@ -283,23 +283,23 @@ func _get_error_quadrants(subtile_corner_types: Dictionary) -> Array:
     var tl_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.TOP_LEFT] \
             [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var tr_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.TOP_RIGHT] \
             [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var bl_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.BOTTOM_LEFT] \
             [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var br_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.BOTTOM_RIGHT] \
             [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.ERROR]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     return [
         tl_quadrant_position,
         tr_quadrant_position,
@@ -312,8 +312,8 @@ func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
     var tl_quadrant_position_or_h_inbound_map = subtile_corner_types \
             [CornerDirection.TOP_LEFT] \
             [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var tl_quadrant_position: Vector2
     if tl_quadrant_position_or_h_inbound_map is Vector2:
         tl_quadrant_position = tl_quadrant_position_or_h_inbound_map
@@ -324,8 +324,8 @@ func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
     var tr_quadrant_position_or_h_inbound_map = subtile_corner_types \
             [CornerDirection.TOP_RIGHT] \
             [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var tr_quadrant_position: Vector2
     if tr_quadrant_position_or_h_inbound_map is Vector2:
         tr_quadrant_position = tr_quadrant_position_or_h_inbound_map
@@ -336,8 +336,8 @@ func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
     var bl_quadrant_position_or_h_inbound_map = subtile_corner_types \
             [CornerDirection.BOTTOM_LEFT] \
             [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var bl_quadrant_position: Vector2
     if bl_quadrant_position_or_h_inbound_map is Vector2:
         bl_quadrant_position = bl_quadrant_position_or_h_inbound_map
@@ -348,8 +348,8 @@ func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
     var br_quadrant_position_or_h_inbound_map = subtile_corner_types \
             [CornerDirection.BOTTOM_RIGHT] \
             [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.EMPTY]
+            [SubtileCorner.UNKNOWN] \
+            [SubtileCorner.UNKNOWN]
     var br_quadrant_position: Vector2
     if br_quadrant_position_or_h_inbound_map is Vector2:
         br_quadrant_position = br_quadrant_position_or_h_inbound_map
