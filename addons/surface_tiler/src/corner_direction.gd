@@ -101,7 +101,8 @@ static func get_is_top(type: int) -> bool:
         INBOUND_TL_T, \
         INBOUND_TL_L, \
         INBOUND_TR_T, \
-        INBOUND_TR_R, \
+        INBOUND_TR_R:
+            return true
         INBOUND_BL_B, \
         INBOUND_BL_L, \
         INBOUND_BR_B, \
@@ -124,10 +125,11 @@ static func get_is_left(type: int) -> bool:
             return false
         INBOUND_TL_T, \
         INBOUND_TL_L, \
+        INBOUND_BL_B, \
+        INBOUND_BL_L:
+            return true
         INBOUND_TR_T, \
         INBOUND_TR_R, \
-        INBOUND_BL_B, \
-        INBOUND_BL_L, \
         INBOUND_BR_B, \
         INBOUND_BR_R:
             return false

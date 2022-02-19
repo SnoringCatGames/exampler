@@ -860,15 +860,23 @@ static func _check_for_empty_quadrant_non_annotation_pixels(
             var is_pixel_along_left: bool = quadrant_x < ANNOTATION_SIZE.x
             var is_pixel_along_right: bool = \
                     quadrant_x >= quadrant_size - ANNOTATION_SIZE.x
+            var is_pixel_along_double_top: bool = quadrant_y < ANNOTATION_SIZE.y * 2
+            var is_pixel_along_double_bottom: bool = \
+                    quadrant_y >= quadrant_size - ANNOTATION_SIZE.y * 2
+            var is_pixel_along_double_left: bool = quadrant_x < ANNOTATION_SIZE.x * 2
+            var is_pixel_along_double_right: bool = \
+                    quadrant_x >= quadrant_size - ANNOTATION_SIZE.x * 2
             var is_pixel_in_a_corner := \
                     (is_pixel_along_top or is_pixel_along_bottom) and \
+                    (is_pixel_along_double_left or is_pixel_along_double_right) or \
+                    (is_pixel_along_double_top or is_pixel_along_double_bottom) and \
                     (is_pixel_along_left or is_pixel_along_right)
             var is_pixel_along_correct_horizontal_side := \
-                    is_left and is_pixel_along_left or \
-                    !is_left and is_pixel_along_right
+                    is_left and is_pixel_along_double_left or \
+                    !is_left and is_pixel_along_double_right
             var is_pixel_along_correct_vertical_side := \
-                    is_top and is_pixel_along_top or \
-                    !is_top and is_pixel_along_bottom
+                    is_top and is_pixel_along_double_top or \
+                    !is_top and is_pixel_along_double_bottom
             var is_pixel_in_a_corner_annotation_position := \
                     is_pixel_in_a_corner and \
                     (is_pixel_along_correct_horizontal_side or \
@@ -890,9 +898,14 @@ static func _check_for_empty_quadrant_non_annotation_pixels(
             assert(color.a == 0,
                     ("Quadrant non-annotation-corner pixels must be empty: " +
                     "pixel_position=(%s,%s), " +
+                    "pixel_position=(%s,%s), " +
+                    "color=%s, " +
                     "image=%s") % [
                         quadrant_x,
                         quadrant_y,
+                        quadrant_position.x + quadrant_x,
+                        quadrant_position.y + quadrant_y,
+                        str(color),
                         _get_log_string(
                             quadrant_position,
                             quadrant_size,

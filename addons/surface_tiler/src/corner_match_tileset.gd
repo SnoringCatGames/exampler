@@ -221,15 +221,10 @@ func _get_best_quadrant_match(
                     var other_corner_type_map_or_position = \
                             corner_type_map_or_position[other_corner_type]
                     
-                    var other_corner_weight_multiplier: float
-                    if is_inbound_iteration:
-                        if other_corner_type == SubtileCorner.UNKNOWN:
-                            pass
-                    else:
-                        other_corner_weight_multiplier = \
-                                Su.subtile_manifest \
-                                    .SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER \
-                                    [target_depth][other_depth]
+                    var other_corner_weight_multiplier: float = \
+                            Su.subtile_manifest \
+                                .SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER \
+                                [target_depth][other_depth]
                     
                     var other_weight := \
                             weight + \
