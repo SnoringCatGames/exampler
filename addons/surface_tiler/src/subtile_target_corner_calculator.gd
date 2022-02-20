@@ -6,7 +6,6 @@ extends Node
 # FIXME: LEFT OFF HERE: ---------------------------------------------
 # - Encode all missing data in FallbackSubtileCorners.
 #   - Add new h-opp vs v-opp flags.
-# - Add logic to parse the h-opp vs v-opp flags.
 # - Add logic to transitively include any fallbacks for fallbacks of fallbacks.
 # - Think of what old corner-types I can remove now that I have the new
 #   quadrant-connection system.
