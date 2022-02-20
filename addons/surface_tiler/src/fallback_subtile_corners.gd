@@ -5,8 +5,15 @@ extends Reference
 # NOTE:
 # -   This mapping enables us to match one corner type with another.
 # -   Each mapping multiplier must be between 0 and 1.
+# -   A value of SubtileCorner.UNKNOWN is automatically considered a valid
+#     fallback with a weight-multiplier of 0.5.
+#     -   So an UNKNOWN value will be preferred over a fallback with a weight
+#         multiplier less that 0.5.
 # -   Reverse mappings are automatically added. DO NOT INCLUDE THEM HERE.
 #     -   E.g., if A maps to B, then B should not map to A.
+# -   The boolean value indicates whether the fallback is appropriate as a
+#     substitute for a horizontal (true) or vertical (false) opposite-quadrant
+#     neighbor.
 # FIXME: LEFT OFF HERE: -----------------------------------------
 # - Should this be configurable by the tileset author?
 # - Would there be a simpler way to allow the tile-set author to configure which
@@ -22,7 +29,8 @@ const FALLBACKS := {
     SubtileCorner.EXT_90H: [],
     SubtileCorner.EXT_90V: [],
     SubtileCorner.EXT_90_90_CONVEX: [
-        [SubtileCorner.EMPTY, 1.0],
+        [SubtileCorner.EMPTY, 1.0, true],
+        [SubtileCorner.EMPTY, 1.0, false],
     ],
     SubtileCorner.EXT_90_90_CONCAVE: [],
     
@@ -55,26 +63,36 @@ const FALLBACKS := {
     ### 90-to-45-degree.
     
     SubtileCorner.EXT_90H_45_CONVEX_ACUTE: [
-        [SubtileCorner.EMPTY, 1.0],
+        [SubtileCorner.EMPTY, 1.0, true],
+        [SubtileCorner.EMPTY, 1.0, false],
     ],
     SubtileCorner.EXT_90V_45_CONVEX_ACUTE: [
-        [SubtileCorner.EMPTY, 1.0],
+        [SubtileCorner.EMPTY, 1.0, true],
+        [SubtileCorner.EMPTY, 1.0, false],
     ],
     
     SubtileCorner.EXT_90H_45_CONVEX: [
-        [SubtileCorner.EXT_90H, 0.6],
+        [SubtileCorner.EXT_90H, 1.0, true],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.3, false],
     ],
     SubtileCorner.EXT_90V_45_CONVEX: [
-        [SubtileCorner.EXT_90V, 0.6],
+        [SubtileCorner.EXT_90V, 1.0, false],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.3, true],
     ],
     
     SubtileCorner.EXT_EXT_90H_45_CONCAVE: [
-        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.6],
-        [SubtileCorner.EXT_90_90_CONCAVE, 0.3],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 1.0, true],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.1, false],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.05, true],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.2, false],
+        [SubtileCorner.EXT_90H, 0.3, false]
     ],
     SubtileCorner.EXT_EXT_90V_45_CONCAVE: [
-        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.6],
-        [SubtileCorner.EXT_90_90_CONCAVE, 0.3],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 0.1, true],
+        [SubtileCorner.EXT_EXT_45_CLIPPED, 1.0, false],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.2, true],
+        [SubtileCorner.EXT_90_90_CONCAVE, 0.05, false],
+        [SubtileCorner.EXT_90V, 0.3, true],
     ],
     
     SubtileCorner.EXT_INT_90H_45_CONVEX: [

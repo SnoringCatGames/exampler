@@ -211,9 +211,10 @@ func _parse_fallback_corner_types() -> void:
         assert(FallbackSubtileCorners.FALLBACKS[corner_type] is Array)
         for fallback in FallbackSubtileCorners.FALLBACKS[corner_type]:
             assert(fallback is Array)
-            assert(fallback.size() == 2)
+            assert(fallback.size() == 3)
             assert(fallback[0] is int)
             assert(fallback[1] is float)
+            assert(fallback[2] is bool)
             assert(fallback[1] > 0.0 and fallback[1] <= 1.0)
     
     # Validate SubtileCornerToDepth.
@@ -241,3 +242,7 @@ func _parse_fallback_corner_types() -> void:
             if !is_reverse_mapping_present:
                 FallbackSubtileCorners.FALLBACKS[fallback_corner_type] \
                         .push_back([corner_type, fallback[1]])
+    
+    # FIXME: LEFT OFF HERE: -------------------
+    # - Record transitive fallback mappings?
+    # - Or should this only be traversed on demand?

@@ -4,8 +4,12 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ---------------------------------------------
-# - Implement the new simple quadrant-connection annotation system.
-# - Think of what old corner-types I can remove now...
+# - Encode all missing data in FallbackSubtileCorners.
+#   - Add new h-opp vs v-opp flags.
+# - Add logic to parse the h-opp vs v-opp flags.
+# - Add logic to transitively include any fallbacks for fallbacks of fallbacks.
+# - Think of what old corner-types I can remove now that I have the new
+#   quadrant-connection system.
 # - Add a couple more corner types:
 #   - NOPE! Abandon this one, since it should be covered by the new connection
 #     annotation.
