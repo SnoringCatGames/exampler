@@ -155,7 +155,7 @@ func _get_best_quadrant_match(
         if corner_type_map_or_position is Vector2:
             # Base case: We found a position.
             var result := [corner_type_map_or_position, weight]
-            # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+            # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
             result.resize(7)
             result[i + 2] = 1
             return result
@@ -167,7 +167,7 @@ func _get_best_quadrant_match(
                     target_corner_types,
                     i + 1,
                     weight)
-            # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+            # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
             result[i + 2] = 1
             return result
         
@@ -177,18 +177,17 @@ func _get_best_quadrant_match(
         # quadrant configured for this specific corner-type.
         var best_fallback_position_and_weight := [Vector2.INF, -INF]
         
-        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
         var is_matched_to_unknown := false
         var did_a_fallback_match := false
         
         # Consider the UNKNOWN value as a valid fallback.
-        var fallback_corner_type: int = SubtileCorner.UNKNOWN
         var fallback_corner_weight_multiplier: float = 0.5
-        if corner_type_map_or_position.has(fallback_corner_type):
+        if corner_type_map_or_position.has(SubtileCorner.UNKNOWN):
             # There is a quadrant configured for this fallback corner-type.
             
             var fallback_corner_type_map_or_position = \
-                    corner_type_map_or_position[fallback_corner_type]
+                    corner_type_map_or_position[SubtileCorner.UNKNOWN]
             var fallback_weight := \
                     weight + \
                     current_weight_contribution * \
@@ -217,12 +216,15 @@ func _get_best_quadrant_match(
         var is_using_h_opp_multiplier := i == 1 or i == 4
         
         # Consider all explicitly configured fallbacks.
-        for fallback in FallbackSubtileCorners.FALLBACKS[target_corner_type]:
-            fallback_corner_type = fallback[0]
+        var fallbacks_for_corner_type: Dictionary = \
+                FallbackSubtileCorners.FALLBACKS[target_corner_type]
+        for fallback_corner_type in fallbacks_for_corner_type:
+            var fallback_multipliers: Array = \
+                    fallbacks_for_corner_type[fallback_corner_type]
             fallback_corner_weight_multiplier = \
-                    fallback[1] if \
+                    fallback_multipliers[0] if \
                     is_using_h_opp_multiplier else \
-                    fallback[2]
+                    fallback_multipliers[1]
             
             if fallback_corner_weight_multiplier <= 0.0:
                 # Skip this fallback, since it is for the other direction.
@@ -313,7 +315,7 @@ func _get_best_quadrant_match(
                                     other_corner_type == SubtileCorner.UNKNOWN
                             did_a_fallback_match = false
         
-        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
         best_fallback_position_and_weight.resize(7)
         best_fallback_position_and_weight[i + 2] = \
                 2 if did_a_fallback_match else \
@@ -323,7 +325,7 @@ func _get_best_quadrant_match(
         
     else:
         var result := [Vector2.INF, -INF]
-        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
         result.resize(7)
         result[i + 2] = -1
         return result
