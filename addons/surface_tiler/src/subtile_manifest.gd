@@ -214,8 +214,9 @@ func _parse_fallback_corner_types() -> void:
             assert(fallback.size() == 3)
             assert(fallback[0] is int)
             assert(fallback[1] is float)
-            assert(fallback[2] is bool)
+            assert(fallback[2] is float)
             assert(fallback[1] > 0.0 and fallback[1] <= 1.0)
+            assert(fallback[2] > 0.0 and fallback[2] <= 1.0)
     
     # Validate SubtileCornerToDepth.
     assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \

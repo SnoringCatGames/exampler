@@ -70,18 +70,6 @@ func get_quadrants(
     var quadrant_positions := []
     quadrant_positions.resize(4)
     
-    # TODO: Remove. Useful for debugging.
-    if proximity.get_world_position() == Vector2(-32, -160):
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        print(">>")
-        print(proximity.to_string())
-        print(target_corners.to_string(true))
-        print(">>")
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-        print_subtile_corner_types(
-                CornerDirection.TOP_LEFT,
-                target_corners.top_left)
-    
     for i in CornerDirection.OUTBOUND_CORNERS.size():
         var corner_direction: int = CornerDirection.OUTBOUND_CORNERS[i]
         
@@ -100,6 +88,20 @@ func get_quadrants(
                 0)
         var quadrant_position: Vector2 = best_position_and_weight[0]
         var quadrant_weight: float = best_position_and_weight[1]
+        
+        # TODO: Remove. Useful for debugging.
+        if proximity.get_world_position() == Vector2(-32, -160) and \
+                corner_direction == CornerDirection.TOP_LEFT:
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print(">>")
+            print(proximity.to_string())
+            print(target_corners.to_string(true))
+            print("_get_best_quadrant_match: " + str(best_position_and_weight))
+            print(">>")
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print_subtile_corner_types(
+                    CornerDirection.TOP_LEFT,
+                    target_corners.top_left)
         
         if quadrant_weight < \
                 Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:
@@ -140,7 +142,7 @@ func _get_best_quadrant_match(
         _:
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
     
-    var current_weight_contribution := 1.0 / pow(1000,iteration_exponent)
+    var current_weight_contribution := 1.0 / pow(10000,iteration_exponent)
     var is_inbound_iteration := i > 2
     var target_corner_type: int = target_corner_types[i]
     
@@ -152,28 +154,79 @@ func _get_best_quadrant_match(
         
         if corner_type_map_or_position is Vector2:
             # Base case: We found a position.
-            return [corner_type_map_or_position, weight]
+            var result := [corner_type_map_or_position, weight]
+            # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+            result.resize(7)
+            result[i + 2] = 1
+            return result
             
         else:
             # Recursive case: We found another mapping to consider.
-            return _get_best_quadrant_match(
+            var result := _get_best_quadrant_match(
                     corner_type_map_or_position,
                     target_corner_types,
                     i + 1,
                     weight)
+            # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+            result[i + 2] = 1
+            return result
         
     elif i > 0 or \
             Su.subtile_manifest.allows_fallback_corner_matches:
         # Consider possible fallback corner-type matches, since there is no
         # quadrant configured for this specific corner-type.
-        var best_fallback_position := Vector2.INF
-        var best_fallback_weight := -INF
+        var best_fallback_position_and_weight := [Vector2.INF, -INF]
         
-        for fallback_corner_type_and_weight in \
-                FallbackSubtileCorners.FALLBACKS[target_corner_type]:
-            var fallback_corner_type: int = fallback_corner_type_and_weight[0]
-            var fallback_corner_weight_multiplier: float = \
-                    fallback_corner_type_and_weight[1]
+        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        var is_matched_to_unknown := false
+        var did_a_fallback_match := false
+        
+        # Consider the UNKNOWN value as a valid fallback.
+        var fallback_corner_type: int = SubtileCorner.UNKNOWN
+        var fallback_corner_weight_multiplier: float = 0.5
+        if corner_type_map_or_position.has(fallback_corner_type):
+            # There is a quadrant configured for this fallback corner-type.
+            
+            var fallback_corner_type_map_or_position = \
+                    corner_type_map_or_position[fallback_corner_type]
+            var fallback_weight := \
+                    weight + \
+                    current_weight_contribution * \
+                    fallback_corner_weight_multiplier * 0.1
+            
+            if fallback_corner_type_map_or_position is Vector2:
+                # Base case: We found a position.
+                best_fallback_position_and_weight = [
+                    fallback_corner_type_map_or_position,
+                    fallback_weight,
+                ]
+                did_a_fallback_match = true
+                
+            else:
+                # Recursive case: We found another mapping to consider.
+                var fallback_position_and_weight := \
+                        _get_best_quadrant_match(
+                            fallback_corner_type_map_or_position,
+                            target_corner_types,
+                            i + 1,
+                            fallback_weight)
+                best_fallback_position_and_weight = \
+                        fallback_position_and_weight
+                did_a_fallback_match = true
+        
+        var is_using_h_opp_multiplier := i == 1 or i == 4
+        
+        # Consider all explicitly configured fallbacks.
+        for fallback in FallbackSubtileCorners.FALLBACKS[target_corner_type]:
+            fallback_corner_type = fallback[0]
+            fallback_corner_weight_multiplier = \
+                    fallback[1] if \
+                    is_using_h_opp_multiplier else \
+                    fallback[2]
+            
+            if fallback_corner_weight_multiplier <= 0.0:
+                # Skip this fallback, since it is for the other direction.
+                continue
             
             if corner_type_map_or_position.has(fallback_corner_type):
                 # There is a quadrant configured for this fallback corner-type.
@@ -187,10 +240,12 @@ func _get_best_quadrant_match(
                 
                 if fallback_corner_type_map_or_position is Vector2:
                     # Base case: We found a position.
-                    if fallback_weight > best_fallback_weight:
-                        best_fallback_position = \
-                                fallback_corner_type_map_or_position
-                        best_fallback_weight = fallback_weight
+                    if fallback_weight > best_fallback_position_and_weight[1]:
+                        best_fallback_position_and_weight = [
+                            fallback_corner_type_map_or_position,
+                            fallback_weight,
+                        ]
+                        did_a_fallback_match = true
                     
                 else:
                     # Recursive case: We found another mapping to consider.
@@ -200,15 +255,15 @@ func _get_best_quadrant_match(
                                 target_corner_types,
                                 i + 1,
                                 fallback_weight)
-                    if fallback_position_and_weight[1] > best_fallback_weight:
-                        best_fallback_position = fallback_position_and_weight[0]
-                        best_fallback_weight = fallback_position_and_weight[1]
+                    if fallback_position_and_weight[1] > \
+                            best_fallback_position_and_weight[1]:
+                        best_fallback_position_and_weight = \
+                                fallback_position_and_weight
+                        did_a_fallback_match = true
         
-        if best_fallback_weight < 0 and \
-                (i > 0 or \
+        if (i > 0 or \
                 Su.subtile_manifest.allows_non_fallback_corner_matches):
-            # There were no matching fallbacks.
-            # Now we consider all other corner-types of the correct depth.
+            # Now we consider all other possible corner-types.
             var target_depth: int = \
                     SubtileCornerToDepth.CORNERS_TO_DEPTHS[target_corner_type]
             for other_corner_type in \
@@ -233,10 +288,14 @@ func _get_best_quadrant_match(
                     
                     if other_corner_type_map_or_position is Vector2:
                         # Base case: We found a position.
-                        if other_weight > best_fallback_weight:
-                            best_fallback_position = \
-                                    other_corner_type_map_or_position
-                            best_fallback_weight = other_weight
+                        if other_weight > best_fallback_position_and_weight[1]:
+                            best_fallback_position_and_weight = [
+                                other_corner_type_map_or_position,
+                                other_weight,
+                            ]
+                            is_matched_to_unknown = \
+                                    other_corner_type == SubtileCorner.UNKNOWN
+                            did_a_fallback_match = false
                         
                     else:
                         # Recursive case: We found another mapping to consider.
@@ -246,16 +305,28 @@ func _get_best_quadrant_match(
                                     target_corner_types,
                                     i + 1,
                                     other_weight)
-                        if other_position_and_weight[1] > best_fallback_weight:
-                            best_fallback_position = \
-                                    other_position_and_weight[0]
-                            best_fallback_weight = \
-                                    other_position_and_weight[1]
+                        if other_position_and_weight[1] > \
+                                best_fallback_position_and_weight[1]:
+                            best_fallback_position_and_weight = \
+                                    other_position_and_weight
+                            is_matched_to_unknown = \
+                                    other_corner_type == SubtileCorner.UNKNOWN
+                            did_a_fallback_match = false
         
-        return [best_fallback_position, best_fallback_weight]
+        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        best_fallback_position_and_weight.resize(7)
+        best_fallback_position_and_weight[i + 2] = \
+                2 if did_a_fallback_match else \
+                3 if is_matched_to_unknown else \
+                4
+        return best_fallback_position_and_weight
         
     else:
-        return [Vector2.INF, -INF]
+        var result := [Vector2.INF, -INF]
+        # FIXME: LEFT OFF HERE: ---------- Remove? Or keep this for debugging?
+        result.resize(7)
+        result[i + 2] = -1
+        return result
 
 
 func _is_tile_bound(
