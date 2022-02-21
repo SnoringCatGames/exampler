@@ -4,9 +4,10 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ---------------------------------------------
-# - Encode all missing data in FallbackSubtileCorners.
-#   - Add new h-opp vs v-opp flags.
 # - Add logic to transitively include any fallbacks for fallbacks of fallbacks.
+#   - Allow a value to already be included.
+#   - Choose the min weight in the transitive chain for a transitive fallback.
+#   - Choose the max weight for a fallback that is included redundantly.
 # - Think of what old corner-types I can remove now that I have the new
 #   quadrant-connection system.
 # - Add a couple more corner types:
@@ -198,7 +199,11 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         proximity.get_is_top_right_corner_clipped_90V_45():
                     if proximity.get_is_bottom_left_corner_clipped_90_90() or \
                             proximity.get_is_bottom_left_corner_clipped_90H_45():
-                        return SubtileCorner.EXT_INT_90_90_CONVEX
+                        if proximity.get_is_top_right_corner_clipped_90V_45() and \
+                                proximity.get_is_bottom_left_corner_clipped_90H_45():
+                            return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
+                        else:
+                            return SubtileCorner.EXT_INT_90_90_CONVEX
                     elif proximity.get_is_bottom_left_corner_clipped_45_45() or \
                             proximity.get_is_bottom_left_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
@@ -695,7 +700,11 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         proximity.get_is_top_left_corner_clipped_90V_45():
                     if proximity.get_is_bottom_right_corner_clipped_90_90() or \
                             proximity.get_is_bottom_right_corner_clipped_90H_45():
-                        return SubtileCorner.EXT_INT_90_90_CONVEX
+                        if proximity.get_is_top_left_corner_clipped_90V_45() and \
+                                proximity.get_is_bottom_right_corner_clipped_90H_45():
+                            return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
+                        else:
+                            return SubtileCorner.EXT_INT_90_90_CONVEX
                     elif proximity.get_is_bottom_right_corner_clipped_45_45() or \
                             proximity.get_is_bottom_right_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
@@ -1192,7 +1201,11 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         proximity.get_is_bottom_right_corner_clipped_90V_45():
                     if proximity.get_is_top_left_corner_clipped_90_90() or \
                             proximity.get_is_top_left_corner_clipped_90H_45():
-                        return SubtileCorner.EXT_INT_90_90_CONVEX
+                        if proximity.get_is_bottom_right_corner_clipped_90V_45() and \
+                                proximity.get_is_top_left_corner_clipped_90H_45():
+                            return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
+                        else:
+                            return SubtileCorner.EXT_INT_90_90_CONVEX
                     elif proximity.get_is_top_left_corner_clipped_45_45() or \
                             proximity.get_is_top_left_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
@@ -1689,7 +1702,11 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         proximity.get_is_bottom_left_corner_clipped_90V_45():
                     if proximity.get_is_top_right_corner_clipped_90_90() or \
                             proximity.get_is_top_right_corner_clipped_90H_45():
-                        return SubtileCorner.EXT_INT_90_90_CONVEX
+                        if proximity.get_is_bottom_left_corner_clipped_90V_45() and \
+                                proximity.get_is_top_right_corner_clipped_90H_45():
+                            return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
+                        else:
+                            return SubtileCorner.EXT_INT_90_90_CONVEX
                     elif proximity.get_is_top_right_corner_clipped_45_45() or \
                             proximity.get_is_top_right_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE

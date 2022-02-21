@@ -162,6 +162,7 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE, \
             SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE, \
             SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE, \
+            SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
             SubtileCorner.INT_90H_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90V_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED, \
@@ -305,6 +306,7 @@ static func get_shape_type_for_corner_type(
             SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE, \
             SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE, \
             SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE, \
+            SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE, \
             SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE, \
             SubtileCorner.INT_90H_INT_EXT_45_CLIPPED, \
             SubtileCorner.INT_90V_INT_EXT_45_CLIPPED, \
