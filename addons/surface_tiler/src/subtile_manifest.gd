@@ -236,6 +236,7 @@ func _parse_fallback_corner_types() -> void:
     
     _record_reverse_fallbacks()
     _record_transitive_fallbacks()
+#    _print_fallbacks()
 
 
 func _record_reverse_fallbacks() -> void:
@@ -283,16 +284,18 @@ func _record_transitive_fallbacks_recursively(
         # Update the multipliers for the transitive mapping to be the max of the
         # previously-recorded and current-transitive values.
         var multipliers: Array = transitive_basis_map[corner_type]
-        multipliers[0] = max(multipliers[0], h_opp_multiplier)
-        multipliers[1] = max(multipliers[1], v_opp_multiplier)
-        return
+        h_opp_multiplier = max(multipliers[0], h_opp_multiplier)
+        v_opp_multiplier = max(multipliers[1], v_opp_multiplier)
+        multipliers[0] = h_opp_multiplier
+        multipliers[1] = v_opp_multiplier
     
     assert(!exclusion_set.has(corner_type) or !exclusion_set[corner_type])
-
+    
     exclusion_set[corner_type] = true
     
     for fallback_type in current_map:
-        if exclusion_set.has(fallback_type) and \
+        if transitive_basis_map.has(fallback_type) or \
+                exclusion_set.has(fallback_type) and \
                 exclusion_set[fallback_type]:
             # We're already considering this type in the current transitive
             # chain.
@@ -307,6 +310,10 @@ func _record_transitive_fallbacks_recursively(
                 v_opp_multiplier,
                 fallback_multipliers[1])
         
+        if transitive_h_opp_multiplier <= 0.0 and \
+                transitive_v_opp_multiplier <= 0.0:
+            continue
+        
         _record_transitive_fallbacks_recursively(
                 fallback_type,
                 transitive_basis_type,
@@ -315,3 +322,26 @@ func _record_transitive_fallbacks_recursively(
                 exclusion_set)
     
     exclusion_set[corner_type] = false
+
+
+func _print_fallbacks() -> void:
+    print("")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>> FALLBACKS                >>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        print("%s:" % get_subtile_corner_string(corner_type))
+        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            var multipliers: Array = \
+                    FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
+            print("    %s [h_opp=%s, v_opp=%s]" % [
+                Sc.utils.pad_string(
+                        get_subtile_corner_string(fallback_type) + ":",
+                        56,
+                        true,
+                        true),
+                str(multipliers[0]),
+                str(multipliers[1]),
+            ])
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("")
