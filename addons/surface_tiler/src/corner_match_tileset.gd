@@ -96,8 +96,7 @@ func get_quadrants(
                     CornerDirection.get_string(corner_direction))
             print(proximity.to_string())
             print(target_corners.to_string(true))
-            print("Best quadrant match: " +
-                    _get_position_and_weight_results_string(
+            print(_get_position_and_weight_results_string(
                         best_position_and_weight))
             _print_subtile_corner_types(
                     corner_direction,
@@ -134,7 +133,7 @@ func get_quadrants(
     return clear_quadrants
 
 
-# Array<Vector2, float>
+# Array<Vector2, float, Dictionary, Dictionary, Dictionary, Dictionary, Dictionary>
 func _get_best_quadrant_match(
         corner_type_map_or_position,
         target_corner_types: Array,
@@ -156,8 +155,9 @@ func _get_best_quadrant_match(
 #    print(">> %s" % str(i))
     
     var best_position_and_weight := [Vector2.INF, -INF]
-    # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
     var best_weight_contribution := -INF
+    var best_type := SubtileCorner.UNKNOWN
+    var best_match_label := "-"
     
     # Consider direct corner-type matches.
     if corner_type_map_or_position.has(target_corner_type):
@@ -184,6 +184,8 @@ func _get_best_quadrant_match(
         
         best_position_and_weight = direct_match_position_and_weight
         best_weight_contribution = direct_match_weight_contribution
+        best_type = target_corner_type
+        best_match_label = "direct_match"
         # FIXME: -------------------------------------------------------------
 #        print("> d %s %s" % [
 #            str(i),
@@ -192,9 +194,12 @@ func _get_best_quadrant_match(
     
     if i == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
-        # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
         best_position_and_weight.resize(7)
-        best_position_and_weight[i + 2] = best_weight_contribution
+        best_position_and_weight[i + 2] = {
+            weight_contribution = best_weight_contribution,
+            corner_type = best_type,
+            match_label = best_match_label,
+        }
         return best_position_and_weight
     
     # Consider the UNKNOWN value as a fallback.
@@ -225,6 +230,8 @@ func _get_best_quadrant_match(
         if fallback_position_and_weight[1] > best_position_and_weight[1]:
             best_position_and_weight = fallback_position_and_weight
             best_weight_contribution = fallback_weight_contribution
+            best_type = SubtileCorner.UNKNOWN
+            best_match_label = "unknown_match"
         # FIXME: -------------------------------------------------------------
 #        print("> u %s %s" % [
 #            str(i),
@@ -284,15 +291,23 @@ func _get_best_quadrant_match(
             if fallback_position_and_weight[1] > best_position_and_weight[1]:
                 best_position_and_weight = fallback_position_and_weight
                 best_weight_contribution = fallback_weight_contribution
+                best_type = fallback_corner_type
+                best_match_label = \
+                        "good_fallback_match" if \
+                        fallback_weight_contribution > 0 else \
+                        "bad_fallback_match"
             # FIXME: -------------------------------------------------------------
 #            print("> f %s %s" % [
 #                str(i),
 #                str(fallback_position_and_weight[1]),
 #            ])
     
-    # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
     best_position_and_weight.resize(7)
-    best_position_and_weight[i + 2] = best_weight_contribution
+    best_position_and_weight[i + 2] = {
+        weight_contribution = best_weight_contribution,
+        corner_type = best_type,
+        match_label = best_match_label,
+    }
     return best_position_and_weight
 
 
@@ -409,13 +424,6 @@ func _get_position_and_weight_results_string(
             "p=" + str(position_and_weight[0]))
     position_and_weight_result_strings.push_back(
             "w=" + str(position_and_weight[1]))
-    var weight_thresholds := [
-        [1.0, 0.9999],
-        [0.01, 0.009999],
-        [0.01, 0.009999],
-        [0.0001, 0.00009999],
-        [0.0001, 0.00009999],
-    ]
     var neighbor_labels := [
         "self",
         "h_opp",
@@ -424,26 +432,22 @@ func _get_position_and_weight_results_string(
         "v_inbound",
     ]
     for i in range(2,7):
-        var neighbor_label: String = neighbor_labels[i - 2]
-        var contribution_string: String
-        if position_and_weight[i] == null:
-            contribution_string = "-"
-        else:
-            var prefix := \
-                    "direct_match" if \
-                    position_and_weight[i] >= \
-                        weight_thresholds[i - 2][0] else \
-                    "unknown_match" if \
-                    position_and_weight[i] >= \
-                        weight_thresholds[i - 2][1] else \
-                    "fallback_match"
-            contribution_string = "%s(%s)" % [
-                prefix,
-                str(position_and_weight[i]),
-            ]
-        position_and_weight_result_strings \
-                .push_back("%s=%s" % [neighbor_label, contribution_string])
-    return Sc.utils.join(position_and_weight_result_strings, ", ")
+        var neighbor_result = position_and_weight[i]
+        var contribution_string := \
+                "NULL" if \
+                neighbor_result == null else \
+                "(%s, %s, %s)" % [
+                    neighbor_result.match_label,
+                    Su.subtile_manifest.get_subtile_corner_string(
+                        neighbor_result.corner_type),
+                    str(neighbor_result.weight_contribution),
+                ]
+        position_and_weight_result_strings.push_back("%s=%s" % [
+                neighbor_labels[i - 2],
+                contribution_string,
+            ])
+    return "quadrant_match(\n    %s\n)" % \
+            Sc.utils.join(position_and_weight_result_strings, ",\n    ")
 
 
 func _sort(arr: Array) -> Array:
