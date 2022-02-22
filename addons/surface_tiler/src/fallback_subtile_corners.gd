@@ -5,10 +5,6 @@ extends Reference
 # NOTE:
 # -   This mapping enables us to match one corner type with another.
 # -   Each mapping multiplier must be between 0 and 1.
-# -   A value of SubtileCorner.UNKNOWN is automatically considered a valid
-#     fallback with a weight-multiplier of 0.5.
-#     -   So an UNKNOWN value will be preferred over a fallback with a weight
-#         multiplier less that 0.5.
 # -   Reverse mappings are automatically added. DO NOT INCLUDE THEM HERE.
 #     -   E.g., if A maps to B, then B should not map to A.
 # -   The first multiplier represents the weight for this fallback in an h-opp

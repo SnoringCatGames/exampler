@@ -82,7 +82,8 @@ func get_quadrants(
         ]
         
         # FIXME: -------------------------------------------------------------
-#        print(">>")
+#        print(">>>")
+        
         var best_position_and_weight := _get_best_quadrant_match(
                 subtile_corner_types[corner_direction],
                 corner_types,
@@ -102,8 +103,8 @@ func get_quadrants(
             print(">>")
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             _print_subtile_corner_types(
-                    CornerDirection.BOTTOM_LEFT,
-                    target_corners.bottom_left)
+                    corner_direction,
+                    target_corners.get_corner_type(corner_direction))
         
         if quadrant_weight < \
                 Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:
@@ -116,6 +117,9 @@ func get_quadrants(
                 proximity.to_string(),
                 target_corners.to_string(true),
             ])
+#            _print_subtile_corner_types(
+#                    corner_direction,
+#                    target_corners.get_corner_type(corner_direction))
             quadrant_position = error_quadrants[i]
         
         quadrant_positions[i] = quadrant_position
@@ -149,7 +153,7 @@ func _get_best_quadrant_match(
     var target_corner_type: int = target_corner_types[i]
     
     # FIXME: -------------------------------------------------------------
-#    print(">>> %s" % str(corner_type_map_or_position))
+#    print(">> %s" % str(i))
     
     var best_position_and_weight := [Vector2.INF, -INF]
     # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
@@ -159,23 +163,27 @@ func _get_best_quadrant_match(
     if corner_type_map_or_position.has(target_corner_type):
         var direct_match_corner_type_map_or_position = \
                 corner_type_map_or_position[target_corner_type]
-        best_weight_contribution = current_iteration_weight_multiplier
-        var direct_match_weight := weight + best_weight_contribution
+        var direct_match_weight_contribution := \
+                current_iteration_weight_multiplier
+        var direct_match_weight := weight + direct_match_weight_contribution
         
+        var direct_match_position_and_weight: Array
         if direct_match_corner_type_map_or_position is Vector2:
             # Base case: We found a position.
-            best_position_and_weight = [
+            direct_match_position_and_weight = [
                 direct_match_corner_type_map_or_position,
                 direct_match_weight,
             ]
         else:
             # Recursive case: We found another mapping to consider.
-            best_position_and_weight = _get_best_quadrant_match(
+            direct_match_position_and_weight = _get_best_quadrant_match(
                     direct_match_corner_type_map_or_position,
                     target_corner_types,
                     i + 1,
                     direct_match_weight)
         
+        best_position_and_weight = direct_match_position_and_weight
+        best_weight_contribution = direct_match_weight_contribution
         # FIXME: -------------------------------------------------------------
 #        print("> d %s %s" % [
 #            str(i),
@@ -193,29 +201,34 @@ func _get_best_quadrant_match(
     if corner_type_map_or_position.has(SubtileCorner.UNKNOWN):
         var fallback_corner_type_map_or_position = \
                 corner_type_map_or_position[SubtileCorner.UNKNOWN]
-        var fallback_corner_weight_multiplier: float = 0.5
-        best_weight_contribution = \
+        var fallback_corner_weight_multiplier: float = 1.0
+        var fallback_weight_contribution := \
                 current_iteration_weight_multiplier * \
                 fallback_corner_weight_multiplier * 0.1
-        var fallback_weight := weight + best_weight_contribution
+        var fallback_weight := weight + fallback_weight_contribution
         
+        var fallback_position_and_weight: Array
         if fallback_corner_type_map_or_position is Vector2:
             # Base case: We found a position.
-            best_position_and_weight = [
+            fallback_position_and_weight = [
                 fallback_corner_type_map_or_position,
                 fallback_weight,
             ]
         else:
             # Recursive case: We found another mapping to consider.
-            best_position_and_weight = _get_best_quadrant_match(
+            fallback_position_and_weight = _get_best_quadrant_match(
                     fallback_corner_type_map_or_position,
                     target_corner_types,
                     i + 1,
                     fallback_weight)
+        
+        if fallback_position_and_weight[1] > best_position_and_weight[1]:
+            best_position_and_weight = fallback_position_and_weight
+            best_weight_contribution = fallback_weight_contribution
         # FIXME: -------------------------------------------------------------
 #        print("> u %s %s" % [
 #            str(i),
-#            str(best_position_and_weight[1]),
+#            str(fallback_position_and_weight[1]),
 #        ])
     
     # Consider all explicitly configured fallbacks.
@@ -233,8 +246,8 @@ func _get_best_quadrant_match(
             # Skip this fallback, since it is for the other direction.
             continue
         
-        if fallback_corner_weight_multiplier <= 0.5:
-            # -   If the weight-multiplier is less than 0.5, then we should
+        if fallback_corner_weight_multiplier <= 1.0:
+            # -   If the weight-multiplier is less than 1.0, then we should
             #     prefer mappings that use UNKNOWN values.
             # -   This offset ensures that a non-unknown fallback will
             #     counter the weight contributed by any match from the other
@@ -268,15 +281,14 @@ func _get_best_quadrant_match(
                         i + 1,
                         fallback_weight)
             
-            if fallback_position_and_weight[1] > \
-                    best_position_and_weight[1]:
+            if fallback_position_and_weight[1] > best_position_and_weight[1]:
                 best_position_and_weight = fallback_position_and_weight
                 best_weight_contribution = fallback_weight_contribution
-                # FIXME: -------------------------------------------------------------
-#                print("> f %s %s" % [
-#                    str(i),
-#                    str(best_position_and_weight[1]),
-#                ])
+            # FIXME: -------------------------------------------------------------
+#            print("> f %s %s" % [
+#                str(i),
+#                str(fallback_position_and_weight[1]),
+#            ])
     
     # FIXME: LEFT OFF HERE: ----------- Remove? Or keep this for debugging?
     best_position_and_weight.resize(7)
