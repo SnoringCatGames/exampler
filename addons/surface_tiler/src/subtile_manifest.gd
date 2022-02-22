@@ -72,16 +72,14 @@ var forces_convex_collision_shapes: bool
 #         run time.
 # -   If false, the autotiling logic will assume all possible subtile angle
 #         combinations are defined.
-#     -   The tile-set author then needs to draw, and configure in GDScript,
-#         many more subtile angle combinations.
-#     -   Only exact matches will be used.
-#     -   If an exact match isn't defined, then a single given fallback
-#         error-indicator subtile will be used.
-#     -   The level author can then see the error-indicator subtile and change
-#         their level topography to instead use whichever subtiles are
-#         available.
+#     -   The tile-set author then needs to draw many more subtile angle
+#         combinations.
+#     -   Only exact quadrant corner-type matches will be used.
+#     -   If an exact match isn't defined, then the error-indicator quadrant
+#         will be used.
+#     -   The level author can then see the error-indicator and change their
+#         level topography to instead use whichever subtiles are available.
 var allows_fallback_corner_matches: bool
-var allows_non_fallback_corner_matches: bool
 
 # -   If false, then custom corner-match autotiling behavior will not happen at
 #     runtime, and will only happen when editing within the scene editor.
@@ -116,8 +114,6 @@ func register_manifest(manifest: Dictionary) -> void:
             manifest.forces_convex_collision_shapes
     self.allows_fallback_corner_matches = \
             manifest.allows_fallback_corner_matches
-    self.allows_non_fallback_corner_matches = \
-            manifest.allows_non_fallback_corner_matches
     self.supports_runtime_autotiling = manifest.supports_runtime_autotiling
     
     self.corner_type_annotation_key_path = \
