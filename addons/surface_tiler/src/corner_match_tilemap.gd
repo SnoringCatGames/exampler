@@ -177,14 +177,20 @@ func _on_cell_tile_changed(
         # Update all nearby neighbor cells.
         for y in 5:
             for x in 5:
-                var neighbor_position := \
-                        cell_position + Vector2(x - 2, y - 2)
+                var neighbor_position := cell_position + Vector2(x - 2, y - 2)
                 if neighbor_position == cell_position:
                     # We already updated this cell.
                     continue
-                _delegate_quadrant_updates(
-                        neighbor_position,
-                        tile_id)
+                _delegate_quadrant_updates(neighbor_position, tile_id)
+    
+    # FIXME: --------------
+    # - Trigger debug printing somewhere else (probably through a
+    #   click-to-inspect mode that's toggled through the plugin UI).
+    tile_set.get_quadrants(
+            cell_position,
+            tile_id,
+            self,
+            true)
     
     emit_signal(
             "cell_tile_changed",

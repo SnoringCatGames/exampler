@@ -47,7 +47,8 @@ var _angle_type_to_tile_id := {}
 func get_quadrants(
         cell_position: Vector2,
         tile_id: int,
-        tile_map: TileMap) -> Array:
+        tile_map: TileMap,
+        logs_debug_info := false) -> Array:
     if !Engine.editor_hint and \
             !Su.subtile_manifest.supports_runtime_autotiling:
         return error_quadrants
@@ -81,9 +82,6 @@ func get_quadrants(
             target_corners.get_v_inbound_corner_type(corner_direction),
         ]
         
-        # FIXME: -------------------------------------------------------------
-#        print(">>>")
-        
         var best_position_and_weight := _get_best_quadrant_match(
                 subtile_corner_types[corner_direction],
                 corner_types,
@@ -92,19 +90,20 @@ func get_quadrants(
         var quadrant_position: Vector2 = best_position_and_weight[0]
         var quadrant_weight: float = best_position_and_weight[1]
         
-        # TODO: Remove. Useful for debugging.
-        if proximity.get_world_position() == Vector2(-32, -160) and \
-                corner_direction == CornerDirection.BOTTOM_LEFT:
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-            print(">>")
+        if logs_debug_info:
+            print("")
+            print(">>> get_quadrants: %s" % \
+                    CornerDirection.get_string(corner_direction))
             print(proximity.to_string())
             print(target_corners.to_string(true))
-            print("_get_best_quadrant_match: " + str(best_position_and_weight))
-            print(">>")
-            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print("Best quadrant match: " +
+                    _get_position_and_weight_results_string(
+                        best_position_and_weight))
             _print_subtile_corner_types(
                     corner_direction,
                     target_corners.get_corner_type(corner_direction))
+            print(">>>")
+            print("")
         
         if quadrant_weight < \
                 Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:
@@ -117,9 +116,10 @@ func get_quadrants(
                 proximity.to_string(),
                 target_corners.to_string(true),
             ])
-#            _print_subtile_corner_types(
-#                    corner_direction,
-#                    target_corners.get_corner_type(corner_direction))
+            if logs_debug_info:
+                _print_subtile_corner_types(
+                        corner_direction,
+                        target_corners.get_corner_type(corner_direction))
             quadrant_position = error_quadrants[i]
         
         quadrant_positions[i] = quadrant_position
@@ -147,7 +147,7 @@ func _get_best_quadrant_match(
         3, 4: iteration_exponent = 2
         _:
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
-    var current_iteration_weight_multiplier := 1.0 / pow(10,iteration_exponent)
+    var current_iteration_weight_multiplier := 1.0 / pow(100,iteration_exponent)
     var is_inbound_iteration := i > 2
     var is_h_neighbor := i == 1 or i == 4
     var target_corner_type: int = target_corner_types[i]
@@ -201,7 +201,7 @@ func _get_best_quadrant_match(
     if corner_type_map_or_position.has(SubtileCorner.UNKNOWN):
         var fallback_corner_type_map_or_position = \
                 corner_type_map_or_position[SubtileCorner.UNKNOWN]
-        var fallback_corner_weight_multiplier: float = 1.0
+        var fallback_corner_weight_multiplier: float = 0.9999
         var fallback_weight_contribution := \
                 current_iteration_weight_multiplier * \
                 fallback_corner_weight_multiplier * 0.1
@@ -332,10 +332,7 @@ func _print_subtile_corner_types(
         target_v_opp_corner_type := -1,
         target_h_inbound_corner_type := -1,
         target_v_inbound_corner_type := -1) -> void:
-    print("")
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print(">>> CornerMatchTileset.subtile_corner_types         >>>")
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>>>> CornerMatchTileset.subtile_corner_types")
     for corner_direction in _sort(subtile_corner_types.keys()):
         if target_corner_direction >= 0 and \
                 target_corner_direction != corner_direction:
@@ -402,8 +399,51 @@ func _print_subtile_corner_types(
                                                 v_inbound_corner_type) +
                                         " => Position: " + 
                                         str(position))
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print("")
+    print(">>>>>")
+
+
+func _get_position_and_weight_results_string(
+        position_and_weight: Array) -> String:
+    var position_and_weight_result_strings := []
+    position_and_weight_result_strings.push_back(
+            "p=" + str(position_and_weight[0]))
+    position_and_weight_result_strings.push_back(
+            "w=" + str(position_and_weight[1]))
+    var weight_thresholds := [
+        [1.0, 0.9999],
+        [0.01, 0.009999],
+        [0.01, 0.009999],
+        [0.0001, 0.00009999],
+        [0.0001, 0.00009999],
+    ]
+    var neighbor_labels := [
+        "self",
+        "h_opp",
+        "v_opp",
+        "h_inbound",
+        "v_inbound",
+    ]
+    for i in range(2,7):
+        var neighbor_label: String = neighbor_labels[i - 2]
+        var contribution_string: String
+        if position_and_weight[i] == null:
+            contribution_string = "-"
+        else:
+            var prefix := \
+                    "direct_match" if \
+                    position_and_weight[i] >= \
+                        weight_thresholds[i - 2][0] else \
+                    "unknown_match" if \
+                    position_and_weight[i] >= \
+                        weight_thresholds[i - 2][1] else \
+                    "fallback_match"
+            contribution_string = "%s(%s)" % [
+                prefix,
+                str(position_and_weight[i]),
+            ]
+        position_and_weight_result_strings \
+                .push_back("%s=%s" % [neighbor_label, contribution_string])
+    return Sc.utils.join(position_and_weight_result_strings, ", ")
 
 
 func _sort(arr: Array) -> Array:
