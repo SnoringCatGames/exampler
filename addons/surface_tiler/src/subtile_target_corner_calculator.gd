@@ -4,23 +4,25 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -----------------------------------------------
-# - Add support for concave cusps within cells, with the deeper half of the
-#    quadrants.
-# - Debug all the error cases for 45-degree target-corner calculations.
-# - Add a couple more corner types:
-#   - Add support for the new subtile shape where a concave cusp between
+# - Add support for diag-opp, and remove old corner-types that involved
+#   90-90-concave corners.
+# - Add support for v2-inbound and h2-inbound corner-type connections.
+#   - This is needed for fixing the problem of handling cases like
+#     EXT_45_CLIPPED_EXT_INT_45_CLIPPED, which would otherwise require creating
+#     many new corner-types.
+# - [NOPE] Add a couple more corner types?:
+#   - [NOPE] Add support for the new subtile shape where a concave cusp between
 #     45-degree slopes lies just past a 90-degree surface?
 #     - I drew this in the tile-set at row 32.
-#   - EXT_45_CLIPPED_EXT_INT_45_CLIPPED @ (0,32)
-#     - I _do_ need this one, since there is no other way to distinquish
+#   - [NOPE] EXT_45_CLIPPED_EXT_INT_45_CLIPPED @ (0,32)
+#     - I need this one, since there is no other way to distinquish
 #       between inbound neighbor types.
-#   - Maybe still abandon this?
+#   - [NOPE] Maybe still abandon this?
 #     - INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED @ (8,26)
 #       - INT_90H_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
 #       - INT_90V_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
 #       - INT_90_90_CONVEX_INT_EXT_45_CLIPPED_INT_INT_45_CLIPPED
-# - Add support for diag-opp, and remove old corner-types that involved
-#   90-90-concave corners.
+# - Debug all the error cases for 45-degree target-corner calculations.
 # - Make sure quadrant-collision-shape calculations work with all the
 #   inner-clipped-connection arrangements.
 # - Think of what old corner-types I can remove now that I have the new
