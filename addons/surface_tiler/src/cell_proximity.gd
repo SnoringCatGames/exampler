@@ -524,12 +524,43 @@ func get_is_90_right_wall(
             return false
 
 
-func get_is_45_pos_floor(relative_x := 0, relative_y := 0) -> bool:
+func get_is_45_pos_floor(
+        relative_x := 0,
+        relative_y := 0,
+        recursion_depth := 0) -> bool:
     if get_is_empty(relative_x, relative_y):
         return false
-    if get_is_present(relative_x - 1, relative_y) or \
-            get_is_present(relative_x, relative_y - 1):
-        # Can't be a 45 floor if there is another block in front.
+    if get_is_present(relative_x - 1, relative_y):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x, relative_y - 1) and \
+                get_is_present(relative_x + 1, relative_y) and \
+                get_is_45_neg_floor(
+                        relative_x - 1,
+                        relative_y - 1,
+                        recursion_depth + 1) and \
+                get_is_45_pos_floor(
+                        relative_x + 1, 
+                        relative_y - 1,
+                        recursion_depth + 1):
+            return true
+        return false
+    if get_is_present(relative_x, relative_y - 1):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x - 1, relative_y) and \
+                get_is_present(relative_x, relative_y + 1) and \
+                get_is_45_neg_ceiling(
+                        relative_x - 1,
+                        relative_y - 1,
+                        recursion_depth + 1) and \
+                get_is_45_pos_floor(
+                        relative_x - 1,
+                        relative_y + 1,
+                        recursion_depth + 1):
+            return true
         return false
     match get_angle_type(relative_x, relative_y):
         CellAngleType.A90:
@@ -559,12 +590,43 @@ func get_is_45_pos_floor(relative_x := 0, relative_y := 0) -> bool:
             return false
 
 
-func get_is_45_neg_floor(relative_x := 0, relative_y := 0) -> bool:
+func get_is_45_neg_floor(
+        relative_x := 0,
+        relative_y := 0,
+        recursion_depth := 0) -> bool:
     if get_is_empty(relative_x, relative_y):
         return false
-    if get_is_present(relative_x + 1, relative_y) or \
-            get_is_present(relative_x, relative_y - 1):
-        # Can't be a 45 floor if there is another block in front.
+    if get_is_present(relative_x + 1, relative_y):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x, relative_y - 1) and \
+                get_is_present(relative_x - 1, relative_y) and \
+                get_is_45_neg_floor(
+                        relative_x - 1,
+                        relative_y - 1,
+                        recursion_depth + 1) and \
+                get_is_45_pos_floor(
+                        relative_x + 1,
+                        relative_y - 1,
+                        recursion_depth + 1):
+            return true
+        return false
+    if get_is_present(relative_x, relative_y - 1):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x + 1, relative_y) and \
+                get_is_present(relative_x, relative_y + 1) and \
+                get_is_45_pos_ceiling(
+                        relative_x + 1,
+                        relative_y - 1,
+                        recursion_depth + 1) and \
+                get_is_45_neg_floor(
+                        relative_x + 1,
+                        relative_y + 1,
+                        recursion_depth + 1):
+            return true
         return false
     match get_angle_type(relative_x, relative_y):
         CellAngleType.A90:
@@ -594,12 +656,43 @@ func get_is_45_neg_floor(relative_x := 0, relative_y := 0) -> bool:
             return false
 
 
-func get_is_45_pos_ceiling(relative_x := 0, relative_y := 0) -> bool:
+func get_is_45_pos_ceiling(
+        relative_x := 0,
+        relative_y := 0,
+        recursion_depth := 0) -> bool:
     if get_is_empty(relative_x, relative_y):
         return false
-    if get_is_present(relative_x + 1, relative_y) or \
-            get_is_present(relative_x, relative_y + 1):
-        # Can't be a 45 ceiling if there is another block in front.
+    if get_is_present(relative_x + 1, relative_y):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x, relative_y + 1) and \
+                get_is_present(relative_x - 1, relative_y) and \
+                get_is_45_neg_ceiling(
+                        relative_x + 1,
+                        relative_y + 1,
+                        recursion_depth + 1) and \
+                get_is_45_pos_ceiling(
+                        relative_x - 1,
+                        relative_y + 1,
+                        recursion_depth + 1):
+            return true
+        return false
+    if get_is_present(relative_x, relative_y + 1):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x + 1, relative_y) and \
+                get_is_present(relative_x, relative_y - 1) and \
+                get_is_45_neg_floor(
+                        relative_x + 1,
+                        relative_y + 1,
+                        recursion_depth + 1) and \
+                get_is_45_pos_ceiling(
+                        relative_x + 1,
+                        relative_y - 1,
+                        recursion_depth + 1):
+            return true
         return false
     match get_angle_type(relative_x, relative_y):
         CellAngleType.A90:
@@ -629,12 +722,43 @@ func get_is_45_pos_ceiling(relative_x := 0, relative_y := 0) -> bool:
             return false
 
 
-func get_is_45_neg_ceiling(relative_x := 0, relative_y := 0) -> bool:
+func get_is_45_neg_ceiling(
+        relative_x := 0,
+        relative_y := 0,
+        recursion_depth := 0) -> bool:
     if get_is_empty(relative_x, relative_y):
         return false
-    if get_is_present(relative_x - 1, relative_y) or \
-            get_is_present(relative_x, relative_y + 1):
-        # Can't be a 45 ceiling if there is another block in front.
+    if get_is_present(relative_x - 1, relative_y):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x, relative_y + 1) and \
+                get_is_present(relative_x + 1, relative_y) and \
+                get_is_45_pos_ceiling(
+                        relative_x - 1,
+                        relative_y + 1,
+                        recursion_depth + 1) and \
+                get_is_45_neg_ceiling(
+                        relative_x + 1,
+                        relative_y + 1,
+                        recursion_depth + 1):
+            return true
+        return false
+    if get_is_present(relative_x, relative_y + 1):
+        # There is a block in front, but this could be a concave cusp between
+        # 45-degree surfaces.
+        if recursion_depth < 4 and \
+                get_is_empty(relative_x - 1, relative_y) and \
+                get_is_present(relative_x, relative_y - 1) and \
+                get_is_45_pos_floor(
+                        relative_x - 1,
+                        relative_y + 1,
+                        recursion_depth + 1) and \
+                get_is_45_neg_ceiling(
+                        relative_x - 1,
+                        relative_y - 1,
+                        recursion_depth + 1):
+            return true
         return false
     match get_angle_type(relative_x, relative_y):
         CellAngleType.A90:
