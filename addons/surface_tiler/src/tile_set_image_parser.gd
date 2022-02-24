@@ -100,24 +100,22 @@ func parse_corner_type_annotation_key(
 #   CornerDirection,
 #   Dictionary<
 #     SubtileCorner, # Self-corner
-#     Dictionary<
+#     (Vector2|Dictionary<
 #       SubtileCorner, # H-opp-corner
-#       Dictionary<
+#       (Vector2|Dictionary<
 #         SubtileCorner, # V-opp-corner
-#         (Vector2|
-#         Dictionary<
+#         (Vector2|Dictionary<
 #           SubtileCorner, # H-inbound-corner
-#           Dictionary<
+#           (Vector2|Dictionary<
 #             SubtileCorner, # V-inbound-corner
-#             (Vector2|
-#             Dictionary<
+#             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-opp-corner
-#               (Vector2|
-#               Dictionary<
+#               (Vector2|Dictionary<
 #                 SubtileCorner, # H2-inbound-corner
-#                 Dictionary<
+#                 (Vector2|Dictionary<
 #                   SubtileCorner, # V2-inbound-corner
-#                   Vector2>>)>)>>)>>>>
+#                   Vector2        # Quadrant coordinates
+#                 >)>)>)>)>)>)>)>>
 func parse_tile_set_corner_type_annotations(
         corner_type_annotation_key: Dictionary,
         tile_set_corner_type_annotations_path: String,
@@ -851,7 +849,7 @@ func _parse_corner_type_annotation(
             corner_type_annotation_key,
             CornerDirection.INBOUND_BR_BD)
     
-    _record_autotile_coord(
+    _record_quadrant_coordinates(
             subtile_corner_types,
             CornerDirection.TOP_LEFT,
             tl_quadrant_position / quadrant_size,
@@ -866,7 +864,7 @@ func _parse_corner_type_annotation(
             is_tl_h_connected_internally,
             is_tl_v_connected_internally,
             is_tl_d_connected_internally)
-    _record_autotile_coord(
+    _record_quadrant_coordinates(
             subtile_corner_types,
             CornerDirection.TOP_RIGHT,
             tr_quadrant_position / quadrant_size,
@@ -881,7 +879,7 @@ func _parse_corner_type_annotation(
             is_tr_h_connected_internally,
             is_tr_v_connected_internally,
             is_tr_d_connected_internally)
-    _record_autotile_coord(
+    _record_quadrant_coordinates(
             subtile_corner_types,
             CornerDirection.BOTTOM_LEFT,
             bl_quadrant_position / quadrant_size,
@@ -896,7 +894,7 @@ func _parse_corner_type_annotation(
             is_bl_h_connected_internally,
             is_bl_v_connected_internally,
             is_bl_d_connected_internally)
-    _record_autotile_coord(
+    _record_quadrant_coordinates(
             subtile_corner_types,
             CornerDirection.BOTTOM_RIGHT,
             br_quadrant_position / quadrant_size,
@@ -913,10 +911,10 @@ func _parse_corner_type_annotation(
             is_br_d_connected_internally)
 
 
-static func _record_autotile_coord(
+static func _record_quadrant_coordinates(
         subtile_corner_types: Dictionary,
         corner_direction: int,
-        autotile_coord: Vector2,
+        quadrant_coordinates: Vector2,
         self_corner_type: int,
         h_opp_corner_type: int,
         v_opp_corner_type: int,
@@ -928,113 +926,104 @@ static func _record_autotile_coord(
         is_h_connected_internally: bool,
         is_v_connected_internally: bool,
         is_d_connected_internally: bool) -> void:
-    # FIXME: LEFT OFF HERE: -------------------------
-    # - hd_inbound_corner_type
-    # - vd_inbound_corner_type
-    # - is_d_connected_internally
-    # - d_opp_corner_type
-# Dictionary<
-#   CornerDirection,
-#   Dictionary<
-#     SubtileCorner, # Self-corner
-#     Dictionary<
-#       SubtileCorner, # H-opp-corner
-#       Dictionary<
-#         SubtileCorner, # V-opp-corner
-#         (Vector2|
-#         Dictionary<
-#           SubtileCorner, # H-inbound-corner
-#           Dictionary<
-#             SubtileCorner, # V-inbound-corner
-#             (Vector2|
-#             Dictionary<
-#               SubtileCorner, # Diagonal-opp-corner
-#               (Vector2|
-#               Dictionary<
-#                 SubtileCorner, # H2-inbound-corner
-#                 Dictionary<
-#                   SubtileCorner, # V2-inbound-corner
-#                   Vector2>>)>)>>)>>>>
-    
-    
-    
-    
-    
-    
     if !is_h_connected_internally:
         h_opp_corner_type = SubtileCorner.UNKNOWN
     if !is_v_connected_internally:
         v_opp_corner_type = SubtileCorner.UNKNOWN
+    if !is_d_connected_internally:
+        d_opp_corner_type = SubtileCorner.UNKNOWN
     
-    var includes_inbound_or_internal_diagonal := \
-            h_inbound_corner_type != SubtileCorner.UNKNOWN or \
-            v_inbound_corner_type != SubtileCorner.UNKNOWN or \
-            is_d_connected_internally
-    var includes_inbound_diagonal
+    var keys := [
+        self_corner_type,
+        h_opp_corner_type,
+        v_opp_corner_type,
+        d_opp_corner_type,
+        h_inbound_corner_type,
+        v_inbound_corner_type,
+        hd_inbound_corner_type,
+        vd_inbound_corner_type,
+        quadrant_coordinates,
+    ]
     
-    # CornerDirection mapping.
+    var index_of_last_known_type := 0
+    for i in keys.size() - 1:
+        if keys[i] != SubtileCorner.UNKNOWN:
+            index_of_last_known_type = i
+    
     var map: Dictionary = subtile_corner_types[corner_direction]
     
-    # Self corner-type mapping.
-    if !map.has(self_corner_type):
-        map[self_corner_type] = {}
-    map = map[self_corner_type]
+    _record_quadrant_coordinates_recursively(
+            map,
+            keys,
+            0,
+            index_of_last_known_type)
+
+
+static func _record_quadrant_coordinates_recursively(
+        map: Dictionary,
+        keys: Array,
+        index: int,
+        index_of_last_known_type: int) -> void:
+    var current_key = keys[index]
+    var next_key_or_value = keys[index + 1]
     
-    # H-opp corner-type mapping.
-    if !map.has(h_opp_corner_type):
-        map[h_opp_corner_type] = {}
-    map = map[h_opp_corner_type]
+    assert(current_key is int)
+    assert(index < keys.size() - 2 or \
+            next_key_or_value is Vector2)
     
-    if includes_inbound:
-        if !map.has(v_opp_corner_type):
-            # There was no previous mapping for the v-opp corner-type.
-            map[v_opp_corner_type] = {}
-            
-        elif map[v_opp_corner_type] is Vector2:
-            # There was a Vector2 value mapped for the v-opp corner-type.
-            var previous_position: Vector2 = map[v_opp_corner_type]
-            
-            # V-opp corner-type mapping (for the previous value).
-            map[v_opp_corner_type] = {}
-            var new_map = map[v_opp_corner_type]
-            
-            # H-inbound corner-type mapping (for the previous value).
-            if !new_map.has(SubtileCorner.UNKNOWN):
-                new_map[SubtileCorner.UNKNOWN] = {}
-            new_map = new_map[SubtileCorner.UNKNOWN]
-            
-            new_map[SubtileCorner.UNKNOWN] = previous_position
-        
-        # V-opp corner-type mapping.
-        map = map[v_opp_corner_type]
-        
-        # H-inbound corner-type mapping.
-        if !map.has(h_inbound_corner_type):
-            map[h_inbound_corner_type] = {}
-        map = map[h_inbound_corner_type]
-        
-        if !map.has(v_inbound_corner_type):
-            map[v_inbound_corner_type] = autotile_coord
-        
-    else:
-        if map.has(v_opp_corner_type) and \
-                map[v_opp_corner_type] is Dictionary:
-            # There was a Dictionary value (inbound-corner-types) mapped for
-            # the v-opp corner-type.
-            
-            # V-opp corner-type mapping.
-            map = map[v_opp_corner_type]
-            
-            # H-inbound corner-type mapping.
-            if !map.has(SubtileCorner.UNKNOWN):
-                map[SubtileCorner.UNKNOWN] = {}
-            map = map[SubtileCorner.UNKNOWN]
-            
-            if !map.has(SubtileCorner.UNKNOWN):
-                map[SubtileCorner.UNKNOWN] = autotile_coord
+    if map.has(current_key):
+        var preexisting_value = map[current_key]
+        if preexisting_value is Vector2:
+            if next_key_or_value is Vector2 or \
+                    index >= index_of_last_known_type:
+                # Base case:
+                # -   Do nothing.
+                # -   Keep the earlier coordinates when there are multiple
+                #     coordinates with the same corner-types.
+                pass
+            else:
+                # Recursive case:
+                # -   Record a new map.
+                # -   Record a mapping from UNKNOWN to the preexisting value.
+                # -   Recurse.
+                var next_map := {}
+                map[current_key] = next_map
+                next_map[SubtileCorner.UNKNOWN] = preexisting_value
+                _record_quadrant_coordinates_recursively(
+                        next_map,
+                        keys,
+                        index + 1,
+                        index_of_last_known_type)
         else:
-            if !map.has(v_opp_corner_type):
-                map[v_opp_corner_type] = autotile_coord
+            var next_map: Dictionary = preexisting_value
+            _record_quadrant_coordinates_recursively(
+                    next_map,
+                    keys,
+                    index + 1,
+                    index_of_last_known_type)
+    else:
+        if next_key_or_value is Vector2:
+            # Base case: Record the quadrant coordinates.
+            map[current_key] = next_key_or_value
+        elif index >= index_of_last_known_type:
+            # Base case:
+            # -   Record the quadrant coordinates.
+            # -   In this case, some of the connected corner-types are
+            #     undefined.
+            # -   Rather than create extra nested dictionaries with mappings
+            #     from SubtileCorner.UNKNOWN, we just record a mapping from
+            #     UNKNOWN directly to the quadrant coordinates on the last
+            #     preexisting dictionary in the chain.
+            map[current_key] = keys.back()
+        else:
+            # Recursive case: Record a new map and recurse.
+            var next_map := {}
+            map[current_key] = next_map
+            _record_quadrant_coordinates_recursively(
+                    next_map,
+                    keys,
+                    index + 1,
+                    index_of_last_known_type)
 
 
 static func _get_corner_type_from_annotation(

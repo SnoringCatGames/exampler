@@ -7,24 +7,22 @@ extends TileSet
 #   CornerDirection,
 #   Dictionary<
 #     SubtileCorner, # Self-corner
-#     Dictionary<
+#     (Vector2|Dictionary<
 #       SubtileCorner, # H-opp-corner
-#       Dictionary<
+#       (Vector2|Dictionary<
 #         SubtileCorner, # V-opp-corner
-#         (Vector2|
-#         Dictionary<
+#         (Vector2|Dictionary<
 #           SubtileCorner, # H-inbound-corner
-#           Dictionary<
+#           (Vector2|Dictionary<
 #             SubtileCorner, # V-inbound-corner
-#             (Vector2|
-#             Dictionary<
+#             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-opp-corner
-#               (Vector2|
-#               Dictionary<
+#               (Vector2|Dictionary<
 #                 SubtileCorner, # H2-inbound-corner
-#                 Dictionary<
+#                 (Vector2|Dictionary<
 #                   SubtileCorner, # V2-inbound-corner
-#                   Vector2>>)>)>>)>>>>
+#                   Vector2        # Quadrant coordinates
+#                 >)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
 
 var are_45_degree_subtiles_used: bool
