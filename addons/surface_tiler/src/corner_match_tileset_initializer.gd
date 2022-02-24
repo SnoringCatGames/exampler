@@ -193,39 +193,82 @@ func _set_inner_tile_shapes_for_quadrants(
         var self_corner_type_map: Dictionary = \
                 subtile_corner_types[corner_direction]
         for self_corner_type in self_corner_type_map:
-            var h_opp_corner_type_map: Dictionary = \
+            var h_opp_corner_type_map_or_position = \
                     self_corner_type_map[self_corner_type]
-            for h_opp_corner_type in h_opp_corner_type_map:
-                var v_opp_corner_type_map: Dictionary = \
-                        h_opp_corner_type_map[h_opp_corner_type]
-                for v_opp_corner_type in v_opp_corner_type_map:
-                    var position_or_h_inbound_corner_type_map = \
-                            v_opp_corner_type_map[v_opp_corner_type]
-                    if position_or_h_inbound_corner_type_map is Vector2:
-                        _set_shapes_for_quadrant(
-                                tile_set,
-                                tile_id,
-                                position_or_h_inbound_corner_type_map,
-                                self_corner_type,
-                                h_opp_corner_type,
-                                v_opp_corner_type,
-                                corner_direction,
-                                collision_shapes,
-                                occlusion_shapes)
-                    else:
-                        for v_inbound_corner_type_map in \
-                                position_or_h_inbound_corner_type_map.values():
-                            for position in v_inbound_corner_type_map.values():
-                                _set_shapes_for_quadrant(
-                                        tile_set,
-                                        tile_id,
-                                        position,
-                                        self_corner_type,
-                                        h_opp_corner_type,
-                                        v_opp_corner_type,
-                                        corner_direction,
-                                        collision_shapes,
-                                        occlusion_shapes)
+            if h_opp_corner_type_map_or_position is Vector2:
+                _set_inner_tile_shapes_for_quadrants_recursively(
+                        tile_set,
+                        tile_id,
+                        h_opp_corner_type_map_or_position,
+                        self_corner_type,
+                        SubtileCorner.UNKNOWN,
+                        SubtileCorner.UNKNOWN,
+                        corner_direction,
+                        collision_shapes,
+                        occlusion_shapes)
+                continue
+            for h_opp_corner_type in h_opp_corner_type_map_or_position:
+                var v_opp_corner_type_map_or_position = \
+                        h_opp_corner_type_map_or_position[h_opp_corner_type]
+                if v_opp_corner_type_map_or_position is Vector2:
+                    _set_inner_tile_shapes_for_quadrants_recursively(
+                            tile_set,
+                            tile_id,
+                            v_opp_corner_type_map_or_position,
+                            self_corner_type,
+                            h_opp_corner_type,
+                            SubtileCorner.UNKNOWN,
+                            corner_direction,
+                            collision_shapes,
+                            occlusion_shapes)
+                    continue
+                for v_opp_corner_type in v_opp_corner_type_map_or_position:
+                    _set_inner_tile_shapes_for_quadrants_recursively(
+                            tile_set,
+                            tile_id,
+                            v_opp_corner_type_map_or_position \
+                                [v_opp_corner_type],
+                            self_corner_type,
+                            h_opp_corner_type,
+                            v_opp_corner_type,
+                            corner_direction,
+                            collision_shapes,
+                            occlusion_shapes)
+
+
+func _set_inner_tile_shapes_for_quadrants_recursively(
+        tile_set: CornerMatchTileset,
+        tile_id: int,
+        position_or_map,
+        self_corner_type: int,
+        h_opp_corner_type: int,
+        v_opp_corner_type: int,
+        corner_direction: int,
+        collision_shapes: Dictionary,
+        occlusion_shapes: Dictionary) -> void:
+    if position_or_map is Vector2:
+        _set_shapes_for_quadrant(
+                tile_set,
+                tile_id,
+                position_or_map,
+                self_corner_type,
+                h_opp_corner_type,
+                v_opp_corner_type,
+                corner_direction,
+                collision_shapes,
+                occlusion_shapes)
+    else:
+        for key in position_or_map:
+            _set_inner_tile_shapes_for_quadrants_recursively(
+                    tile_set,
+                    tile_id,
+                    position_or_map[key],
+                    self_corner_type,
+                    h_opp_corner_type,
+                    v_opp_corner_type,
+                    corner_direction,
+                    collision_shapes,
+                    occlusion_shapes)
 
 
 func _set_shapes_for_quadrant(
@@ -282,24 +325,16 @@ func _set_shapes_for_quadrant(
 func _get_error_quadrants(subtile_corner_types: Dictionary) -> Array:
     var tl_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.TOP_LEFT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
+            [SubtileCorner.ERROR]
     var tr_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.TOP_RIGHT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
+            [SubtileCorner.ERROR]
     var bl_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.BOTTOM_LEFT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
+            [SubtileCorner.ERROR]
     var br_quadrant_position: Vector2 = subtile_corner_types \
             [CornerDirection.BOTTOM_RIGHT] \
-            [SubtileCorner.ERROR] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
+            [SubtileCorner.ERROR]
     return [
         tl_quadrant_position,
         tr_quadrant_position,
@@ -309,57 +344,33 @@ func _get_error_quadrants(subtile_corner_types: Dictionary) -> Array:
 
 
 func _get_empty_quadrants(subtile_corner_types: Dictionary) -> Array:
-    var tl_quadrant_position_or_h_inbound_map = subtile_corner_types \
+    var tl_quadrant_position_or_map = subtile_corner_types \
             [CornerDirection.TOP_LEFT] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
-    var tl_quadrant_position: Vector2
-    if tl_quadrant_position_or_h_inbound_map is Vector2:
-        tl_quadrant_position = tl_quadrant_position_or_h_inbound_map
-    else:
-        tl_quadrant_position = tl_quadrant_position_or_h_inbound_map \
-                [SubtileCorner.UNKNOWN] \
-                [SubtileCorner.UNKNOWN]
-    var tr_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [SubtileCorner.EMPTY]
+    while tl_quadrant_position_or_map is Dictionary:
+        tl_quadrant_position_or_map = \
+                tl_quadrant_position_or_map[SubtileCorner.UNKNOWN]
+    var tr_quadrant_position_or_map = subtile_corner_types \
             [CornerDirection.TOP_RIGHT] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
-    var tr_quadrant_position: Vector2
-    if tr_quadrant_position_or_h_inbound_map is Vector2:
-        tr_quadrant_position = tr_quadrant_position_or_h_inbound_map
-    else:
-        tr_quadrant_position = tr_quadrant_position_or_h_inbound_map \
-                [SubtileCorner.UNKNOWN] \
-                [SubtileCorner.UNKNOWN]
-    var bl_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [SubtileCorner.EMPTY]
+    while tr_quadrant_position_or_map is Dictionary:
+        tr_quadrant_position_or_map = \
+                tr_quadrant_position_or_map[SubtileCorner.UNKNOWN]
+    var bl_quadrant_position_or_map = subtile_corner_types \
             [CornerDirection.BOTTOM_LEFT] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
-    var bl_quadrant_position: Vector2
-    if bl_quadrant_position_or_h_inbound_map is Vector2:
-        bl_quadrant_position = bl_quadrant_position_or_h_inbound_map
-    else:
-        bl_quadrant_position = bl_quadrant_position_or_h_inbound_map \
-                [SubtileCorner.UNKNOWN] \
-                [SubtileCorner.UNKNOWN]
-    var br_quadrant_position_or_h_inbound_map = subtile_corner_types \
+            [SubtileCorner.EMPTY]
+    while bl_quadrant_position_or_map is Dictionary:
+        bl_quadrant_position_or_map = \
+                bl_quadrant_position_or_map[SubtileCorner.UNKNOWN]
+    var br_quadrant_position_or_map = subtile_corner_types \
             [CornerDirection.BOTTOM_RIGHT] \
-            [SubtileCorner.EMPTY] \
-            [SubtileCorner.UNKNOWN] \
-            [SubtileCorner.UNKNOWN]
-    var br_quadrant_position: Vector2
-    if br_quadrant_position_or_h_inbound_map is Vector2:
-        br_quadrant_position = br_quadrant_position_or_h_inbound_map
-    else:
-        br_quadrant_position = br_quadrant_position_or_h_inbound_map \
-                [SubtileCorner.UNKNOWN] \
-                [SubtileCorner.UNKNOWN]
+            [SubtileCorner.EMPTY]
+    while br_quadrant_position_or_map is Dictionary:
+        br_quadrant_position_or_map = \
+                br_quadrant_position_or_map[SubtileCorner.UNKNOWN]
     return [
-        tl_quadrant_position,
-        tr_quadrant_position,
-        bl_quadrant_position,
-        br_quadrant_position,
+        tl_quadrant_position_or_map,
+        tr_quadrant_position_or_map,
+        bl_quadrant_position_or_map,
+        br_quadrant_position_or_map,
     ]

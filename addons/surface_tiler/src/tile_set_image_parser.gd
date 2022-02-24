@@ -111,9 +111,9 @@ func parse_corner_type_annotation_key(
 #             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-opp-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-inbound-corner
+#                 SubtileCorner, # H-d-inbound-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-inbound-corner
+#                   SubtileCorner, # V-d-inbound-corner
 #                   Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>>
 func parse_tile_set_corner_type_annotations(
@@ -1130,10 +1130,8 @@ static func _check_for_empty_quadrant_non_annotation_pixels(
                     (is_pixel_along_correct_horizontal_side or \
                     is_pixel_along_correct_vertical_side)
             var is_pixel_in_a_connection_annotation_position: bool = \
-                    (quadrant_x == 0 or quadrant_x == quadrant_size - 1) and \
-                    (quadrant_y == 1 or quadrant_y == quadrant_size - 2) or \
-                    (quadrant_y == 0 or quadrant_y == quadrant_size - 1) and \
-                    (quadrant_x == 1 or quadrant_x == quadrant_size - 2)
+                    (quadrant_x <= 1 or quadrant_x >= quadrant_size - 2) and \
+                    (quadrant_y <= 1 or quadrant_y >= quadrant_size - 2)
             
             if is_pixel_in_a_corner_annotation_position or \
                     is_pixel_in_a_connection_annotation_position:

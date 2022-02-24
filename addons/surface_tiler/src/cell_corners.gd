@@ -211,3 +211,48 @@ func get_v_inbound_corner_type(corner_direction: int) -> int:
         _:
             Sc.logger.error("CellCorners.get_v_inbound_corner_type")
             return SubtileCorner.UNKNOWN
+
+
+func get_d_opp_corner_type(corner_direction: int) -> int:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return bottom_right
+        CornerDirection.TOP_RIGHT:
+            return bottom_left
+        CornerDirection.BOTTOM_LEFT:
+            return top_right
+        CornerDirection.BOTTOM_RIGHT:
+            return top_left
+        _:
+            Sc.logger.error("CellCorners.get_d_opp_corner_type")
+            return SubtileCorner.UNKNOWN
+
+
+func get_h_d_inbound_corner_type(corner_direction: int) -> int:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return inbound_bl_l
+        CornerDirection.TOP_RIGHT:
+            return inbound_br_r
+        CornerDirection.BOTTOM_LEFT:
+            return inbound_tl_l
+        CornerDirection.BOTTOM_RIGHT:
+            return inbound_tr_r
+        _:
+            Sc.logger.error("CellCorners.get_h_d_inbound_corner_type")
+            return SubtileCorner.UNKNOWN
+
+
+func get_v_d_inbound_corner_type(corner_direction: int) -> int:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return inbound_tr_t
+        CornerDirection.TOP_RIGHT:
+            return inbound_tl_t
+        CornerDirection.BOTTOM_LEFT:
+            return inbound_br_b
+        CornerDirection.BOTTOM_RIGHT:
+            return inbound_bl_b
+        _:
+            Sc.logger.error("CellCorners.get_v_d_inbound_corner_type")
+            return SubtileCorner.UNKNOWN

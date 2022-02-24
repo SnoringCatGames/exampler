@@ -8,11 +8,11 @@ extends Node
 #   Dictionary<
 #     CornerDirection,
 #     Dictionary<
-#       SubtileCorner,
+#       SubtileCorner, # Self-corner
 #       Dictionary<
-#         SubtileCorner,
+#         SubtileCorner, # H-opp-corner
 #         Dictionary<
-#           SubtileCorner,
+#           SubtileCorner, # V-opp-corner
 #           (Shape2D|OccluderPolygon2D)>>>>>
 func create_tileset_shapes(
         subtile_corner_types: Dictionary,
@@ -54,9 +54,12 @@ func create_tileset_shapes(
         for self_corner_type in self_corner_type_map:
             collision_shapes[corner_direction][self_corner_type] = {}
             occlusion_shapes[corner_direction][self_corner_type] = {}
-            var h_opp_corner_type_map: Dictionary = \
+            var h_opp_corner_type_map_or_position = \
                     self_corner_type_map[self_corner_type]
-            for h_opp_corner_type in h_opp_corner_type_map:
+            
+            if h_opp_corner_type_map_or_position is Vector2:
+                var h_opp_corner_type = SubtileCorner.UNKNOWN
+                var v_opp_corner_type = SubtileCorner.UNKNOWN
                 collision_shapes \
                         [corner_direction] \
                         [self_corner_type] \
@@ -65,31 +68,82 @@ func create_tileset_shapes(
                         [corner_direction] \
                         [self_corner_type] \
                         [h_opp_corner_type] = {}
-                var v_opp_corner_type_map: Dictionary = \
-                        h_opp_corner_type_map[h_opp_corner_type]
-                for v_opp_corner_type in v_opp_corner_type_map:
-                    var shape_type := \
-                            QuadrantShapeType.get_shape_type_for_corner_type(
-                                self_corner_type,
-                                h_opp_corner_type,
-                                v_opp_corner_type)
-                    var shapes: Array = \
-                            shape_type_to_shapes[shape_type][corner_direction]
-                    collision_shapes \
-                            [corner_direction] \
-                            [self_corner_type] \
-                            [h_opp_corner_type] \
-                            [v_opp_corner_type] = shapes[0]
-                    occlusion_shapes \
-                            [corner_direction] \
-                            [self_corner_type] \
-                            [h_opp_corner_type] \
-                            [v_opp_corner_type] = shapes[1]
+                _record_shapes(
+                        collision_shapes,
+                        occlusion_shapes,
+                        corner_direction,
+                        self_corner_type,
+                        h_opp_corner_type,
+                        v_opp_corner_type,
+                        shape_type_to_shapes)
+                continue
+            
+            for h_opp_corner_type in h_opp_corner_type_map_or_position:
+                collision_shapes \
+                        [corner_direction] \
+                        [self_corner_type] \
+                        [h_opp_corner_type] = {}
+                occlusion_shapes \
+                        [corner_direction] \
+                        [self_corner_type] \
+                        [h_opp_corner_type] = {}
+                var v_opp_corner_type_map_or_position = \
+                        h_opp_corner_type_map_or_position[h_opp_corner_type]
+                
+                if v_opp_corner_type_map_or_position is Vector2:
+                    var v_opp_corner_type = SubtileCorner.UNKNOWN
+                    _record_shapes(
+                            collision_shapes,
+                            occlusion_shapes,
+                            corner_direction,
+                            self_corner_type,
+                            h_opp_corner_type,
+                            v_opp_corner_type,
+                            shape_type_to_shapes)
+                    continue
+                
+                for v_opp_corner_type in v_opp_corner_type_map_or_position:
+                    _record_shapes(
+                            collision_shapes,
+                            occlusion_shapes,
+                            corner_direction,
+                            self_corner_type,
+                            h_opp_corner_type,
+                            v_opp_corner_type,
+                            shape_type_to_shapes)
     
     return {
         collision_shapes = collision_shapes,
         occlusion_shapes = occlusion_shapes,
     }
+
+
+func _record_shapes(
+        collision_shapes: Dictionary,
+        occlusion_shapes: Dictionary,
+        corner_direction: int,
+        self_corner_type: int,
+        h_opp_corner_type: int,
+        v_opp_corner_type: int,
+        shape_type_to_shapes: Dictionary) -> void:
+    var shape_type := \
+            QuadrantShapeType.get_shape_type_for_corner_type(
+                self_corner_type,
+                h_opp_corner_type,
+                v_opp_corner_type)
+    var shapes: Array = \
+            shape_type_to_shapes[shape_type][corner_direction]
+    collision_shapes \
+            [corner_direction] \
+            [self_corner_type] \
+            [h_opp_corner_type] \
+            [v_opp_corner_type] = shapes[0]
+    occlusion_shapes \
+            [corner_direction] \
+            [self_corner_type] \
+            [h_opp_corner_type] \
+            [v_opp_corner_type] = shapes[1]
+
 
 # Dictionary<
 #   QuadrantShapeType,

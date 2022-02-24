@@ -18,9 +18,9 @@ extends TileSet
 #             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-opp-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-inbound-corner
+#                 SubtileCorner, # H-d-inbound-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-inbound-corner
+#                   SubtileCorner, # V-d-inbound-corner
 #                   Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
@@ -77,6 +77,9 @@ func get_quadrants(
             target_corners.get_v_opp_corner_type(corner_direction),
             target_corners.get_h_inbound_corner_type(corner_direction),
             target_corners.get_v_inbound_corner_type(corner_direction),
+            target_corners.get_d_opp_corner_type(corner_direction),
+            target_corners.get_h_d_inbound_corner_type(corner_direction),
+            target_corners.get_v_d_inbound_corner_type(corner_direction),
         ]
         
         var best_position_and_weight := _get_best_quadrant_match(
@@ -88,18 +91,18 @@ func get_quadrants(
         var quadrant_weight: float = best_position_and_weight[1]
         
         if logs_debug_info:
-            print("")
-            print(">>> get_quadrants: %s" % \
+            Sc.logger.print("")
+            Sc.logger.print(">>> get_quadrants: %s" % \
                     CornerDirection.get_string(corner_direction))
-            print(proximity.to_string())
-            print(target_corners.to_string(true))
-            print(_get_position_and_weight_results_string(
+            Sc.logger.print(proximity.to_string())
+            Sc.logger.print(target_corners.to_string(true))
+            Sc.logger.print(_get_position_and_weight_results_string(
                         best_position_and_weight))
             _print_subtile_corner_types(
                     corner_direction,
-                    target_corners.get_corner_type(corner_direction))
-            print(">>>")
-            print("")
+                    [target_corners.get_corner_type(corner_direction)])
+            Sc.logger.print(">>>")
+            Sc.logger.print("")
         
         if quadrant_weight < \
                 Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:
@@ -115,7 +118,7 @@ func get_quadrants(
             if logs_debug_info:
                 _print_subtile_corner_types(
                         corner_direction,
-                        target_corners.get_corner_type(corner_direction))
+                        [target_corners.get_corner_type(corner_direction)])
             quadrant_position = error_quadrants[i]
         
         quadrant_positions[i] = quadrant_position
@@ -140,12 +143,15 @@ func _get_best_quadrant_match(
     match i:
         0: iteration_exponent = 0
         1, 2: iteration_exponent = 1
-        3, 4: iteration_exponent = 2
+        3, 4, 5, 6, 7: iteration_exponent = 2
         _:
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
-    var current_iteration_weight_multiplier := 1.0 / pow(100,iteration_exponent)
+    var current_iteration_weight_multiplier := \
+            1.0 / pow(1000,iteration_exponent)
     var is_inbound_iteration := i > 2
     var is_h_neighbor := i == 1 or i == 4
+    var is_v_neighbor := i == 2 or i == 3
+    var is_d_neighbor := !is_h_neighbor and !is_v_neighbor
     var target_corner_type: int = target_corner_types[i]
     
     # FIXME: -------------------------------------------------------------
@@ -191,7 +197,7 @@ func _get_best_quadrant_match(
     
     if i == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
-        best_position_and_weight.resize(7)
+        best_position_and_weight.resize(10)
         best_position_and_weight[i + 2] = {
             weight_contribution = best_weight_contribution,
             corner_type = best_type,
@@ -235,71 +241,75 @@ func _get_best_quadrant_match(
 #            str(fallback_position_and_weight[1]),
 #        ])
     
-    # Consider all explicitly configured fallbacks.
-    var fallbacks_for_corner_type: Dictionary = \
-            FallbackSubtileCorners.FALLBACKS[target_corner_type]
-    for fallback_corner_type in fallbacks_for_corner_type:
-        var fallback_multipliers: Array = \
-                fallbacks_for_corner_type[fallback_corner_type]
-        var fallback_corner_weight_multiplier: float = \
-                fallback_multipliers[0] if \
-                is_h_neighbor else \
-                fallback_multipliers[1]
-        
-        if fallback_corner_weight_multiplier <= 0.0:
-            # Skip this fallback, since it is for the other direction.
-            continue
-        
-        if fallback_corner_weight_multiplier <= 1.0:
-            # -   If the weight-multiplier is less than 1.0, then we should
-            #     prefer mappings that use UNKNOWN values.
-            # -   This offset ensures that a non-unknown fallback will
-            #     counter the weight contributed by any match from the other
-            #     direction.
-            fallback_corner_weight_multiplier = \
-                    (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * \
-                    10.0
-        
-        if corner_type_map_or_position.has(fallback_corner_type):
-            # There is a quadrant configured for this fallback corner-type.
+    # FIXME: LEFT OFF HERE: -----------------------------------------
+    # - Should internal and inbound diagonal connections have configurable
+    #   fallbacks?
+    if !is_d_neighbor:
+        # Consider all explicitly configured fallbacks.
+        var fallbacks_for_corner_type: Dictionary = \
+                FallbackSubtileCorners.FALLBACKS[target_corner_type]
+        for fallback_corner_type in fallbacks_for_corner_type:
+            var fallback_multipliers: Array = \
+                    fallbacks_for_corner_type[fallback_corner_type]
+            var fallback_corner_weight_multiplier: float = \
+                    fallback_multipliers[0] if \
+                    is_h_neighbor else \
+                    fallback_multipliers[1]
             
-            var fallback_corner_type_map_or_position = \
-                    corner_type_map_or_position[fallback_corner_type]
-            var fallback_weight_contribution := \
-                    current_iteration_weight_multiplier * \
-                    fallback_corner_weight_multiplier * 0.1
-            var fallback_weight := weight + fallback_weight_contribution
+            if fallback_corner_weight_multiplier <= 0.0:
+                # Skip this fallback, since it is for the other direction.
+                continue
             
-            var fallback_position_and_weight: Array
-            if fallback_corner_type_map_or_position is Vector2:
-                # Base case: We found a position.
-                fallback_position_and_weight = [
-                    fallback_corner_type_map_or_position,
-                    fallback_weight,
-                ]
-            else:
-                # Recursive case: We found another mapping to consider.
-                fallback_position_and_weight = _get_best_quadrant_match(
+            if fallback_corner_weight_multiplier <= 1.0:
+                # -   If the weight-multiplier is less than 1.0, then we should
+                #     prefer mappings that use UNKNOWN values.
+                # -   This offset ensures that a non-unknown fallback will
+                #     counter the weight contributed by any match from the other
+                #     direction.
+                fallback_corner_weight_multiplier = \
+                        (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * \
+                        10.0
+            
+            if corner_type_map_or_position.has(fallback_corner_type):
+                # There is a quadrant configured for this fallback corner-type.
+                
+                var fallback_corner_type_map_or_position = \
+                        corner_type_map_or_position[fallback_corner_type]
+                var fallback_weight_contribution := \
+                        current_iteration_weight_multiplier * \
+                        fallback_corner_weight_multiplier * 0.1
+                var fallback_weight := weight + fallback_weight_contribution
+                
+                var fallback_position_and_weight: Array
+                if fallback_corner_type_map_or_position is Vector2:
+                    # Base case: We found a position.
+                    fallback_position_and_weight = [
                         fallback_corner_type_map_or_position,
-                        target_corner_types,
-                        i + 1,
-                        fallback_weight)
-            
-            if fallback_position_and_weight[1] > best_position_and_weight[1]:
-                best_position_and_weight = fallback_position_and_weight
-                best_weight_contribution = fallback_weight_contribution
-                best_type = fallback_corner_type
-                best_match_label = \
-                        "good_fallback_match" if \
-                        fallback_weight_contribution > 0 else \
-                        "bad_fallback_match"
-            # FIXME: -------------------------------------------------------------
-#            print("> f %s %s" % [
-#                str(i),
-#                str(fallback_position_and_weight[1]),
-#            ])
+                        fallback_weight,
+                    ]
+                else:
+                    # Recursive case: We found another mapping to consider.
+                    fallback_position_and_weight = _get_best_quadrant_match(
+                            fallback_corner_type_map_or_position,
+                            target_corner_types,
+                            i + 1,
+                            fallback_weight)
+                
+                if fallback_position_and_weight[1] > best_position_and_weight[1]:
+                    best_position_and_weight = fallback_position_and_weight
+                    best_weight_contribution = fallback_weight_contribution
+                    best_type = fallback_corner_type
+                    best_match_label = \
+                            "good_fallback_match" if \
+                            fallback_weight_contribution > 0 else \
+                            "bad_fallback_match"
+                # FIXME: -------------------------------------------------------
+#                print("> f %s %s" % [
+#                    str(i),
+#                    str(fallback_position_and_weight[1]),
+#                ])
     
-    best_position_and_weight.resize(7)
+    best_position_and_weight.resize(10)
     best_position_and_weight[i + 2] = {
         weight_contribution = best_weight_contribution,
         corner_type = best_type,
@@ -339,79 +349,104 @@ func get_inner_cell_size() -> Vector2:
 
 func _print_subtile_corner_types(
         target_corner_direction := -1,
-        target_self_corner_type := -1,
-        target_h_opp_corner_type := -1,
-        target_v_opp_corner_type := -1,
-        target_h_inbound_corner_type := -1,
-        target_v_inbound_corner_type := -1) -> void:
-    print(">>>>> CornerMatchTileset.subtile_corner_types")
+        target_connection_types := []) -> void:
+    var connection_labels := [
+        "Self",
+        "H-opp",
+        "V-opp",
+        "H-inbound",
+        "V-inbound",
+        "Diagonal-opp",
+        "H-d-inbound",
+        "V-d-inbound",
+    ]
+    Sc.logger.print(">>>>> CornerMatchTileset.subtile_corner_types")
     for corner_direction in _sort(subtile_corner_types.keys()):
         if target_corner_direction >= 0 and \
                 target_corner_direction != corner_direction:
             continue
-        print(CornerDirection.get_string(corner_direction))
-        var self_corner_type_map: Dictionary = \
-                subtile_corner_types[corner_direction]
-        for self_corner_type in _sort(self_corner_type_map.keys()):
-            if target_self_corner_type >= 0 and \
-                    target_self_corner_type != self_corner_type:
-                continue
-            print("  Self: " + Su.subtile_manifest \
-                    .get_subtile_corner_string(self_corner_type))
-            var h_opp_corner_type_map: Dictionary = \
-                    self_corner_type_map[self_corner_type]
-            for h_opp_corner_type in _sort(h_opp_corner_type_map.keys()):
-                if target_h_opp_corner_type >= 0 and \
-                        target_h_opp_corner_type != corner_direction:
-                    continue
-                print("    H-opp: " + Su.subtile_manifest \
-                        .get_subtile_corner_string(h_opp_corner_type))
-                var v_opp_corner_type_map: Dictionary = \
-                        h_opp_corner_type_map[h_opp_corner_type]
-                for v_opp_corner_type in _sort(v_opp_corner_type_map.keys()):
-                    if target_v_opp_corner_type >= 0 and \
-                            target_v_opp_corner_type != corner_direction:
-                        continue
-                    var position_or_h_inbound_corner_type_map = \
-                            v_opp_corner_type_map[v_opp_corner_type]
-                    if position_or_h_inbound_corner_type_map is Vector2:
-                        print("      V-opp: " + Su.subtile_manifest \
-                                .get_subtile_corner_string(v_opp_corner_type) +
-                                " => Position: " +
-                                str(position_or_h_inbound_corner_type_map))
-                    else:
-                        print("      V-opp: " + Su.subtile_manifest \
-                                .get_subtile_corner_string(v_opp_corner_type))
-                        for h_inbound_corner_type in \
-                                _sort(position_or_h_inbound_corner_type_map \
-                                    .keys()):
-                            if target_h_inbound_corner_type >= 0 and \
-                                    target_h_inbound_corner_type != \
-                                        corner_direction:
-                                continue
-                            print("        H-inbound: " +
-                                    Su.subtile_manifest \
-                                        .get_subtile_corner_string(
-                                            h_inbound_corner_type))
-                            var v_inbound_corner_type_map: Dictionary = \
-                                    position_or_h_inbound_corner_type_map \
-                                        [h_inbound_corner_type]
-                            for v_inbound_corner_type in \
-                                    _sort(v_inbound_corner_type_map.keys()):
-                                if target_v_inbound_corner_type >= 0 and \
-                                        target_v_inbound_corner_type != \
-                                            corner_direction:
-                                    continue
-                                var position: Vector2 = \
-                                        v_inbound_corner_type_map \
-                                            [v_inbound_corner_type]
-                                print("          V-inbound: " +
-                                        Su.subtile_manifest \
-                                            .get_subtile_corner_string(
-                                                v_inbound_corner_type) +
-                                        " => Position: " + 
-                                        str(position))
-    print(">>>>>")
+        Sc.logger.print(CornerDirection.get_string(corner_direction))
+        _print_subtile_corner_types_recursively(
+                subtile_corner_types[corner_direction],
+                target_connection_types,
+                connection_labels,
+                0)
+    Sc.logger.print(">>>>>")
+
+
+func _print_subtile_corner_types_recursively(
+        map: Dictionary,
+        target_connection_types: Array,
+        connection_labels: Array,
+        index: int) -> void:
+    if target_connection_types.size() > index:
+        var target_connection_type: int = target_connection_types[index]
+        if !map.has(target_connection_type):
+            Sc.logger.warning(
+                    ("subtile_corner_types does not contain the target " +
+                    "connection type: " +
+                    "target_type=%s, index=%s, target_types=%s") % [
+                        Su.subtile_manifest.get_subtile_corner_string(
+                                target_connection_type),
+                        str(index),
+                        str(target_connection_types),
+                    ])
+            return
+        var next_value = map[target_connection_type]
+        if next_value is Vector2:
+            _print_subtile_connection_entry(
+                    connection_labels,
+                    index,
+                    target_connection_type,
+                    next_value)
+        else:
+            _print_subtile_connection_entry(
+                    connection_labels,
+                    index,
+                    target_connection_type)
+            _print_subtile_corner_types_recursively(
+                    next_value,
+                    target_connection_types,
+                    connection_labels,
+                    index + 1)
+    else:
+        for connection_type in _sort(map.keys()):
+            var next_value = map[connection_type]
+            if next_value is Vector2:
+                _print_subtile_connection_entry(
+                        connection_labels,
+                        index,
+                        connection_type,
+                        next_value)
+            else:
+                _print_subtile_connection_entry(
+                        connection_labels,
+                        index,
+                        connection_type)
+                _print_subtile_corner_types_recursively(
+                        next_value,
+                        target_connection_types,
+                        connection_labels,
+                        index + 1)
+
+
+func _print_subtile_connection_entry(
+        connection_labels: Array,
+        index: int,
+        connection_type: int,
+        quadrant_coordinates := Vector2.INF) -> void:
+    var spaces := Sc.utils.get_spaces((index + 1) * 2)
+    var quadrant_coordinates_string := \
+            " => %s" % str(quadrant_coordinates) if \
+            quadrant_coordinates != Vector2.INF else \
+            ""
+    var message := "%s%s: %s%s" % [
+        spaces,
+        connection_labels[index],
+        Su.subtile_manifest.get_subtile_corner_string(connection_type),
+        quadrant_coordinates_string,
+    ]
+    Sc.logger.print(message)
 
 
 func _get_position_and_weight_results_string(

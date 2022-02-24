@@ -16,6 +16,9 @@ extends Reference
 # - Should this be configurable by the tileset author?
 # - Would there be a simpler way to allow the tile-set author to configure which
 #   slopes are allowed to transition into which others?
+# FIXME: LEFT OFF HERE: -----------------------------------------
+# - Should internal and inbound diagonal connections have configurable
+#   fallbacks?
 const FALLBACKS := {
     SubtileCorner.UNKNOWN: {},
     SubtileCorner.ERROR: {},
@@ -89,11 +92,11 @@ const FALLBACKS := {
     
     SubtileCorner.EXT_90H_45_CONVEX: {
         SubtileCorner.EXT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_EXT_45_CLIPPED: [0.0, 0.3],
+        SubtileCorner.EXT_EXT_45_CLIPPED: [0.0, 0.1],
     },
     SubtileCorner.EXT_90V_45_CONVEX: {
         SubtileCorner.EXT_90V: [0.0, 1.0],
-        SubtileCorner.EXT_EXT_45_CLIPPED: [0.3, 0.0],
+        SubtileCorner.EXT_EXT_45_CLIPPED: [0.1, 0.0],
     },
     
     SubtileCorner.EXT_EXT_90H_45_CONCAVE: {
@@ -109,20 +112,20 @@ const FALLBACKS := {
     
     SubtileCorner.EXT_INT_90H_45_CONVEX: {
         SubtileCorner.EXT_INT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.3],
+        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.1],
     },
     SubtileCorner.EXT_INT_90V_45_CONVEX: {
         SubtileCorner.EXT_INT_90V: [0.0, 1.0],
-        SubtileCorner.EXT_INT_45_H_SIDE: [0.3, 0.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.1, 0.0],
     },
     
     SubtileCorner.EXT_INT_90H_45_CONCAVE: {
         SubtileCorner.EXT_INT_45_V_SIDE: [0.9, 0.0],
-        SubtileCorner.EXT_INT_90H: [0.0, 0.3],
+        SubtileCorner.EXT_INT_90H: [0.0, 0.1],
     },
     SubtileCorner.EXT_INT_90V_45_CONCAVE: {
         SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 0.9],
-        SubtileCorner.EXT_INT_90V: [0.3, 0.0],
+        SubtileCorner.EXT_INT_90V: [0.1, 0.0],
     },
     SubtileCorner.INT_EXT_90H_45_CONCAVE: {
         SubtileCorner.INT_INT_45_CLIPPED: [1.0, 1.0],
