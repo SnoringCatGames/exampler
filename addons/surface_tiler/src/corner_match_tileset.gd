@@ -147,7 +147,7 @@ func _get_best_quadrant_match(
         _:
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
     var current_iteration_weight_multiplier := \
-            1.0 / pow(1000,iteration_exponent)
+            1000.0 / pow(1000,iteration_exponent)
     var is_inbound_iteration := i > 2
     var is_h_neighbor := i == 1 or i == 4
     var is_v_neighbor := i == 2 or i == 3
@@ -462,8 +462,11 @@ func _get_position_and_weight_results_string(
         "v_opp",
         "h_inbound",
         "v_inbound",
+        "diag_opp",
+        "h_d_inbound",
+        "v_d_inbound",
     ]
-    for i in range(2,7):
+    for i in range(2,10):
         var neighbor_result = position_and_weight[i]
         var contribution_string := \
                 "NULL" if \

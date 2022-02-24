@@ -11,7 +11,7 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: --------------------------------
-var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 0.5
+var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 500.0
 
 # NOTE: These values should be between 0 and 1, exclusive.
 var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
