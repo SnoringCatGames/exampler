@@ -3,15 +3,6 @@ class_name CornerMatchTileset
 extends TileSet
 
 
-# FIXME: LEFT OFF HERE: ---------------------------------------
-#   - Encode fallback_subtile_corner_matches.
-#   - Implement the inner-TileMap pattern to render quadrants according to the
-#     outer TileMap's cells.
-#   - Hook-up all tile-set configuration.
-#   - Test and debug!
-#   - Add support for A27.
-
-
 # Dictionary<
 #   CornerDirection,
 #   Dictionary<
@@ -25,7 +16,15 @@ extends TileSet
 #           SubtileCorner, # H-inbound-corner
 #           Dictionary<
 #             SubtileCorner, # V-inbound-corner
-#             Vector2>>)>>>>
+#             (Vector2|
+#             Dictionary<
+#               SubtileCorner, # Diagonal-opp-corner
+#               (Vector2|
+#               Dictionary<
+#                 SubtileCorner, # H2-inbound-corner
+#                 Dictionary<
+#                   SubtileCorner, # V2-inbound-corner
+#                   Vector2>>)>)>>)>>>>
 var subtile_corner_types: Dictionary
 
 var are_45_degree_subtiles_used: bool

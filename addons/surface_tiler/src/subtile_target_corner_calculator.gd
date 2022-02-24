@@ -6,7 +6,9 @@ extends Node
 # FIXME: LEFT OFF HERE: -----------------------------------------------
 # - Add support for diag-opp, and remove old corner-types that involved
 #   90-90-concave corners.
-# - Add support for v2-inbound and h2-inbound corner-type connections.
+#   - Finish image-parser updates.
+#   - Update all iterations of subtile_corner_types.
+# - Add support for vd-inbound and hd-inbound corner-type connections.
 #   - This is needed for fixing the problem of handling cases like
 #     EXT_45_CLIPPED_EXT_INT_45_CLIPPED, which would otherwise require creating
 #     many new corner-types.
