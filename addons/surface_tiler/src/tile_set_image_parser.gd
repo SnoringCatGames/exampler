@@ -111,9 +111,9 @@ func parse_corner_type_annotation_key(
 #             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-opp-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H-d-inbound-corner
+#                 SubtileCorner, # H2-inbound-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V-d-inbound-corner
+#                   SubtileCorner, # V2-inbound-corner
 #                   Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>>
 func parse_tile_set_corner_type_annotations(
@@ -237,6 +237,7 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_LEFT,
             true,
             true,
+            false,
             false)
     var has_tl_v_internal_implicit_connection := _get_connection_indicator(
             tl_quadrant_position,
@@ -245,6 +246,7 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.TOP_LEFT,
             true,
+            false,
             false,
             false)
     var has_tl_d_internal_implicit_connection := _get_connection_indicator(
@@ -255,7 +257,8 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_LEFT,
             true,
             false,
-            true)
+            true,
+            false)
     var has_tr_h_internal_implicit_connection := _get_connection_indicator(
             tr_quadrant_position,
             quadrant_size,
@@ -264,6 +267,7 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_RIGHT,
             true,
             true,
+            false,
             false)
     var has_tr_v_internal_implicit_connection := _get_connection_indicator(
             tr_quadrant_position,
@@ -272,6 +276,7 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.TOP_RIGHT,
             true,
+            false,
             false,
             false)
     var has_tr_d_internal_implicit_connection := _get_connection_indicator(
@@ -282,7 +287,8 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_RIGHT,
             true,
             false,
-            true)
+            true,
+            false)
     var has_bl_h_internal_implicit_connection := _get_connection_indicator(
             bl_quadrant_position,
             quadrant_size,
@@ -291,6 +297,7 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_LEFT,
             true,
             true,
+            false,
             false)
     var has_bl_v_internal_implicit_connection := _get_connection_indicator(
             bl_quadrant_position,
@@ -299,6 +306,7 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.BOTTOM_LEFT,
             true,
+            false,
             false,
             false)
     var has_bl_d_internal_implicit_connection := _get_connection_indicator(
@@ -309,7 +317,8 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_LEFT,
             true,
             false,
-            true)
+            true,
+            false)
     var has_br_h_internal_implicit_connection := _get_connection_indicator(
             br_quadrant_position,
             quadrant_size,
@@ -318,6 +327,7 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_RIGHT,
             true,
             true,
+            false,
             false)
     var has_br_v_internal_implicit_connection := _get_connection_indicator(
             br_quadrant_position,
@@ -326,6 +336,7 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.BOTTOM_RIGHT,
             true,
+            false,
             false,
             false)
     var has_br_d_internal_implicit_connection := _get_connection_indicator(
@@ -336,7 +347,8 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_RIGHT,
             true,
             false,
-            true)
+            true,
+            false)
     
     # Parse the eight possible axially-aligned inbound connection annotations.
     var has_tl_h_external_implicit_connection := _get_connection_indicator(
@@ -347,6 +359,7 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_LEFT,
             false,
             true,
+            false,
             false)
     var has_tl_v_external_implicit_connection := _get_connection_indicator(
             tl_quadrant_position,
@@ -354,6 +367,7 @@ func _parse_corner_type_annotation(
             image,
             tile_set_corner_type_annotations_path,
             CornerDirection.TOP_LEFT,
+            false,
             false,
             false,
             false)
@@ -365,6 +379,7 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_RIGHT,
             false,
             true,
+            false,
             false)
     var has_tr_v_external_implicit_connection := _get_connection_indicator(
             tr_quadrant_position,
@@ -372,6 +387,7 @@ func _parse_corner_type_annotation(
             image,
             tile_set_corner_type_annotations_path,
             CornerDirection.TOP_RIGHT,
+            false,
             false,
             false,
             false)
@@ -383,6 +399,7 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_LEFT,
             false,
             true,
+            false,
             false)
     var has_bl_v_external_implicit_connection := _get_connection_indicator(
             bl_quadrant_position,
@@ -390,6 +407,7 @@ func _parse_corner_type_annotation(
             image,
             tile_set_corner_type_annotations_path,
             CornerDirection.BOTTOM_LEFT,
+            false,
             false,
             false,
             false)
@@ -401,6 +419,7 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_RIGHT,
             false,
             true,
+            false,
             false)
     var has_br_v_external_implicit_connection := _get_connection_indicator(
             br_quadrant_position,
@@ -410,10 +429,11 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_RIGHT,
             false,
             false,
+            false,
             false)
     
-    # Parse the eight possible diagonal inbound connection annotations.
-    var has_tl_hd_external_implicit_connection := _get_connection_indicator(
+    # Parse the eight possible two-away inbound connection annotations.
+    var has_tl_h2_external_implicit_connection := _get_connection_indicator(
             tl_quadrant_position,
             quadrant_size,
             image,
@@ -421,8 +441,9 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_LEFT,
             false,
             true,
+            false,
             true)
-    var has_tl_vd_external_implicit_connection := _get_connection_indicator(
+    var has_tl_v2_external_implicit_connection := _get_connection_indicator(
             tl_quadrant_position,
             quadrant_size,
             image,
@@ -430,8 +451,9 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_LEFT,
             false,
             false,
+            false,
             true)
-    var has_tr_hd_external_implicit_connection := _get_connection_indicator(
+    var has_tr_h2_external_implicit_connection := _get_connection_indicator(
             tr_quadrant_position,
             quadrant_size,
             image,
@@ -439,8 +461,9 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_RIGHT,
             false,
             true,
+            false,
             true)
-    var has_tr_vd_external_implicit_connection := _get_connection_indicator(
+    var has_tr_v2_external_implicit_connection := _get_connection_indicator(
             tr_quadrant_position,
             quadrant_size,
             image,
@@ -448,8 +471,9 @@ func _parse_corner_type_annotation(
             CornerDirection.TOP_RIGHT,
             false,
             false,
+            false,
             true)
-    var has_bl_hd_external_implicit_connection := _get_connection_indicator(
+    var has_bl_h2_external_implicit_connection := _get_connection_indicator(
             bl_quadrant_position,
             quadrant_size,
             image,
@@ -457,8 +481,9 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_LEFT,
             false,
             true,
+            false,
             true)
-    var has_bl_vd_external_implicit_connection := _get_connection_indicator(
+    var has_bl_v2_external_implicit_connection := _get_connection_indicator(
             bl_quadrant_position,
             quadrant_size,
             image,
@@ -466,8 +491,9 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_LEFT,
             false,
             false,
+            false,
             true)
-    var has_br_hd_external_implicit_connection := _get_connection_indicator(
+    var has_br_h2_external_implicit_connection := _get_connection_indicator(
             br_quadrant_position,
             quadrant_size,
             image,
@@ -475,13 +501,15 @@ func _parse_corner_type_annotation(
             CornerDirection.BOTTOM_RIGHT,
             false,
             true,
+            false,
             true)
-    var has_br_vd_external_implicit_connection := _get_connection_indicator(
+    var has_br_v2_external_implicit_connection := _get_connection_indicator(
             br_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
             CornerDirection.BOTTOM_RIGHT,
+            false,
             false,
             false,
             true)
@@ -537,55 +565,55 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.INBOUND_BR_B)
     
-    # Parse the eight possible diagonal custom inbound corner-type annotations.
-    var tl_hd_inbound_corner_annotation := _get_quadrant_annotation(
+    # Parse the eight possible two-away custom inbound corner-type annotations.
+    var tl_h2_inbound_corner_annotation := _get_quadrant_annotation(
             tl_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_TL_LD)
-    var tl_vd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_TL_L2)
+    var tl_v2_inbound_corner_annotation := _get_quadrant_annotation(
             tl_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_TL_TD)
-    var tr_hd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_TL_T2)
+    var tr_h2_inbound_corner_annotation := _get_quadrant_annotation(
             tr_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_TR_RD)
-    var tr_vd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_TR_R2)
+    var tr_v2_inbound_corner_annotation := _get_quadrant_annotation(
             tr_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_TR_TD)
-    var bl_hd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_TR_T2)
+    var bl_h2_inbound_corner_annotation := _get_quadrant_annotation(
             bl_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_BL_LD)
-    var bl_vd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_BL_L2)
+    var bl_v2_inbound_corner_annotation := _get_quadrant_annotation(
             bl_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_BL_BD)
-    var br_hd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_BL_B2)
+    var br_h2_inbound_corner_annotation := _get_quadrant_annotation(
             br_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_BR_RD)
-    var br_vd_inbound_corner_annotation := _get_quadrant_annotation(
+            CornerDirection.INBOUND_BR_R2)
+    var br_v2_inbound_corner_annotation := _get_quadrant_annotation(
             br_quadrant_position,
             quadrant_size,
             image,
             tile_set_corner_type_annotations_path,
-            CornerDirection.INBOUND_BR_BD)
+            CornerDirection.INBOUND_BR_B2)
     
     assert((!has_tl_h_external_implicit_connection or \
                 tl_h_inbound_corner_annotation.bits == 0) and \
@@ -668,63 +696,63 @@ func _parse_corner_type_annotation(
                 tile_set_corner_type_annotations_path,
                 CornerDirection.TOP_RIGHT)
     
-    # Parse the eight diagonal inbound corner-type annotations.
-    if has_tl_hd_external_implicit_connection:
-        tl_hd_inbound_corner_annotation = _get_quadrant_annotation(
-                tl_quadrant_position + Vector2(-1,1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.BOTTOM_RIGHT)
-    if has_tl_vd_external_implicit_connection:
-        tl_vd_inbound_corner_annotation = _get_quadrant_annotation(
-                tl_quadrant_position + Vector2(1,-1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.BOTTOM_RIGHT)
-    if has_tr_hd_external_implicit_connection:
-        tr_hd_inbound_corner_annotation = _get_quadrant_annotation(
-                tr_quadrant_position + Vector2(1,1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.BOTTOM_LEFT)
-    if has_tr_vd_external_implicit_connection:
-        tr_vd_inbound_corner_annotation = _get_quadrant_annotation(
-                tr_quadrant_position + Vector2(-1,-1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.BOTTOM_LEFT)
-    if has_bl_hd_external_implicit_connection:
-        bl_hd_inbound_corner_annotation = _get_quadrant_annotation(
-                bl_quadrant_position + Vector2(-1,-1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.TOP_RIGHT)
-    if has_bl_vd_external_implicit_connection:
-        bl_vd_inbound_corner_annotation = _get_quadrant_annotation(
-                bl_quadrant_position + Vector2(1,1) * quadrant_size,
-                quadrant_size,
-                image,
-                tile_set_corner_type_annotations_path,
-                CornerDirection.TOP_RIGHT)
-    if has_br_hd_external_implicit_connection:
-        br_hd_inbound_corner_annotation = _get_quadrant_annotation(
-                br_quadrant_position + Vector2(1,-1) * quadrant_size,
+    # Parse the eight two-away inbound corner-type annotations.
+    if has_tl_h2_external_implicit_connection:
+        tl_h2_inbound_corner_annotation = _get_quadrant_annotation(
+                tl_quadrant_position + Vector2(-2,0) * quadrant_size,
                 quadrant_size,
                 image,
                 tile_set_corner_type_annotations_path,
                 CornerDirection.TOP_LEFT)
-    if has_br_vd_external_implicit_connection:
-        br_vd_inbound_corner_annotation = _get_quadrant_annotation(
-                br_quadrant_position + Vector2(-1,1) * quadrant_size,
+    if has_tl_v2_external_implicit_connection:
+        tl_v2_inbound_corner_annotation = _get_quadrant_annotation(
+                tl_quadrant_position + Vector2(0,-2) * quadrant_size,
                 quadrant_size,
                 image,
                 tile_set_corner_type_annotations_path,
                 CornerDirection.TOP_LEFT)
+    if has_tr_h2_external_implicit_connection:
+        tr_h2_inbound_corner_annotation = _get_quadrant_annotation(
+                tr_quadrant_position + Vector2(2,0) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.TOP_RIGHT)
+    if has_tr_v2_external_implicit_connection:
+        tr_v2_inbound_corner_annotation = _get_quadrant_annotation(
+                tr_quadrant_position + Vector2(0,-2) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.TOP_RIGHT)
+    if has_bl_h2_external_implicit_connection:
+        bl_h2_inbound_corner_annotation = _get_quadrant_annotation(
+                bl_quadrant_position + Vector2(-2,0) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.BOTTOM_LEFT)
+    if has_bl_v2_external_implicit_connection:
+        bl_v2_inbound_corner_annotation = _get_quadrant_annotation(
+                bl_quadrant_position + Vector2(0,2) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.BOTTOM_LEFT)
+    if has_br_h2_external_implicit_connection:
+        br_h2_inbound_corner_annotation = _get_quadrant_annotation(
+                br_quadrant_position + Vector2(2,0) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.BOTTOM_RIGHT)
+    if has_br_v2_external_implicit_connection:
+        br_v2_inbound_corner_annotation = _get_quadrant_annotation(
+                br_quadrant_position + Vector2(0,2) * quadrant_size,
+                quadrant_size,
+                image,
+                tile_set_corner_type_annotations_path,
+                CornerDirection.BOTTOM_RIGHT)
     
     var is_subtile_empty: bool = \
             tl_corner_annotation.bits == 0 and \
@@ -740,14 +768,14 @@ func _parse_corner_type_annotation(
                 bl_v_inbound_corner_annotation.bits == 0 and \
                 br_h_inbound_corner_annotation.bits == 0 and \
                 br_v_inbound_corner_annotation.bits == 0 and \
-                tl_hd_inbound_corner_annotation.bits == 0 and \
-                tl_vd_inbound_corner_annotation.bits == 0 and \
-                tr_hd_inbound_corner_annotation.bits == 0 and \
-                tr_vd_inbound_corner_annotation.bits == 0 and \
-                bl_hd_inbound_corner_annotation.bits == 0 and \
-                bl_vd_inbound_corner_annotation.bits == 0 and \
-                br_hd_inbound_corner_annotation.bits == 0 and \
-                br_vd_inbound_corner_annotation.bits == 0,
+                tl_h2_inbound_corner_annotation.bits == 0 and \
+                tl_v2_inbound_corner_annotation.bits == 0 and \
+                tr_h2_inbound_corner_annotation.bits == 0 and \
+                tr_v2_inbound_corner_annotation.bits == 0 and \
+                bl_h2_inbound_corner_annotation.bits == 0 and \
+                bl_v2_inbound_corner_annotation.bits == 0 and \
+                br_h2_inbound_corner_annotation.bits == 0 and \
+                br_v2_inbound_corner_annotation.bits == 0,
                 ("Subtile outbound corner-type annotations are all empty, " +
                 "but not all inbound annotations are empty: " +
                 "subtile=%s, image=%s") % [
@@ -845,61 +873,61 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             quadrant_size)
     
-    # Validate the eight possible diagonal inbound corner-type annotations.
+    # Validate the eight possible two-away inbound corner-type annotations.
     _validate_tileset_annotation(
-            tl_hd_inbound_corner_annotation,
+            tl_h2_inbound_corner_annotation,
             corner_type_annotation_key,
             tl_quadrant_position,
-            CornerDirection.INBOUND_TL_LD,
+            CornerDirection.INBOUND_TL_L2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            tl_vd_inbound_corner_annotation,
+            tl_v2_inbound_corner_annotation,
             corner_type_annotation_key,
             tl_quadrant_position,
-            CornerDirection.INBOUND_TL_TD,
+            CornerDirection.INBOUND_TL_T2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            tr_hd_inbound_corner_annotation,
+            tr_h2_inbound_corner_annotation,
             corner_type_annotation_key,
             tr_quadrant_position,
-            CornerDirection.INBOUND_TR_RD,
+            CornerDirection.INBOUND_TR_R2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            tr_vd_inbound_corner_annotation,
+            tr_v2_inbound_corner_annotation,
             corner_type_annotation_key,
             tr_quadrant_position,
-            CornerDirection.INBOUND_TR_TD,
+            CornerDirection.INBOUND_TR_T2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            bl_hd_inbound_corner_annotation,
+            bl_h2_inbound_corner_annotation,
             corner_type_annotation_key,
             bl_quadrant_position,
-            CornerDirection.INBOUND_BL_LD,
+            CornerDirection.INBOUND_BL_L2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            bl_vd_inbound_corner_annotation,
+            bl_v2_inbound_corner_annotation,
             corner_type_annotation_key,
             bl_quadrant_position,
-            CornerDirection.INBOUND_BL_BD,
+            CornerDirection.INBOUND_BL_B2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            br_hd_inbound_corner_annotation,
+            br_h2_inbound_corner_annotation,
             corner_type_annotation_key,
             br_quadrant_position,
-            CornerDirection.INBOUND_BR_RD,
+            CornerDirection.INBOUND_BR_R2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     _validate_tileset_annotation(
-            br_vd_inbound_corner_annotation,
+            br_v2_inbound_corner_annotation,
             corner_type_annotation_key,
             br_quadrant_position,
-            CornerDirection.INBOUND_BR_BD,
+            CornerDirection.INBOUND_BR_B2,
             tile_set_corner_type_annotations_path,
             quadrant_size)
     
@@ -955,39 +983,39 @@ func _parse_corner_type_annotation(
             corner_type_annotation_key,
             CornerDirection.INBOUND_BR_B)
     
-    # Also map diagonal inbound annotations to their corner-types.
-    var tl_hd_inbound_corner_type := _get_corner_type_from_annotation(
-            tl_hd_inbound_corner_annotation,
+    # Also map two-away inbound annotations to their corner-types.
+    var tl_h2_inbound_corner_type := _get_corner_type_from_annotation(
+            tl_h2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_TL_LD)
-    var tl_vd_inbound_corner_type := _get_corner_type_from_annotation(
-            tl_vd_inbound_corner_annotation,
+            CornerDirection.INBOUND_TL_L2)
+    var tl_v2_inbound_corner_type := _get_corner_type_from_annotation(
+            tl_v2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_TL_TD)
-    var tr_hd_inbound_corner_type := _get_corner_type_from_annotation(
-            tr_hd_inbound_corner_annotation,
+            CornerDirection.INBOUND_TL_T2)
+    var tr_h2_inbound_corner_type := _get_corner_type_from_annotation(
+            tr_h2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_TR_RD)
-    var tr_vd_inbound_corner_type := _get_corner_type_from_annotation(
-            tr_vd_inbound_corner_annotation,
+            CornerDirection.INBOUND_TR_R2)
+    var tr_v2_inbound_corner_type := _get_corner_type_from_annotation(
+            tr_v2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_TR_TD)
-    var bl_hd_inbound_corner_type := _get_corner_type_from_annotation(
-            bl_hd_inbound_corner_annotation,
+            CornerDirection.INBOUND_TR_T2)
+    var bl_h2_inbound_corner_type := _get_corner_type_from_annotation(
+            bl_h2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_BL_LD)
-    var bl_vd_inbound_corner_type := _get_corner_type_from_annotation(
-            bl_vd_inbound_corner_annotation,
+            CornerDirection.INBOUND_BL_L2)
+    var bl_v2_inbound_corner_type := _get_corner_type_from_annotation(
+            bl_v2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_BL_BD)
-    var br_hd_inbound_corner_type := _get_corner_type_from_annotation(
-            br_hd_inbound_corner_annotation,
+            CornerDirection.INBOUND_BL_B2)
+    var br_h2_inbound_corner_type := _get_corner_type_from_annotation(
+            br_h2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_BR_RD)
-    var br_vd_inbound_corner_type := _get_corner_type_from_annotation(
-            br_vd_inbound_corner_annotation,
+            CornerDirection.INBOUND_BR_R2)
+    var br_v2_inbound_corner_type := _get_corner_type_from_annotation(
+            br_v2_inbound_corner_annotation,
             corner_type_annotation_key,
-            CornerDirection.INBOUND_BR_BD)
+            CornerDirection.INBOUND_BR_B2)
     
     _record_quadrant_coordinates(
             subtile_corner_types,
@@ -999,8 +1027,8 @@ func _parse_corner_type_annotation(
             br_corner_type,
             tl_h_inbound_corner_type,
             tl_v_inbound_corner_type,
-            tl_hd_inbound_corner_type,
-            tl_vd_inbound_corner_type,
+            tl_h2_inbound_corner_type,
+            tl_v2_inbound_corner_type,
             has_tl_h_internal_implicit_connection,
             has_tl_v_internal_implicit_connection,
             has_tl_d_internal_implicit_connection)
@@ -1014,8 +1042,8 @@ func _parse_corner_type_annotation(
             bl_corner_type,
             tr_h_inbound_corner_type,
             tr_v_inbound_corner_type,
-            tr_hd_inbound_corner_type,
-            tr_vd_inbound_corner_type,
+            tr_h2_inbound_corner_type,
+            tr_v2_inbound_corner_type,
             has_tr_h_internal_implicit_connection,
             has_tr_v_internal_implicit_connection,
             has_tr_d_internal_implicit_connection)
@@ -1029,8 +1057,8 @@ func _parse_corner_type_annotation(
             tr_corner_type,
             bl_h_inbound_corner_type,
             bl_v_inbound_corner_type,
-            bl_hd_inbound_corner_type,
-            bl_vd_inbound_corner_type,
+            bl_h2_inbound_corner_type,
+            bl_v2_inbound_corner_type,
             has_bl_h_internal_implicit_connection,
             has_bl_v_internal_implicit_connection,
             has_bl_d_internal_implicit_connection)
@@ -1044,8 +1072,8 @@ func _parse_corner_type_annotation(
             tl_corner_type,
             br_h_inbound_corner_type,
             br_v_inbound_corner_type,
-            br_hd_inbound_corner_type,
-            br_vd_inbound_corner_type,
+            br_h2_inbound_corner_type,
+            br_v2_inbound_corner_type,
             has_br_h_internal_implicit_connection,
             has_br_v_internal_implicit_connection,
             has_br_d_internal_implicit_connection)
@@ -1061,8 +1089,8 @@ static func _record_quadrant_coordinates(
         d_opp_corner_type: int,
         h_inbound_corner_type: int,
         v_inbound_corner_type: int,
-        hd_inbound_corner_type: int,
-        vd_inbound_corner_type: int,
+        h2_inbound_corner_type: int,
+        v2_inbound_corner_type: int,
         is_h_connected_internally: bool,
         is_v_connected_internally: bool,
         is_d_connected_internally: bool) -> void:
@@ -1080,8 +1108,8 @@ static func _record_quadrant_coordinates(
         h_inbound_corner_type,
         v_inbound_corner_type,
         d_opp_corner_type,
-        hd_inbound_corner_type,
-        vd_inbound_corner_type,
+        h2_inbound_corner_type,
+        v2_inbound_corner_type,
         quadrant_coordinates,
     ]
     
@@ -1308,29 +1336,33 @@ static func _get_connection_indicator(
         corner_direction: int,
         is_internal: bool,
         is_horizontal: bool,
-        is_diagonal: bool) -> bool:
+        is_diagonal: bool,
+        is_two_away: bool) -> bool:
+    assert(is_internal or !is_diagonal)
+    assert(!is_internal or !is_two_away)
+    
     var x_offset: int
     var y_offset: int
     
-    if is_diagonal:
-        if is_internal:
+    if is_internal:
+        if is_diagonal:
             x_offset = quadrant_size - 1
             y_offset = quadrant_size - 1
         else:
-            if is_horizontal:
-                x_offset = 0
-                y_offset = quadrant_size - 1
-            else:
-                x_offset = quadrant_size - 1
-                y_offset = 0
-    else:
-        if is_internal:
             if is_horizontal:
                 x_offset = quadrant_size - 1
                 y_offset = quadrant_size - 2
             else:
                 x_offset = quadrant_size - 2
                 y_offset = quadrant_size - 1
+    else:
+        if is_two_away:
+            if is_horizontal:
+                x_offset = 1
+                y_offset = quadrant_size - 2
+            else:
+                x_offset = quadrant_size - 2
+                y_offset = 1
         else:
             if is_horizontal:
                 x_offset = 0
@@ -1402,11 +1434,6 @@ static func _get_quadrant_annotation(
         corner_direction: int) -> Dictionary:
     var is_left := CornerDirection.get_is_left(corner_direction)
     var is_top := CornerDirection.get_is_top(corner_direction)
-    if !CornerDirection.get_is_outbound(corner_direction):
-        if CornerDirection.get_is_horizontal_inbound(corner_direction):
-            is_left = !is_left
-        else:
-            is_top = !is_top
     
     var region_start: Vector2
     match corner_direction:
@@ -1460,35 +1487,35 @@ static func _get_quadrant_annotation(
                     quadrant_size - ANNOTATION_SIZE.x * 2,
                     quadrant_size - ANNOTATION_SIZE.y)
         
-        CornerDirection.INBOUND_TL_TD:
+        CornerDirection.INBOUND_TL_T2:
             region_start = Vector2(
                     0,
                     ANNOTATION_SIZE.y * 2)
-        CornerDirection.INBOUND_TL_LD:
+        CornerDirection.INBOUND_TL_L2:
             region_start = Vector2(
                     ANNOTATION_SIZE.x * 2,
                     0)
-        CornerDirection.INBOUND_TR_TD:
+        CornerDirection.INBOUND_TR_T2:
             region_start = Vector2(
                     quadrant_size - ANNOTATION_SIZE.x,
                     ANNOTATION_SIZE.y * 2)
-        CornerDirection.INBOUND_TR_RD:
+        CornerDirection.INBOUND_TR_R2:
             region_start = Vector2(
                     quadrant_size - ANNOTATION_SIZE.x * 3,
                     0)
-        CornerDirection.INBOUND_BL_BD:
+        CornerDirection.INBOUND_BL_B2:
             region_start = Vector2(
                     0,
                     quadrant_size - ANNOTATION_SIZE.y * 3)
-        CornerDirection.INBOUND_BL_LD:
+        CornerDirection.INBOUND_BL_L2:
             region_start = Vector2(
                     ANNOTATION_SIZE.x * 2,
                     quadrant_size - ANNOTATION_SIZE.y)
-        CornerDirection.INBOUND_BR_BD:
+        CornerDirection.INBOUND_BR_B2:
             region_start = Vector2(
                     quadrant_size - ANNOTATION_SIZE.x,
                     quadrant_size - ANNOTATION_SIZE.y * 3)
-        CornerDirection.INBOUND_BR_RD:
+        CornerDirection.INBOUND_BR_R2:
             region_start = Vector2(
                     quadrant_size - ANNOTATION_SIZE.x * 3,
                     quadrant_size - ANNOTATION_SIZE.y)

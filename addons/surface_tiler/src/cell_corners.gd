@@ -16,6 +16,15 @@ var inbound_bl_l := SubtileCorner.UNKNOWN
 var inbound_br_b := SubtileCorner.UNKNOWN
 var inbound_br_r := SubtileCorner.UNKNOWN
 
+var inbound_tl_t2 := SubtileCorner.UNKNOWN
+var inbound_tl_l2 := SubtileCorner.UNKNOWN
+var inbound_tr_t2 := SubtileCorner.UNKNOWN
+var inbound_tr_r2 := SubtileCorner.UNKNOWN
+var inbound_bl_b2 := SubtileCorner.UNKNOWN
+var inbound_bl_l2 := SubtileCorner.UNKNOWN
+var inbound_br_b2 := SubtileCorner.UNKNOWN
+var inbound_br_r2 := SubtileCorner.UNKNOWN
+
 
 func _init(proximity: CellProximity) -> void:
     self.top_left = Su.subtile_manifest.subtile_target_corner_calculator \
@@ -38,9 +47,17 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_tr_t = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_right_corner(top_proximity)
+        self.inbound_tl_t2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_top_left_corner(top_proximity)
+        self.inbound_tr_t2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_top_right_corner(top_proximity)
     else:
         self.inbound_tl_t = SubtileCorner.EMPTY
         self.inbound_tr_t = SubtileCorner.EMPTY
+        self.inbound_tl_t2 = SubtileCorner.EMPTY
+        self.inbound_tr_t2 = SubtileCorner.EMPTY
     
     if proximity.get_is_present(0, 1):
         var bottom_proximity := CellProximity.new(
@@ -53,9 +70,17 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_br_b = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_top_right_corner(bottom_proximity)
+        self.inbound_bl_b2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_bottom_left_corner(bottom_proximity)
+        self.inbound_br_b2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_bottom_right_corner(bottom_proximity)
     else:
         self.inbound_bl_b = SubtileCorner.EMPTY
         self.inbound_br_b = SubtileCorner.EMPTY
+        self.inbound_bl_b2 = SubtileCorner.EMPTY
+        self.inbound_br_b2 = SubtileCorner.EMPTY
     
     if proximity.get_is_present(-1, 0):
         var left_proximity := CellProximity.new(
@@ -68,9 +93,17 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_bl_l = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_right_corner(left_proximity)
+        self.inbound_tl_l2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_top_left_corner(left_proximity)
+        self.inbound_bl_l2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_bottom_left_corner(left_proximity)
     else:
         self.inbound_tl_l = SubtileCorner.EMPTY
         self.inbound_bl_l = SubtileCorner.EMPTY
+        self.inbound_tl_l2 = SubtileCorner.EMPTY
+        self.inbound_bl_l2 = SubtileCorner.EMPTY
     
     if proximity.get_is_present(1, 0):
         var right_proximity := CellProximity.new(
@@ -83,9 +116,17 @@ func _init(proximity: CellProximity) -> void:
         self.inbound_br_r = \
                 Su.subtile_manifest.subtile_target_corner_calculator \
                     .get_target_bottom_left_corner(right_proximity)
+        self.inbound_tr_r2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_top_right_corner(right_proximity)
+        self.inbound_br_r2 = \
+                Su.subtile_manifest.subtile_target_corner_calculator \
+                    .get_target_bottom_right_corner(right_proximity)
     else:
         self.inbound_tr_r = SubtileCorner.EMPTY
         self.inbound_br_r = SubtileCorner.EMPTY
+        self.inbound_tr_r2 = SubtileCorner.EMPTY
+        self.inbound_br_r2 = SubtileCorner.EMPTY
 
 
 func to_string(uses_newlines := false) -> String:
@@ -148,6 +189,22 @@ func get_corner_type(corner_direction: int) -> int:
             return inbound_br_b
         CornerDirection.INBOUND_BR_R:
             return inbound_br_r
+        CornerDirection.INBOUND_TL_T2:
+            return inbound_tl_t2
+        CornerDirection.INBOUND_TL_L2:
+            return inbound_tl_l2
+        CornerDirection.INBOUND_TR_T2:
+            return inbound_tr_t2
+        CornerDirection.INBOUND_TR_R2:
+            return inbound_tr_r2
+        CornerDirection.INBOUND_BL_B2:
+            return inbound_bl_b2
+        CornerDirection.INBOUND_BL_L2:
+            return inbound_bl_l2
+        CornerDirection.INBOUND_BR_B2:
+            return inbound_br_b2
+        CornerDirection.INBOUND_BR_R2:
+            return inbound_br_r2
         _:
             Sc.logger.error("CellCorners.get_corner_type")
             return SubtileCorner.UNKNOWN
@@ -228,31 +285,31 @@ func get_d_opp_corner_type(corner_direction: int) -> int:
             return SubtileCorner.UNKNOWN
 
 
-func get_h_d_inbound_corner_type(corner_direction: int) -> int:
+func get_h2_inbound_corner_type(corner_direction: int) -> int:
     match corner_direction:
         CornerDirection.TOP_LEFT:
-            return inbound_bl_l
+            return inbound_tl_l2
         CornerDirection.TOP_RIGHT:
-            return inbound_br_r
+            return inbound_tr_r2
         CornerDirection.BOTTOM_LEFT:
-            return inbound_tl_l
+            return inbound_bl_l2
         CornerDirection.BOTTOM_RIGHT:
-            return inbound_tr_r
+            return inbound_br_r2
         _:
-            Sc.logger.error("CellCorners.get_h_d_inbound_corner_type")
+            Sc.logger.error("CellCorners.get_h2_inbound_corner_type")
             return SubtileCorner.UNKNOWN
 
 
-func get_v_d_inbound_corner_type(corner_direction: int) -> int:
+func get_v2_inbound_corner_type(corner_direction: int) -> int:
     match corner_direction:
         CornerDirection.TOP_LEFT:
-            return inbound_tr_t
+            return inbound_tl_t2
         CornerDirection.TOP_RIGHT:
-            return inbound_tl_t
+            return inbound_tr_t2
         CornerDirection.BOTTOM_LEFT:
-            return inbound_br_b
+            return inbound_bl_b2
         CornerDirection.BOTTOM_RIGHT:
-            return inbound_bl_b
+            return inbound_br_b2
         _:
-            Sc.logger.error("CellCorners.get_v_d_inbound_corner_type")
+            Sc.logger.error("CellCorners.get_v2_inbound_corner_type")
             return SubtileCorner.UNKNOWN
