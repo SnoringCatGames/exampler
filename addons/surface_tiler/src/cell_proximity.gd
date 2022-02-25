@@ -214,6 +214,13 @@ func get_are_all_sides_present() -> bool:
            !!(bitmask & TileSet.BIND_BOTTOM)
 
 
+func get_are_all_sides_empty() -> bool:
+    return !(bitmask & TileSet.BIND_TOP) and \
+           !(bitmask & TileSet.BIND_LEFT) and \
+           !(bitmask & TileSet.BIND_RIGHT) and \
+           !(bitmask & TileSet.BIND_BOTTOM)
+
+
 func get_are_all_sides_and_corners_present() -> bool:
     return !!(bitmask & TileSet.BIND_TOPLEFT) and \
            !!(bitmask & TileSet.BIND_TOP) and \
@@ -293,9 +300,17 @@ func _get_is_bottom_right_empty() -> bool:
     return !(bitmask & TileSet.BIND_BOTTOMRIGHT)
 
 
+func get_is_lonely(relative_x := 0, relative_y := 0) -> bool:
+    return get_is_empty(relative_x, relative_y - 1) and \
+            get_is_empty(relative_x, relative_y + 1) and \
+            get_is_empty(relative_x - 1, relative_y) and \
+            get_is_empty(relative_x + 1, relative_y)
+
+
 func get_is_top_cap(relative_x := 0, relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_present(relative_x, relative_y + 1) and \
+            get_is_empty(relative_x, relative_y - 1) and \
             get_is_empty(relative_x - 1, relative_y) and \
             get_is_empty(relative_x + 1, relative_y)
 
@@ -303,6 +318,7 @@ func get_is_top_cap(relative_x := 0, relative_y := 0) -> bool:
 func get_is_bottom_cap(relative_x := 0, relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_present(relative_x, relative_y - 1) and \
+            get_is_empty(relative_x, relative_y + 1) and \
             get_is_empty(relative_x - 1, relative_y) and \
             get_is_empty(relative_x + 1, relative_y)
 
@@ -310,6 +326,7 @@ func get_is_bottom_cap(relative_x := 0, relative_y := 0) -> bool:
 func get_is_left_cap(relative_x := 0, relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_present(relative_x + 1, relative_y) and \
+            get_is_empty(relative_x - 1, relative_y) and \
             get_is_empty(relative_x, relative_y - 1) and \
             get_is_empty(relative_x, relative_y + 1)
 
@@ -317,6 +334,7 @@ func get_is_left_cap(relative_x := 0, relative_y := 0) -> bool:
 func get_is_right_cap(relative_x := 0, relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_present(relative_x - 1, relative_y) and \
+            get_is_empty(relative_x + 1, relative_y) and \
             get_is_empty(relative_x, relative_y - 1) and \
             get_is_empty(relative_x, relative_y + 1)
 
@@ -335,10 +353,25 @@ func get_is_90_floor(
         CellAngleType.A45:
             # A45s become A90s when there are neighbors on either side and at
             # least one of the two front corners are empty.
-            return get_is_present(relative_x - 1, relative_y) and \
+            if get_is_present(relative_x - 1, relative_y) and \
                     get_is_present(relative_x + 1, relative_y) and \
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
-                    get_is_empty(relative_x + 1, relative_y - 1))
+                    get_is_empty(relative_x + 1, relative_y - 1)):
+                return true
+            # A 45-degree cap has a 90-degree surface if only one diagonal
+            # neighbor is present.
+            if get_is_left_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y + 1) and \
+                    get_is_empty(relative_x + 1, relative_y - 1) or \
+                    get_is_right_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x - 1, relative_y + 1) and \
+                    get_is_empty(relative_x - 1, relative_y - 1):
+                return true
+            # A lonely 45-degree subile hase a 90-degree floor with 45-degree
+            # acute-concave negative and positive ceilings.
+            if get_is_lonely(relative_x, relative_y):
+                return true
+            return false
         CellAngleType.A27:
             # A27s become A90s in a few cases.
             # FIXME: LEFT OFF HERE: -------- A27
@@ -363,10 +396,21 @@ func get_is_90_ceiling(
         CellAngleType.A45:
             # A45s become A90s when there are neighbors on either side and at
             # least one of the two front corners are empty.
-            return get_is_present(relative_x - 1, relative_y) and \
+            if get_is_present(relative_x - 1, relative_y) and \
                     get_is_present(relative_x + 1, relative_y) and \
                     (get_is_empty(relative_x - 1, relative_y + 1) or \
-                    get_is_empty(relative_x + 1, relative_y + 1))
+                    get_is_empty(relative_x + 1, relative_y + 1)):
+                return true
+            # A 45-degree cap has a 90-degree surface if only one diagonal
+            # neighbor is present.
+            if get_is_left_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y - 1) and \
+                    get_is_empty(relative_x + 1, relative_y + 1) or \
+                    get_is_right_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x - 1, relative_y - 1) and \
+                    get_is_empty(relative_x - 1, relative_y + 1):
+                return true
+            return false
         CellAngleType.A27:
             # A27s become A90s in a few cases.
             # FIXME: LEFT OFF HERE: -------- A27
@@ -391,10 +435,21 @@ func get_is_90_left_wall(
         CellAngleType.A45:
             # A45s become A90s when there are neighbors on either side and at
             # least one of the two front corners are empty.
-            return get_is_present(relative_x, relative_y - 1) and \
+            if get_is_present(relative_x, relative_y - 1) and \
                     get_is_present(relative_x, relative_y + 1) and \
                     (get_is_empty(relative_x + 1, relative_y - 1) or \
-                    get_is_empty(relative_x + 1, relative_y + 1))
+                    get_is_empty(relative_x + 1, relative_y + 1)):
+                return true
+            # A 45-degree cap has a 90-degree surface if only one diagonal
+            # neighbor is present.
+            if get_is_top_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x - 1, relative_y + 1) and \
+                    get_is_empty(relative_x + 1, relative_y + 1) or \
+                    get_is_bottom_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x - 1, relative_y - 1) and \
+                    get_is_empty(relative_x + 1, relative_y - 1):
+                return true
+            return false
         CellAngleType.A27:
             # A27s become A90s in a few cases.
             var two_exposed_at_top := \
@@ -510,10 +565,21 @@ func get_is_90_right_wall(
         CellAngleType.A45:
             # A45s become A90s when there are neighbors on either side and at
             # least one of the two front corners are empty.
-            return get_is_present(relative_x, relative_y - 1) and \
+            if get_is_present(relative_x, relative_y - 1) and \
                     get_is_present(relative_x, relative_y + 1) and \
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
-                    get_is_empty(relative_x - 1, relative_y + 1))
+                    get_is_empty(relative_x - 1, relative_y + 1)):
+                return true
+            # A 45-degree cap has a 90-degree surface if only one diagonal
+            # neighbor is present.
+            if get_is_top_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y + 1) and \
+                    get_is_empty(relative_x - 1, relative_y + 1) or \
+                    get_is_bottom_cap(relative_x, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y - 1) and \
+                    get_is_empty(relative_x - 1, relative_y - 1):
+                return true
+            return false
         CellAngleType.A27:
             # A27s become A90s in a few cases.
             # FIXME: LEFT OFF HERE: -------- A27
@@ -713,6 +779,10 @@ func get_is_45_pos_ceiling(
                         relative_x + 1, relative_y - 1) or \
                     get_is_empty(relative_x - 1, relative_y - 1)):
                 return true
+            # A lonely 45-degree subile hase a 90-degree floor with 45-degree
+            # acute-concave negative and positive ceilings.
+            if get_is_lonely(relative_x, relative_y):
+                return true
             return false
         CellAngleType.A27:
             # FIXME: LEFT OFF HERE: -------- A27
@@ -778,6 +848,10 @@ func get_is_45_neg_ceiling(
                     (get_is_present(
                         relative_x - 1, relative_y - 1) or \
                     get_is_empty(relative_x + 1, relative_y - 1)):
+                return true
+            # A lonely 45-degree subile hase a 90-degree floor with 45-degree
+            # acute-concave negative and positive ceilings.
+            if get_is_lonely(relative_x, relative_y):
                 return true
             return false
         CellAngleType.A27:
