@@ -358,6 +358,16 @@ func get_is_90_floor(
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
                     get_is_empty(relative_x + 1, relative_y - 1)):
                 return true
+            # Similarly, A45s become A90s when there are neighbors or either
+            # side, and neighbors at both front corners, but the front-corner
+            # neighbors are A90s.
+            if get_is_present(relative_x - 1, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y) and \
+                    (get_angle_type(relative_x - 1, relative_y - 1) == \
+                        CellAngleType.A90 and \
+                    get_angle_type(relative_x + 1, relative_y - 1) == \
+                        CellAngleType.A90):
+                return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
             if get_is_left_cap(relative_x, relative_y) and \
@@ -401,6 +411,16 @@ func get_is_90_ceiling(
                     (get_is_empty(relative_x - 1, relative_y + 1) or \
                     get_is_empty(relative_x + 1, relative_y + 1)):
                 return true
+            # Similarly, A45s become A90s when there are neighbors or either
+            # side, and neighbors at both front corners, but the front-corner
+            # neighbors are A90s.
+            if get_is_present(relative_x - 1, relative_y) and \
+                    get_is_present(relative_x + 1, relative_y) and \
+                    (get_angle_type(relative_x - 1, relative_y + 1) == \
+                        CellAngleType.A90 and \
+                    get_angle_type(relative_x + 1, relative_y + 1) == \
+                        CellAngleType.A90):
+                return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
             if get_is_left_cap(relative_x, relative_y) and \
@@ -439,6 +459,16 @@ func get_is_90_left_wall(
                     get_is_present(relative_x, relative_y + 1) and \
                     (get_is_empty(relative_x + 1, relative_y - 1) or \
                     get_is_empty(relative_x + 1, relative_y + 1)):
+                return true
+            # Similarly, A45s become A90s when there are neighbors or either
+            # side, and neighbors at both front corners, but the front-corner
+            # neighbors are A90s.
+            if get_is_present(relative_x, relative_y - 1) and \
+                    get_is_present(relative_x, relative_y + 1) and \
+                    (get_angle_type(relative_x + 1, relative_y - 1) == \
+                        CellAngleType.A90 and \
+                    get_angle_type(relative_x + 1, relative_y + 1) == \
+                        CellAngleType.A90):
                 return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
@@ -569,6 +599,16 @@ func get_is_90_right_wall(
                     get_is_present(relative_x, relative_y + 1) and \
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
                     get_is_empty(relative_x - 1, relative_y + 1)):
+                return true
+            # Similarly, A45s become A90s when there are neighbors or either
+            # side, and neighbors at both front corners, but the front-corner
+            # neighbors are A90s.
+            if get_is_present(relative_x, relative_y - 1) and \
+                    get_is_present(relative_x, relative_y + 1) and \
+                    (get_angle_type(relative_x - 1, relative_y - 1) == \
+                        CellAngleType.A90 and \
+                    get_angle_type(relative_x - 1, relative_y + 1) == \
+                        CellAngleType.A90):
                 return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
