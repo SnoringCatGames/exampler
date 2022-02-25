@@ -894,12 +894,12 @@ func get_is_45_pos_floor_at_right(relative_x := 0, relative_y := 0) -> bool:
 
 func get_is_45_neg_floor_at_top(relative_x := 0, relative_y := 0) -> bool:
     return get_is_empty(relative_x, relative_y - 1) and \
-            get_is_45_pos_floor(relative_x, relative_y)
+            get_is_45_neg_floor(relative_x, relative_y)
 
 
 func get_is_45_neg_floor_at_bottom(relative_x := 0, relative_y := 0) -> bool:
     return get_is_empty(relative_x + 1, relative_y) and \
-            get_is_45_pos_floor(relative_x, relative_y)
+            get_is_45_neg_floor(relative_x, relative_y)
 
 
 func get_is_45_neg_floor_at_left(relative_x := 0, relative_y := 0) -> bool:
