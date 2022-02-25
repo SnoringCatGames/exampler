@@ -83,8 +83,9 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                             pass
                         else:
                             _log_error(
-                                    "get_target_top_left_corner, " + \
-                                    "Clipped corner",
+                                    "get_target_top_left_corner, " +
+                                    "Clipped corner, " +
+                                    "get_is_90_right_wall_at_bottom",
                                     proximity)
                     elif proximity.get_is_45_pos_floor(0,-1):
                         if proximity.get_is_90_floor_at_right(-1,0):
@@ -97,7 +98,8 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_top_left_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_45_pos_floor",
                                     proximity)
                     elif proximity.get_angle_type(0,-1) == CellAngleType.A27:
                         # FIXME: LEFT OFF HERE: -------- A27
@@ -105,7 +107,8 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     else:
                         _log_error(
                                 "get_target_top_left_corner, " + \
-                                "Clipped corner",
+                                    "Clipped corner, " +
+                                    "is_top_left_empty",
                                 proximity)
                 else:
                     _log_error(
@@ -639,7 +642,8 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_top_right_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_90_left_wall_at_bottom",
                                     proximity)
                     elif proximity.get_is_45_neg_floor(0,-1):
                         if proximity.get_is_90_floor_at_left(1,0):
@@ -652,7 +656,8 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_top_right_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_45_neg_floor",
                                     proximity)
                     elif proximity.get_angle_type(0,-1) == CellAngleType.A27:
                         # FIXME: RIGHT OFF HERE: -------- A27
@@ -660,7 +665,8 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     else:
                         _log_error(
                                 "get_target_top_right_corner, " + \
-                                "Clipped corner",
+                                    "Clipped corner, " +
+                                    "is_top_right_empty",
                                 proximity)
                 else:
                     _log_error(
@@ -1194,7 +1200,8 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_bottom_left_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_90_right_wall_at_top",
                                     proximity)
                     elif proximity.get_is_45_neg_ceiling(0,1):
                         if proximity.get_is_90_ceiling_at_right(-1,0):
@@ -1207,7 +1214,8 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_bottom_left_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_45_neg_ceiling",
                                     proximity)
                     elif proximity.get_angle_type(0,1) == CellAngleType.A27:
                         # FIXME: LEFT OFF HERE: -------- A27
@@ -1215,7 +1223,8 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     else:
                         _log_error(
                                 "get_target_bottom_left_corner, " + \
-                                "Clipped corner",
+                                    "Clipped corner, " +
+                                    "is_bottom_left_empty",
                                 proximity)
                 else:
                     _log_error(
@@ -1749,7 +1758,8 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_bottom_right_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_90_left_wall_at_top",
                                     proximity)
                     elif proximity.get_is_45_pos_ceiling(0,1):
                         if proximity.get_is_90_ceiling_at_left(1,0):
@@ -1762,7 +1772,8 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         else:
                             _log_error(
                                     "get_target_bottom_right_corner, " + \
-                                    "Clipped corner",
+                                    "Clipped corner, " +
+                                    "get_is_45_pos_ceiling",
                                     proximity)
                     elif proximity.get_angle_type(0,1) == CellAngleType.A27:
                         # FIXME: RIGHT OFF HERE: -------- A27
@@ -1770,7 +1781,8 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     else:
                         _log_error(
                                 "get_target_bottom_right_corner, " + \
-                                "Clipped corner",
+                                "Clipped corner, " +
+                                "is_bottom_right_empty",
                                 proximity)
                 else:
                     _log_error(
