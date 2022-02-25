@@ -358,16 +358,6 @@ func get_is_90_floor(
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
                     get_is_empty(relative_x + 1, relative_y - 1)):
                 return true
-            # Similarly, A45s become A90s when there are neighbors or either
-            # side, and neighbors at both front corners, but the front-corner
-            # neighbors are A90s.
-            if get_is_present(relative_x - 1, relative_y) and \
-                    get_is_present(relative_x + 1, relative_y) and \
-                    (get_angle_type(relative_x - 1, relative_y - 1) == \
-                        CellAngleType.A90 and \
-                    get_angle_type(relative_x + 1, relative_y - 1) == \
-                        CellAngleType.A90):
-                return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
             if get_is_left_cap(relative_x, relative_y) and \
@@ -411,16 +401,6 @@ func get_is_90_ceiling(
                     (get_is_empty(relative_x - 1, relative_y + 1) or \
                     get_is_empty(relative_x + 1, relative_y + 1)):
                 return true
-            # Similarly, A45s become A90s when there are neighbors or either
-            # side, and neighbors at both front corners, but the front-corner
-            # neighbors are A90s.
-            if get_is_present(relative_x - 1, relative_y) and \
-                    get_is_present(relative_x + 1, relative_y) and \
-                    (get_angle_type(relative_x - 1, relative_y + 1) == \
-                        CellAngleType.A90 and \
-                    get_angle_type(relative_x + 1, relative_y + 1) == \
-                        CellAngleType.A90):
-                return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
             if get_is_left_cap(relative_x, relative_y) and \
@@ -459,16 +439,6 @@ func get_is_90_left_wall(
                     get_is_present(relative_x, relative_y + 1) and \
                     (get_is_empty(relative_x + 1, relative_y - 1) or \
                     get_is_empty(relative_x + 1, relative_y + 1)):
-                return true
-            # Similarly, A45s become A90s when there are neighbors or either
-            # side, and neighbors at both front corners, but the front-corner
-            # neighbors are A90s.
-            if get_is_present(relative_x, relative_y - 1) and \
-                    get_is_present(relative_x, relative_y + 1) and \
-                    (get_angle_type(relative_x + 1, relative_y - 1) == \
-                        CellAngleType.A90 and \
-                    get_angle_type(relative_x + 1, relative_y + 1) == \
-                        CellAngleType.A90):
                 return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
@@ -600,16 +570,6 @@ func get_is_90_right_wall(
                     (get_is_empty(relative_x - 1, relative_y - 1) or \
                     get_is_empty(relative_x - 1, relative_y + 1)):
                 return true
-            # Similarly, A45s become A90s when there are neighbors or either
-            # side, and neighbors at both front corners, but the front-corner
-            # neighbors are A90s.
-            if get_is_present(relative_x, relative_y - 1) and \
-                    get_is_present(relative_x, relative_y + 1) and \
-                    (get_angle_type(relative_x - 1, relative_y - 1) == \
-                        CellAngleType.A90 and \
-                    get_angle_type(relative_x - 1, relative_y + 1) == \
-                        CellAngleType.A90):
-                return true
             # A 45-degree cap has a 90-degree surface if only one diagonal
             # neighbor is present.
             if get_is_top_cap(relative_x, relative_y) and \
@@ -640,35 +600,25 @@ func get_is_45_pos_floor(
     if angle_type == CellAngleType.A90:
         return false
     if get_is_present(relative_x - 1, relative_y):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x, relative_y - 1) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x, relative_y - 1) and \
                 get_is_present(relative_x + 1, relative_y) and \
-                get_is_45_neg_floor(
-                        relative_x - 1,
-                        relative_y - 1,
-                        recursion_depth + 1) and \
-                get_is_45_pos_floor(
-                        relative_x + 1, 
-                        relative_y - 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x - 1, relative_y - 1) and \
+                get_is_present(relative_x + 1, relative_y - 1):
             return true
         return false
     if get_is_present(relative_x, relative_y - 1):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x - 1, relative_y) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x - 1, relative_y) and \
                 get_is_present(relative_x, relative_y + 1) and \
-                get_is_45_neg_ceiling(
-                        relative_x - 1,
-                        relative_y - 1,
-                        recursion_depth + 1) and \
-                get_is_45_pos_floor(
-                        relative_x - 1,
-                        relative_y + 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x - 1, relative_y - 1) and \
+                get_is_present(relative_x - 1, relative_y + 1):
             return true
         return false
     match angle_type:
@@ -709,35 +659,25 @@ func get_is_45_neg_floor(
     if angle_type == CellAngleType.A90:
         return false
     if get_is_present(relative_x + 1, relative_y):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x, relative_y - 1) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x, relative_y - 1) and \
                 get_is_present(relative_x - 1, relative_y) and \
-                get_is_45_neg_floor(
-                        relative_x - 1,
-                        relative_y - 1,
-                        recursion_depth + 1) and \
-                get_is_45_pos_floor(
-                        relative_x + 1,
-                        relative_y - 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x + 1, relative_y - 1) and \
+                get_is_present(relative_x - 1, relative_y - 1):
             return true
         return false
     if get_is_present(relative_x, relative_y - 1):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x + 1, relative_y) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x + 1, relative_y) and \
                 get_is_present(relative_x, relative_y + 1) and \
-                get_is_45_pos_ceiling(
-                        relative_x + 1,
-                        relative_y - 1,
-                        recursion_depth + 1) and \
-                get_is_45_neg_floor(
-                        relative_x + 1,
-                        relative_y + 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x + 1, relative_y - 1) and \
+                get_is_present(relative_x + 1, relative_y + 1):
             return true
         return false
     match angle_type:
@@ -778,35 +718,25 @@ func get_is_45_pos_ceiling(
     if angle_type == CellAngleType.A90:
         return false
     if get_is_present(relative_x + 1, relative_y):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x, relative_y + 1) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x, relative_y + 1) and \
                 get_is_present(relative_x - 1, relative_y) and \
-                get_is_45_neg_ceiling(
-                        relative_x + 1,
-                        relative_y + 1,
-                        recursion_depth + 1) and \
-                get_is_45_pos_ceiling(
-                        relative_x - 1,
-                        relative_y + 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x - 1, relative_y + 1) and \
+                get_is_present(relative_x + 1, relative_y + 1):
             return true
         return false
     if get_is_present(relative_x, relative_y + 1):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x + 1, relative_y) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x + 1, relative_y) and \
                 get_is_present(relative_x, relative_y - 1) and \
-                get_is_45_neg_floor(
-                        relative_x + 1,
-                        relative_y + 1,
-                        recursion_depth + 1) and \
-                get_is_45_pos_ceiling(
-                        relative_x + 1,
-                        relative_y - 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x + 1, relative_y - 1) and \
+                get_is_present(relative_x + 1, relative_y + 1):
             return true
         return false
     match angle_type:
@@ -851,35 +781,25 @@ func get_is_45_neg_ceiling(
     if angle_type == CellAngleType.A90:
         return false
     if get_is_present(relative_x - 1, relative_y):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x, relative_y + 1) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x, relative_y + 1) and \
                 get_is_present(relative_x + 1, relative_y) and \
-                get_is_45_pos_ceiling(
-                        relative_x - 1,
-                        relative_y + 1,
-                        recursion_depth + 1) and \
-                get_is_45_neg_ceiling(
-                        relative_x + 1,
-                        relative_y + 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x - 1, relative_y + 1) and \
+                get_is_present(relative_x + 1, relative_y + 1):
             return true
         return false
     if get_is_present(relative_x, relative_y + 1):
-        # There is a block in front, but this could be a concave cusp between
-        # 45-degree surfaces.
-        if recursion_depth >= 4 or \
-                get_is_empty(relative_x - 1, relative_y) and \
+        # -   There is a block in front, but this could be a concave cusp
+        #     between 45-degree surfaces.
+        # -   A45s become A90s when there are neighbors on either side and at
+        #     least one of the two front corners are empty.
+        if get_is_empty(relative_x - 1, relative_y) and \
                 get_is_present(relative_x, relative_y - 1) and \
-                get_is_45_pos_floor(
-                        relative_x - 1,
-                        relative_y + 1,
-                        recursion_depth + 1) and \
-                get_is_45_neg_ceiling(
-                        relative_x - 1,
-                        relative_y - 1,
-                        recursion_depth + 1):
+                get_is_present(relative_x - 1, relative_y - 1) and \
+                get_is_present(relative_x - 1, relative_y + 1):
             return true
         return false
     match angle_type:
