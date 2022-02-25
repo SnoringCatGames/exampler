@@ -260,7 +260,7 @@ func _get_best_quadrant_match(
                 # Skip this fallback, since it is for the other direction.
                 continue
             
-            if fallback_corner_weight_multiplier <= 1.0:
+            if fallback_corner_weight_multiplier < 1.0:
                 # -   If the weight-multiplier is less than 1.0, then we should
                 #     prefer mappings that use UNKNOWN values.
                 # -   This offset ensures that a non-unknown fallback will

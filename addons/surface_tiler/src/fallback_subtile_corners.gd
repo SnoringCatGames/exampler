@@ -30,9 +30,9 @@ const FALLBACKS := {
     SubtileCorner.EXT_90H: {},
     SubtileCorner.EXT_90V: {},
     SubtileCorner.EXT_90_90_CONVEX: {
-        SubtileCorner.EMPTY: [1.0, 1.0],
-        SubtileCorner.EXT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_90V: [0.0, 1.0],
+#        SubtileCorner.EMPTY: [1.0, 1.0],
+        SubtileCorner.EXT_90H: [0.7, 0.0],
+        SubtileCorner.EXT_90V: [0.0, 0.7],
     },
     SubtileCorner.EXT_90_90_CONCAVE: {
         SubtileCorner.EXT_90H: [0.0, 0.2],

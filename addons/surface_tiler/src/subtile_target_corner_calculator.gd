@@ -3,7 +3,7 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
-# FIXME: LEFT OFF HERE: -----------------------------------------------
+# FIXME: LEFT OFF HERE: -------------------------------------------------
 # - Debug issues with target-corner calculations when a type in 45, but it's
 #   acting like a 90.
 # - Debug all the error cases for 45-degree target-corner calculations.
