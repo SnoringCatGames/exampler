@@ -4,16 +4,17 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -------------------------------------------------
-# - Debug issues with target-corner calculations when a type in 45, but it's
-#   acting like a 90.
 # - Debug all the error cases for 45-degree target-corner calculations.
-# - Make sure quadrant-collision-shape calculations work with all the
-#   inner-clipped-connection arrangements.
-# - Think of what old corner-types I can remove now that I have the new
-#   quadrant-connection system.
-# - Test that all 90-degree top-left corner cases work.
-# - Test 45-degree cases.
-# - Copy/edit get_target_top_left_corner for the other corners.
+# - Re-add support for (tl|tr|bl|br)_(h|v)d_inbound connections.
+#   - Why:
+#     - TL quadrant of right-corner (lower-side) of diamond uses the wrong
+#       quadrant.
+#   - How:
+#     - Only using the implicit connection pixel at first.
+#     - _Should_ be easy to add, since all the needed annotations and
+#       target-corners will already be calculated?
+#     - And adding one more layer of optional dictionaries in the big subtiles
+#       mapping should be easy with the new generic design.
 
 
 func get_target_top_left_corner(proximity: CellProximity) -> int:
