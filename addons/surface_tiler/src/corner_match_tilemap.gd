@@ -175,9 +175,9 @@ func _on_cell_tile_changed(
         _delegate_quadrant_updates(cell_position, tile_id)
         
         # Update all nearby neighbor cells.
-        for y in 5:
-            for x in 5:
-                var neighbor_position := cell_position + Vector2(x - 2, y - 2)
+        for y in 7:
+            for x in 7:
+                var neighbor_position := cell_position + Vector2(x - 3, y - 3)
                 if neighbor_position == cell_position:
                     # We already updated this cell.
                     continue

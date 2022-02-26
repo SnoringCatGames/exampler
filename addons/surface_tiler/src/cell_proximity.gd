@@ -1243,8 +1243,8 @@ func get_is_top_left_corner_clipped_45_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y - 1) and \
-            get_is_45_pos_floor(relative_x - 1, relative_y) and \
-            get_is_45_pos_floor(relative_x, relative_y - 1)
+            get_is_45_pos_floor_at_right(relative_x - 1, relative_y) and \
+            get_is_45_pos_floor_at_bottom(relative_x, relative_y - 1)
 
 
 func get_is_top_right_corner_clipped_45_45(
@@ -1252,8 +1252,8 @@ func get_is_top_right_corner_clipped_45_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y - 1) and \
-            get_is_45_neg_floor(relative_x + 1, relative_y) and \
-            get_is_45_neg_floor(relative_x, relative_y - 1)
+            get_is_45_neg_floor_at_left(relative_x + 1, relative_y) and \
+            get_is_45_neg_floor_at_bottom(relative_x, relative_y - 1)
 
 
 func get_is_bottom_left_corner_clipped_45_45(
@@ -1261,8 +1261,8 @@ func get_is_bottom_left_corner_clipped_45_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y + 1) and \
-            get_is_45_neg_ceiling(relative_x - 1, relative_y) and \
-            get_is_45_neg_ceiling(relative_x, relative_y + 1)
+            get_is_45_neg_ceiling_at_right(relative_x - 1, relative_y) and \
+            get_is_45_neg_ceiling_at_top(relative_x, relative_y + 1)
 
 
 func get_is_bottom_right_corner_clipped_45_45(
@@ -1270,8 +1270,8 @@ func get_is_bottom_right_corner_clipped_45_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y + 1) and \
-            get_is_45_pos_ceiling(relative_x + 1, relative_y) and \
-            get_is_45_pos_ceiling(relative_x, relative_y + 1)
+            get_is_45_pos_ceiling_at_left(relative_x + 1, relative_y) and \
+            get_is_45_pos_ceiling_at_top(relative_x, relative_y + 1)
 
 
 func get_is_top_left_corner_clipped_90H_45(
@@ -1281,7 +1281,7 @@ func get_is_top_left_corner_clipped_90H_45(
             get_is_empty(relative_x - 1, relative_y - 1) and \
             get_is_90_floor_at_right(
                 relative_x - 1, relative_y) and \
-            get_is_45_pos_floor(relative_x, relative_y - 1)
+            get_is_45_pos_floor_at_bottom(relative_x, relative_y - 1)
 
 
 func get_is_top_right_corner_clipped_90H_45(
@@ -1291,7 +1291,7 @@ func get_is_top_right_corner_clipped_90H_45(
             get_is_empty(relative_x + 1, relative_y - 1) and \
             get_is_90_floor_at_right(
                 relative_x + 1, relative_y) and \
-            get_is_45_neg_floor(relative_x, relative_y - 1)
+            get_is_45_neg_floor_at_bottom(relative_x, relative_y - 1)
 
 
 func get_is_bottom_left_corner_clipped_90H_45(
@@ -1301,7 +1301,7 @@ func get_is_bottom_left_corner_clipped_90H_45(
             get_is_empty(relative_x - 1, relative_y + 1) and \
             get_is_90_ceiling_at_right(
                 relative_x - 1, relative_y) and \
-            get_is_45_neg_ceiling(relative_x, relative_y + 1)
+            get_is_45_neg_ceiling_at_top(relative_x, relative_y + 1)
 
 
 func get_is_bottom_right_corner_clipped_90H_45(
@@ -1311,7 +1311,7 @@ func get_is_bottom_right_corner_clipped_90H_45(
             get_is_empty(relative_x + 1, relative_y + 1) and \
             get_is_90_ceiling_at_left(
                 relative_x + 1, relative_y) and \
-            get_is_45_pos_ceiling(relative_x, relative_y + 1)
+            get_is_45_pos_ceiling_at_top(relative_x, relative_y + 1)
 
 
 func get_is_top_left_corner_clipped_90V_45(
@@ -1319,7 +1319,7 @@ func get_is_top_left_corner_clipped_90V_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y - 1) and \
-            get_is_45_pos_floor(relative_x - 1, relative_y) and \
+            get_is_45_pos_floor_at_right(relative_x - 1, relative_y) and \
             get_is_90_right_wall_at_bottom(relative_x, relative_y - 1)
 
 
@@ -1328,7 +1328,7 @@ func get_is_top_right_corner_clipped_90V_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y - 1) and \
-            get_is_45_neg_floor(relative_x + 1, relative_y) and \
+            get_is_45_neg_floor_at_left(relative_x + 1, relative_y) and \
             get_is_90_left_wall_at_bottom(relative_x, relative_y - 1)
 
 
@@ -1337,7 +1337,7 @@ func get_is_bottom_left_corner_clipped_90V_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y + 1) and \
-            get_is_45_neg_ceiling(relative_x - 1, relative_y) and \
+            get_is_45_neg_ceiling_at_right(relative_x - 1, relative_y) and \
             get_is_90_right_wall_at_top(relative_x, relative_y + 1)
 
 
@@ -1346,7 +1346,7 @@ func get_is_bottom_right_corner_clipped_90V_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y + 1) and \
-            get_is_45_pos_ceiling(relative_x + 1, relative_y) and \
+            get_is_45_pos_ceiling_at_left(relative_x + 1, relative_y) and \
             get_is_90_left_wall_at_top(relative_x, relative_y + 1)
 
 
@@ -1355,8 +1355,8 @@ func get_is_top_left_corner_clipped_partial_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y - 1) and \
-            (get_is_45_pos_floor(relative_x - 1, relative_y) or \
-            get_is_45_pos_floor(relative_x, relative_y - 1))
+            (get_is_45_pos_floor_at_right(relative_x - 1, relative_y) or \
+            get_is_45_pos_floor_at_bottom(relative_x, relative_y - 1))
 
 
 func get_is_top_right_corner_clipped_partial_45(
@@ -1364,8 +1364,8 @@ func get_is_top_right_corner_clipped_partial_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y - 1) and \
-            (get_is_45_neg_floor(relative_x + 1, relative_y) or \
-            get_is_45_neg_floor(relative_x, relative_y - 1))
+            (get_is_45_neg_floor_at_left(relative_x + 1, relative_y) or \
+            get_is_45_neg_floor_at_bottom(relative_x, relative_y - 1))
 
 
 func get_is_bottom_left_corner_clipped_partial_45(
@@ -1373,8 +1373,8 @@ func get_is_bottom_left_corner_clipped_partial_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x - 1, relative_y + 1) and \
-            (get_is_45_neg_ceiling(relative_x - 1, relative_y) or \
-            get_is_45_neg_ceiling(relative_x, relative_y + 1))
+            (get_is_45_neg_ceiling_at_right(relative_x - 1, relative_y) or \
+            get_is_45_neg_ceiling_at_top(relative_x, relative_y + 1))
 
 
 func get_is_bottom_right_corner_clipped_partial_45(
@@ -1382,8 +1382,8 @@ func get_is_bottom_right_corner_clipped_partial_45(
         relative_y := 0) -> bool:
     return get_is_present(relative_x, relative_y) and \
             get_is_empty(relative_x + 1, relative_y + 1) and \
-            (get_is_45_pos_ceiling(relative_x + 1, relative_y) or \
-            get_is_45_pos_ceiling(relative_x, relative_y + 1))
+            (get_is_45_pos_ceiling_at_left(relative_x + 1, relative_y) or \
+            get_is_45_pos_ceiling_at_top(relative_x, relative_y + 1))
 
 
 func get_is_top_left_corner_clipped_partial_27(
