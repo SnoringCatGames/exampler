@@ -124,15 +124,15 @@ static func get_is_top(type: int) -> bool:
         INBOUND_BL_L, \
         INBOUND_BR_R:
             return false
-        INBOUND_TL_L2, \
-        INBOUND_TR_R2, \
-        INBOUND_BL_B2, \
-        INBOUND_BR_B2:
-            return true
         INBOUND_TL_T2, \
         INBOUND_TR_T2, \
+        INBOUND_TL_L2, \
+        INBOUND_TR_R2:
+            return true
         INBOUND_BL_L2, \
-        INBOUND_BR_R2:
+        INBOUND_BR_B2, \
+        INBOUND_BR_R2, \
+        INBOUND_BL_B2:
             return false
         _:
             Sc.logger.error("CornerDirection.get_is_top")
