@@ -160,14 +160,14 @@ static func get_is_left(type: int) -> bool:
         INBOUND_BR_B:
             return false
         INBOUND_TL_T2, \
-        INBOUND_TR_R2, \
+        INBOUND_TL_L2, \
         INBOUND_BL_B2, \
-        INBOUND_BR_R2:
+        INBOUND_BL_L2:
             return true
         INBOUND_TR_T2, \
-        INBOUND_TL_L2, \
+        INBOUND_TR_R2, \
         INBOUND_BR_B2, \
-        INBOUND_BL_L2:
+        INBOUND_BR_R2:
             return false
         _:
             Sc.logger.error("CornerDirection.get_is_left")
