@@ -388,7 +388,7 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                         return SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE
                 else:
                     if proximity.get_is_45_neg_floor(1,-1):
-                        if proximity.get_is_45_neg_ceiling_at_right(-1,1):
+                        if proximity.get_is_45_neg_ceiling(-1,1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
                             return SubtileCorner.INT_90H_INT_45_H_SIDE
@@ -915,7 +915,7 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                         return SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE
                 else:
                     if proximity.get_is_45_pos_floor(-1,-1):
-                        if proximity.get_is_45_pos_ceiling_at_left(1,1):
+                        if proximity.get_is_45_pos_ceiling(1,1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
                             return SubtileCorner.INT_90H_INT_45_H_SIDE
@@ -1442,7 +1442,7 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                         return SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE
                 else:
                     if proximity.get_is_45_pos_ceiling(1,1):
-                        if proximity.get_is_45_pos_floor_at_right(-1,-1):
+                        if proximity.get_is_45_pos_floor(-1,-1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
                             return SubtileCorner.INT_90H_INT_45_H_SIDE
@@ -1969,7 +1969,7 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                         return SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE
                 else:
                     if proximity.get_is_45_neg_ceiling(-1,1):
-                        if proximity.get_is_45_neg_floor_at_left(1,-1):
+                        if proximity.get_is_45_neg_floor(1,-1):
                             return SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING
                         else:
                             return SubtileCorner.INT_90H_INT_45_H_SIDE
