@@ -45,7 +45,8 @@ func get_quadrants(
         cell_position: Vector2,
         tile_id: int,
         tile_map: TileMap,
-        logs_debug_info := false) -> Array:
+        logs_debug_info := false,
+        logs_error_info := false) -> Array:
     if !Engine.editor_hint and \
             !Su.subtile_manifest.supports_runtime_autotiling:
         return error_quadrants
@@ -57,7 +58,8 @@ func get_quadrants(
             tile_id)
     var target_corners := CellCorners.new(proximity)
     
-    if !target_corners.get_are_corners_valid():
+    if !target_corners.get_are_corners_valid() and \
+            logs_error_info:
         Sc.logger.warning(
             "Not all target corners are valid:\n%s\n%s" % [
             proximity.to_string(),
@@ -105,7 +107,8 @@ func get_quadrants(
             Sc.logger.print("")
         
         if quadrant_weight < \
-                Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD:
+                Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD and \
+                logs_error_info:
             Sc.logger.warning(
                 ("No matching quadrant was found: " +
                 "%s, best_quadrant_match: [position=%s, weight=%s]\n%s\n%s") % [
@@ -155,7 +158,7 @@ func _get_best_quadrant_match(
     var target_corner_type: int = target_corner_types[i]
     
     # FIXME: -------------------------------------------------------------
-#    print(">> %s" % str(i))
+#    Sc.logger.print(">> %s" % str(i))
     
     var best_position_and_weight := [Vector2.INF, -INF]
     var best_weight_contribution := -INF
@@ -190,7 +193,7 @@ func _get_best_quadrant_match(
         best_type = target_corner_type
         best_match_label = "direct_match"
         # FIXME: -------------------------------------------------------------
-#        print("> d %s %s" % [
+#        Sc.logger.print("> d %s %s" % [
 #            str(i),
 #            str(best_position_and_weight[1]),
 #        ])
@@ -236,7 +239,7 @@ func _get_best_quadrant_match(
             best_type = SubtileCorner.UNKNOWN
             best_match_label = "unknown_match"
         # FIXME: -------------------------------------------------------------
-#        print("> u %s %s" % [
+#        Sc.logger.print("> u %s %s" % [
 #            str(i),
 #            str(fallback_position_and_weight[1]),
 #        ])
@@ -304,7 +307,7 @@ func _get_best_quadrant_match(
                             fallback_weight_contribution > 0 else \
                             "bad_fallback_match"
                 # FIXME: -------------------------------------------------------
-#                print("> f %s %s" % [
+#                Sc.logger.print("> f %s %s" % [
 #                    str(i),
 #                    str(fallback_position_and_weight[1]),
 #                ])

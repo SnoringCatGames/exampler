@@ -18,6 +18,7 @@ export var draws_tile_indices := false setget _set_draws_tile_indices
 ## This can be useful for debugging.
 export var draws_tile_grid_positions := false \
         setget _set_draws_tile_grid_positions
+
 ## This can be useful for debugging.
 export var draws_tile_angles := false setget _set_draws_tile_angles
 ## This can be useful for debugging.
@@ -26,6 +27,11 @@ export var draws_target_corner_types := false \
 ## This can be useful for debugging.
 export var draws_actual_corner_types := false \
         setget _set_draws_actual_corner_types
+
+export var logs_autotiling_state_for_selected_tile := false \
+        setget _set_logs_autotiling_state_for_selected_tile
+export var logs_autotiling_errors := true \
+        setget _set_logs_autotiling_errors
 
 var inner_tilemap: CornerMatchInnerTilemap
 
@@ -118,6 +124,18 @@ func _set_draws_actual_corner_types(value: bool) -> void:
     update()
 
 
+func _set_logs_autotiling_state_for_selected_tile(value: bool) -> void:
+    logs_autotiling_state_for_selected_tile = value
+    property_list_changed_notify()
+    update()
+
+
+func _set_logs_autotiling_errors(value: bool) -> void:
+    logs_autotiling_errors = value
+    property_list_changed_notify()
+    update()
+
+
 func set_cell(
         x: int,
         y: int,
@@ -177,6 +195,9 @@ func _on_cell_tile_changed(
         # Update all nearby neighbor cells.
         for y in 7:
             for x in 7:
+                if (y < 1 or y > 5) and (x < 1 or x > 5):
+                    # Skip the corners, since they won't trigger any changes.
+                    continue
                 var neighbor_position := cell_position + Vector2(x - 3, y - 3)
                 if neighbor_position == cell_position:
                     # We already updated this cell.
@@ -190,7 +211,8 @@ func _on_cell_tile_changed(
             cell_position,
             tile_id,
             self,
-            true)
+            logs_autotiling_state_for_selected_tile,
+            logs_autotiling_errors)
     
     emit_signal(
             "cell_tile_changed",
@@ -205,7 +227,9 @@ func _delegate_quadrant_updates(
     var quadrants: Array = tile_set.get_quadrants(
             cell_position,
             tile_id,
-            self)
+            self,
+            false,
+            logs_autotiling_errors)
     var cell_offsets := [
         Vector2(0,0),
         Vector2(1,0),
