@@ -10,8 +10,9 @@ extends Reference
 # -   The first multiplier represents the weight for this fallback in an h-opp
 #     position, while the second multiplier represents the weight in a v-opp
 #     position.
-# -   The h-opp and v-opp multipliers will also be used for v-inbound and
-#     h-inbound positions, respectively.
+# -   H-inbound and v-inbound multipliers are optional.
+#    - If ommitted, then the h-opp and v-opp multipliers will automatically be
+#      used for v-inbound and h-inbound positions, respectively.
 # FIXME: LEFT OFF HERE: -----------------------------------------
 # - Should this be configurable by the tileset author?
 # - Would there be a simpler way to allow the tile-set author to configure which
@@ -92,40 +93,40 @@ const FALLBACKS := {
     
     SubtileCorner.EXT_90H_45_CONVEX: {
         SubtileCorner.EXT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_EXT_45_CLIPPED: [0.0, 0.1],
+        SubtileCorner.EXT_EXT_45_CLIPPED: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.EXT_90V_45_CONVEX: {
         SubtileCorner.EXT_90V: [0.0, 1.0],
-        SubtileCorner.EXT_EXT_45_CLIPPED: [0.1, 0.0],
+        SubtileCorner.EXT_EXT_45_CLIPPED: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.EXT_EXT_90H_45_CONCAVE: {
         SubtileCorner.EXT_EXT_45_CLIPPED: [1.0, 0.1],
-        SubtileCorner.EXT_90_90_CONCAVE: [0.05, 0.2],
-        SubtileCorner.EXT_90H: [0.0, 0.3],
+        SubtileCorner.EXT_90_90_CONCAVE: [0.05, 0.15, 1.0, 0.05],
+        SubtileCorner.EXT_90H: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.EXT_EXT_90V_45_CONCAVE: {
         SubtileCorner.EXT_EXT_45_CLIPPED: [0.1, 1.0],
-        SubtileCorner.EXT_90_90_CONCAVE: [0.2, 0.05],
-        SubtileCorner.EXT_90V: [0.3, 0.0],
+        SubtileCorner.EXT_90_90_CONCAVE: [0.15, 0.05, 0.05, 1.0],
+        SubtileCorner.EXT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.EXT_INT_90H_45_CONVEX: {
-        SubtileCorner.EXT_INT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.1],
+        SubtileCorner.EXT_INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.EXT_INT_90V_45_CONVEX: {
-        SubtileCorner.EXT_INT_90V: [0.0, 1.0],
-        SubtileCorner.EXT_INT_45_H_SIDE: [0.1, 0.0],
+        SubtileCorner.EXT_INT_90V: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.EXT_INT_90H_45_CONCAVE: {
-        SubtileCorner.EXT_INT_45_V_SIDE: [0.9, 0.0],
-        SubtileCorner.EXT_INT_90H: [0.0, 0.1],
+        SubtileCorner.EXT_INT_45_V_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.EXT_INT_90H: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.EXT_INT_90V_45_CONCAVE: {
-        SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 0.9],
-        SubtileCorner.EXT_INT_90V: [0.1, 0.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.EXT_INT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.INT_EXT_90H_45_CONCAVE: {
         SubtileCorner.INT_INT_45_CLIPPED: [1.0, 1.0],
@@ -136,17 +137,17 @@ const FALLBACKS := {
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: {
-        SubtileCorner.INT_90H: [0.2, 0.4],
+        SubtileCorner.INT_90H: [0.0, 1.0],
     },
     SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: {
-        SubtileCorner.INT_90V: [0.4, 0.2],
+        SubtileCorner.INT_90V: [1.0, 0.0],
     },
     
     SubtileCorner.INT_INT_90H_45_CONCAVE: {
-        SubtileCorner.INT_45_H_SIDE: [0.1, 0.4],
+        SubtileCorner.INT_45_H_SIDE: [0.0, 0.4, 1.0, 1.0],
     },
     SubtileCorner.INT_INT_90V_45_CONCAVE: {
-        SubtileCorner.INT_45_V_SIDE: [0.4, 0.1],
+        SubtileCorner.INT_45_V_SIDE: [0.4, 0.0, 1.0, 1.0],
     },
     
     ### Complex 90-45-degree combinations.
@@ -157,13 +158,13 @@ const FALLBACKS := {
     },
     
     SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING: {
-        SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: [1.0, 0.0],
-        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.2],
+        SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: [1.0, 0.0, 0.0, 1.0],
+        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     
     SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING: {
-        SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: [0.0, 1.0],
-        SubtileCorner.EXT_INT_45_H_SIDE: [0.2, 0.0],
+        SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: [0.0, 1.0, 1.0, 0.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.INT_45_FLOOR_45_CEILING: {
@@ -172,29 +173,27 @@ const FALLBACKS := {
     },
     
     SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: {
-        SubtileCorner.EXT_INT_90H: [0.0, 0.2],
-        SubtileCorner.EXT_INT_45_H_SIDE: [0.2, 0.0],
+        SubtileCorner.EXT_INT_90H: [0.0, 1.0, 1.0, 0.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: {
-        SubtileCorner.EXT_INT_90V: [0.2, 0.0],
-        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.2],
+        SubtileCorner.EXT_INT_90V: [1.0, 0.0, 0.0, 1.0],
+        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     
     SubtileCorner.INT_90H_EXT_INT_45_CONVEX_ACUTE: {
-        SubtileCorner.INT_90H: [0.1, 0.0],
+        SubtileCorner.INT_90H: [0.0, 0.0, 0.0, 1.0],
         SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 1.0],
     },
     SubtileCorner.INT_90V_EXT_INT_45_CONVEX_ACUTE: {
-        SubtileCorner.INT_90V: [0.0, 0.1],
+        SubtileCorner.INT_90V: [0.0, 0.0, 1.0, 0.0],
         SubtileCorner.EXT_INT_45_H_SIDE: [1.0, 0.0],
     },
     
     SubtileCorner.INT_90H_EXT_INT_90H_45_CONCAVE: {
-        SubtileCorner.EXT_INT_90H: [0.1, 0.0],
         SubtileCorner.EXT_INT_90H_45_CONCAVE: [0.0, 1.0],
     },
     SubtileCorner.INT_90V_EXT_INT_90V_45_CONCAVE: {
-        SubtileCorner.EXT_INT_90V: [0.0, 0.1],
         SubtileCorner.EXT_INT_90V_45_CONCAVE: [1.0, 0.0],
     },
     SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE: {
@@ -204,11 +203,11 @@ const FALLBACKS := {
     
     
     SubtileCorner.INT_90H_INT_EXT_45_CLIPPED: {
-        SubtileCorner.INT_90H: [0.2, 0.0],
+        SubtileCorner.INT_90H: [0.0, 0.0],
         SubtileCorner.INT_EXT_45_CLIPPED: [0.0, 1.0],
     },
     SubtileCorner.INT_90V_INT_EXT_45_CLIPPED: {
-        SubtileCorner.INT_90V: [0.0, 0.2],
+        SubtileCorner.INT_90V: [0.0, 0.0],
         SubtileCorner.INT_EXT_45_CLIPPED: [1.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONVEX_INT_EXT_45_CLIPPED: {
@@ -217,91 +216,101 @@ const FALLBACKS := {
     },
     
     SubtileCorner.INT_90H_INT_45_H_SIDE: {
-        SubtileCorner.INT_90H: [0.2, 0.9],
+        SubtileCorner.INT_90H: [0.0, 0.0, 1.0, 1.0],
     },
     SubtileCorner.INT_90V_INT_45_H_SIDE: {
-        SubtileCorner.INT_90V: [0.0, 1.0],
-        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0],
+        SubtileCorner.INT_90V: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONVEX_INT_45_H_SIDE: {
-        SubtileCorner.INT_90V: [0.0, 1.0],
-        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0],
+        SubtileCorner.INT_90V: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
     },
     
     SubtileCorner.INT_90H_INT_45_V_SIDE: {
-        SubtileCorner.INT_90H: [1.0, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90V_INT_45_V_SIDE: {
-        SubtileCorner.INT_90V: [0.9, 0.2],
+        SubtileCorner.INT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.INT_90_90_CONVEX_INT_45_V_SIDE: {
-        SubtileCorner.INT_90H: [1.0, 0.0],
-        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
     },
     
     SubtileCorner.INT_90H_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90V_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0],
-        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONVEX_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0],
-        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE: {
-        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0],
-        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90H_INT_INT_EXT_90V_45_CONCAVE: {
-        SubtileCorner.INT_90H: [1.0, 0.0],
-        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0],
+        SubtileCorner.INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90V_INT_INT_EXT_90H_45_CONCAVE: {
-        SubtileCorner.INT_90V: [0.0, 1.0],
-        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0],
+        SubtileCorner.INT_90V: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90H: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE: {
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_V_SIDE: {
         SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_90H_INT_45_V_SIDE: [0.0, 0.9, 1.0, 0.0],
     },
     SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_H_SIDE: {
         SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0],
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_H_SIDE: [0.9, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_H_SIDE: {
-        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0],
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_V_SIDE: {
-        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 0.1, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
+        SubtileCorner.INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     
     SubtileCorner.INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: {
@@ -318,52 +327,58 @@ const FALLBACKS := {
     },
     
     SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE: {
-        SubtileCorner.INT_90H: [1.0, 0.0],
-        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 1.0],
+        SubtileCorner.INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_90H_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE: {
-        SubtileCorner.INT_90V: [0.0, 1.0],
-        SubtileCorner.INT_INT_90H_45_CONCAVE: [1.0, 0.0],
+        SubtileCorner.INT_90V: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.INT_90H_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE: {
-        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0],
-        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 1.0],
+        SubtileCorner.INT_90H_INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_90H_INT_45_V_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.INT_90V_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE: {
-        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0],
-        SubtileCorner.INT_INT_90H_45_CONCAVE: [1.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_INT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90V_INT_45_H_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
+        SubtileCorner.INT_45_H_SIDE: [1.0, 0.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE: {
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_45_V_SIDE: [0.0, 1.0, 0.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONCAVE_INT_45_FLOOR_45_CEILING: {
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE: [1.0, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE: [0.0, 1.0],
     },
     
     SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE: {
-        SubtileCorner.INT_INT_90H_45_CONCAVE: [0.9, 0.0],
+        SubtileCorner.INT_INT_90H_45_CONCAVE: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE: [0.0, 0.0, 1.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE: {
-        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 0.9],
+        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 1.0, 0.0, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_90V_45_CONCAVE: {
-        SubtileCorner.INT_INT_90H_45_CONCAVE: [0.9, 0.0],
-        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 0.9],
+        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE: [1.0, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE: [0.0, 1.0],
     },
     
     SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE_INT_45_V_SIDE: {
-        SubtileCorner.INT_INT_90H_45_CONCAVE: [0.9, 0.0],
-        SubtileCorner.INT_45_V_SIDE: [0.0, 0.9],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_V_SIDE: [0.0, 1.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90H_45_CONCAVE: [1.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE_INT_45_H_SIDE: {
-        SubtileCorner.INT_INT_90V_45_CONCAVE: [0.0, 0.9],
-        SubtileCorner.INT_45_H_SIDE: [0.9, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_45_H_SIDE: [1.0, 0.0],
+        SubtileCorner.INT_90_90_CONCAVE_INT_INT_90V_45_CONCAVE: [0.0, 1.0],
     },
     
     ### 27-degree.

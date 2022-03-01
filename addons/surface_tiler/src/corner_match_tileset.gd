@@ -105,9 +105,10 @@ func get_quadrants(
             Sc.logger.print(proximity.to_string())
             Sc.logger.print(target_corners.to_string(true))
             Sc.logger.print(_get_position_and_weight_results_string(
-                        best_position_and_weight))
+                    best_position_and_weight))
             _print_subtile_corner_types(
                     corner_direction,
+                    corner_types,
                     [target_corners.get_corner_type(corner_direction)])
             Sc.logger.print(">>>")
             Sc.logger.print("")
@@ -127,6 +128,7 @@ func get_quadrants(
             if logs_debug_info:
                 _print_subtile_corner_types(
                         corner_direction,
+                        corner_types,
                         [target_corners.get_corner_type(corner_direction)])
             quadrant_position = error_quadrants[i]
         
@@ -157,10 +159,11 @@ func _get_best_quadrant_match(
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
     var current_iteration_weight_multiplier := \
             1000.0 / pow(1000,iteration_exponent)
-    var is_inbound_iteration := i > 2
-    var is_h_neighbor := i == 1 or i == 4
-    var is_v_neighbor := i == 2 or i == 3
-    var is_d_neighbor := !is_h_neighbor and !is_v_neighbor
+    var is_inbound_iteration := i > 2 and i != 5
+    var is_h_neighbor := i == 1 or i == 3
+    var is_v_neighbor := i == 2 or i == 4
+    var is_d_neighbor := i == 5 or i == 8 or i == 9
+    var is_2_neighbor := i == 6 or i == 7
     var target_corner_type: int = target_corner_types[i]
     
     # FIXME: -------------------------------------------------------------
@@ -253,17 +256,24 @@ func _get_best_quadrant_match(
     # FIXME: LEFT OFF HERE: -----------------------------------------
     # - Should internal and inbound diagonal connections have configurable
     #   fallbacks?
-    if !is_d_neighbor:
+    if !is_d_neighbor and !is_2_neighbor:
         # Consider all explicitly configured fallbacks.
         var fallbacks_for_corner_type: Dictionary = \
                 FallbackSubtileCorners.FALLBACKS[target_corner_type]
         for fallback_corner_type in fallbacks_for_corner_type:
             var fallback_multipliers: Array = \
                     fallbacks_for_corner_type[fallback_corner_type]
-            var fallback_corner_weight_multiplier: float = \
-                    fallback_multipliers[0] if \
-                    is_h_neighbor else \
-                    fallback_multipliers[1]
+            var fallback_corner_weight_multiplier: float
+            if is_inbound_iteration:
+                if is_h_neighbor:
+                    fallback_corner_weight_multiplier = fallback_multipliers[2]
+                else:
+                    fallback_corner_weight_multiplier = fallback_multipliers[3]
+            else:
+                if is_h_neighbor:
+                    fallback_corner_weight_multiplier = fallback_multipliers[0]
+                else:
+                    fallback_corner_weight_multiplier = fallback_multipliers[1]
             
             if fallback_corner_weight_multiplier <= 0.0:
                 # Skip this fallback, since it is for the other direction.
@@ -357,8 +367,9 @@ func get_inner_cell_size() -> Vector2:
 
 
 func _print_subtile_corner_types(
-        target_corner_direction := -1,
-        target_connection_types := []) -> void:
+        target_corner_direction: int,
+        target_corner_types: Array,
+        filter_connection_types: Array) -> void:
     var connection_labels := [
         "Self",
         "H-opp",
@@ -379,7 +390,8 @@ func _print_subtile_corner_types(
         Sc.logger.print(CornerDirection.get_string(corner_direction))
         _print_subtile_corner_types_recursively(
                 subtile_corner_types[corner_direction],
-                target_connection_types,
+                target_corner_types,
+                filter_connection_types,
                 connection_labels,
                 0)
     Sc.logger.print(">>>>>")
@@ -387,11 +399,12 @@ func _print_subtile_corner_types(
 
 func _print_subtile_corner_types_recursively(
         map: Dictionary,
-        target_connection_types: Array,
+        target_corner_types: Array,
+        filter_connection_types: Array,
         connection_labels: Array,
         index: int) -> void:
-    if target_connection_types.size() > index:
-        var target_connection_type: int = target_connection_types[index]
+    if filter_connection_types.size() > index:
+        var target_connection_type: int = filter_connection_types[index]
         if !map.has(target_connection_type):
             Sc.logger.warning(
                     ("subtile_corner_types does not contain the target " +
@@ -400,7 +413,7 @@ func _print_subtile_corner_types_recursively(
                         Su.subtile_manifest.get_subtile_corner_string(
                                 target_connection_type),
                         str(index),
-                        str(target_connection_types),
+                        str(filter_connection_types),
                     ])
             return
         var next_value = map[target_connection_type]
@@ -409,15 +422,18 @@ func _print_subtile_corner_types_recursively(
                     connection_labels,
                     index,
                     target_connection_type,
+                    target_corner_types,
                     next_value)
         else:
             _print_subtile_connection_entry(
                     connection_labels,
                     index,
-                    target_connection_type)
+                    target_connection_type,
+                    target_corner_types)
             _print_subtile_corner_types_recursively(
                     next_value,
-                    target_connection_types,
+                    target_corner_types,
+                    filter_connection_types,
                     connection_labels,
                     index + 1)
     else:
@@ -428,15 +444,18 @@ func _print_subtile_corner_types_recursively(
                         connection_labels,
                         index,
                         connection_type,
+                        target_corner_types,
                         next_value)
             else:
                 _print_subtile_connection_entry(
                         connection_labels,
                         index,
-                        connection_type)
+                        connection_type,
+                        target_corner_types)
                 _print_subtile_corner_types_recursively(
                         next_value,
-                        target_connection_types,
+                        target_corner_types,
+                        filter_connection_types,
                         connection_labels,
                         index + 1)
 
@@ -445,17 +464,42 @@ func _print_subtile_connection_entry(
         connection_labels: Array,
         index: int,
         connection_type: int,
+        target_corner_types: Array,
         quadrant_coordinates := Vector2.INF) -> void:
+    var target_connection_type: int = target_corner_types[index]
+    var is_direct_match_to_target := connection_type == target_connection_type
+    var is_index_valid_for_fallback := index >= 1 and index <= 4
+    
+    var fallback_weight := -INF
+    if is_direct_match_to_target:
+        fallback_weight = 1.0
+    elif is_index_valid_for_fallback:
+        if FallbackSubtileCorners.FALLBACKS[target_connection_type] \
+                .has(connection_type):
+            fallback_weight = FallbackSubtileCorners.FALLBACKS \
+                    [target_connection_type][connection_type][index - 1]
+    
+    var fallback_weight_string: String
+    if is_index_valid_for_fallback or is_direct_match_to_target:
+        if fallback_weight >= 0:
+            fallback_weight_string = "%.2f" % fallback_weight
+        else:
+            fallback_weight_string = "--"
+    else:
+        fallback_weight_string = "N/A"
+    
     var spaces := Sc.utils.get_spaces((index + 1) * 2)
     var quadrant_coordinates_string := \
             " => %s" % str(quadrant_coordinates) if \
             quadrant_coordinates != Vector2.INF else \
             ""
-    var message := "%s%s: %s%s" % [
+    
+    var message := "%s%s: %s%s [%s]" % [
         spaces,
         connection_labels[index],
         Su.subtile_manifest.get_subtile_corner_string(connection_type),
         quadrant_coordinates_string,
+        fallback_weight_string,
     ]
     Sc.logger.print(message)
 

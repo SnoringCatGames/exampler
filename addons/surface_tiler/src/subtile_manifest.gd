@@ -209,13 +209,11 @@ func _parse_fallback_corner_types() -> void:
             var fallback_multipliers: Array = \
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
             assert(fallback_multipliers is Array)
-            assert(fallback_multipliers.size() == 2)
-            assert(fallback_multipliers[0] is float)
-            assert(fallback_multipliers[1] is float)
-            assert(fallback_multipliers[0] >= 0.0 and \
-                    fallback_multipliers[0] <= 1.0)
-            assert(fallback_multipliers[1] >= 0.0 and \
-                    fallback_multipliers[1] <= 1.0)
+            assert(fallback_multipliers.size() == 2 or \
+                    fallback_multipliers.size() == 4)
+            for multiplier in fallback_multipliers:
+                assert(multiplier is float)
+                assert(multiplier >= 0.0 and multiplier <= 1.0)
     
     # Validate SubtileCornerToDepth.
     assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
@@ -229,6 +227,16 @@ func _parse_fallback_corner_types() -> void:
             SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.values():
         for weight_multiplier in weight_multipliers.values():
             assert(weight_multiplier > 0.0 and weight_multiplier < 1.0)
+    
+    # Populate any abridged fallback multipliers.
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            var fallback_multipliers: Array = \
+                    FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
+            if fallback_multipliers.size() == 2:
+                fallback_multipliers.resize(4)
+                fallback_multipliers[2] = fallback_multipliers[1]
+                fallback_multipliers[3] = fallback_multipliers[0]
     
     _record_reverse_fallbacks()
     _record_transitive_fallbacks()
@@ -259,6 +267,8 @@ func _record_transitive_fallbacks() -> void:
                     corner_type,
                     multipliers[0],
                     multipliers[1],
+                    multipliers[2],
+                    multipliers[3],
                     exclusion_set)
         exclusion_set[corner_type] = false
 
@@ -268,6 +278,8 @@ func _record_transitive_fallbacks_recursively(
         transitive_basis_type: int,
         h_opp_multiplier: float,
         v_opp_multiplier: float,
+        h_inbound_multiplier: float,
+        v_inbound_multiplier: float,
         exclusion_set: Dictionary) -> void:
     var transitive_basis_map: Dictionary = \
             FallbackSubtileCorners.FALLBACKS[transitive_basis_type]
@@ -275,15 +287,24 @@ func _record_transitive_fallbacks_recursively(
     
     # Create a new transitive mapping, if it didn't exist already.
     if !transitive_basis_map.has(corner_type):
-        transitive_basis_map[corner_type] = [h_opp_multiplier, v_opp_multiplier]
+        transitive_basis_map[corner_type] = [
+            h_opp_multiplier,
+            v_opp_multiplier,
+            h_inbound_multiplier,
+            v_inbound_multiplier,
+        ]
     else:
         # Update the multipliers for the transitive mapping to be the max of the
         # previously-recorded and current-transitive values.
         var multipliers: Array = transitive_basis_map[corner_type]
         h_opp_multiplier = max(multipliers[0], h_opp_multiplier)
         v_opp_multiplier = max(multipliers[1], v_opp_multiplier)
+        h_inbound_multiplier = max(multipliers[2], h_inbound_multiplier)
+        v_inbound_multiplier = max(multipliers[3], v_inbound_multiplier)
         multipliers[0] = h_opp_multiplier
         multipliers[1] = v_opp_multiplier
+        multipliers[2] = h_inbound_multiplier
+        multipliers[3] = v_inbound_multiplier
     
     assert(!exclusion_set.has(corner_type) or !exclusion_set[corner_type])
     
@@ -305,9 +326,17 @@ func _record_transitive_fallbacks_recursively(
         var transitive_v_opp_multiplier := min(
                 v_opp_multiplier,
                 fallback_multipliers[1])
+        var transitive_h_inbound_multiplier := min(
+                h_inbound_multiplier,
+                fallback_multipliers[2])
+        var transitive_v_inbound_multiplier := min(
+                v_inbound_multiplier,
+                fallback_multipliers[3])
         
         if transitive_h_opp_multiplier <= 0.0 and \
-                transitive_v_opp_multiplier <= 0.0:
+                transitive_v_opp_multiplier <= 0.0 and \
+                transitive_h_inbound_multiplier <= 0.0 and \
+                transitive_v_inbound_multiplier <= 0.0:
             continue
         
         _record_transitive_fallbacks_recursively(
@@ -315,6 +344,8 @@ func _record_transitive_fallbacks_recursively(
                 transitive_basis_type,
                 transitive_h_opp_multiplier,
                 transitive_v_opp_multiplier,
+                transitive_h_inbound_multiplier,
+                transitive_v_inbound_multiplier,
                 exclusion_set)
     
     exclusion_set[corner_type] = false
@@ -330,7 +361,7 @@ func _print_fallbacks() -> void:
         for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
             var multipliers: Array = \
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
-            print("    %s [h_opp=%s, v_opp=%s]" % [
+            print("    %s [h_opp=%s, v_opp=%s, h_inbound=%s, v_inbound=%s]" % [
                 Sc.utils.pad_string(
                         get_subtile_corner_string(fallback_type) + ":",
                         56,
@@ -338,6 +369,8 @@ func _print_fallbacks() -> void:
                         true),
                 str(multipliers[0]),
                 str(multipliers[1]),
+                str(multipliers[2]),
+                str(multipliers[3]),
             ])
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("")

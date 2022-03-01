@@ -4,18 +4,11 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ------------------------------
-# - Re-add support for (tl|tr|bl|br)_(h|v)d_inbound connections.
-#   - Why:
-#     - TL quadrant of right-corner (lower-side) of diamond uses the wrong
-#       quadrant.
-#   - How:
-#     - Only using the implicit connection pixel at first.
-#     - _Should_ be easy to add, since all the needed annotations and
-#       target-corners will already be calculated?
-#     - And adding one more layer of optional dictionaries in the big subtiles
-#       mapping should be easy with the new generic design.
+# - Add new corner types:
+#   - EXT_INT_90H_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
+#   - EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
 # - Actually, go back and add the separate types for the various inner 45
-#   corners with interesting joins like (like INT_90H_INT_INT_45_CLIPPED).
+#   corners with interesting joins like (like INT_90H_INT_INT_45_CLIPPED)?
 #   - This will be more logic complexity, but less ambiguity, fewer tileset
 #     subtiles, and less work for the tileset author.
 # - Debug all the error cases for 45-degree target-corner calculations.
