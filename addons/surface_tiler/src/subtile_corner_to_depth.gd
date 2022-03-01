@@ -72,6 +72,9 @@ const CORNERS_TO_DEPTHS := {
     
     SubtileCorner.EXT_INT_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
     
+    SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
+    SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING: SubtileDepth.EXT_INT,
+    
     SubtileCorner.INT_45_FLOOR_45_CEILING: SubtileDepth.INT_EXT,
     
     SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: SubtileDepth.EXT_INT,

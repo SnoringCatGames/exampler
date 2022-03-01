@@ -151,11 +151,19 @@ const FALLBACKS := {
     
     ### Complex 90-45-degree combinations.
     
-    # FIXME: LEFT OFF HERE: ------------------------
-    
     SubtileCorner.EXT_INT_45_FLOOR_45_CEILING: {
         SubtileCorner.EXT_INT_45_H_SIDE: [1.0, 0.0],
         SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 1.0],
+    },
+    
+    SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING: {
+        SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE: [1.0, 0.0],
+        SubtileCorner.EXT_INT_45_V_SIDE: [0.0, 0.2],
+    },
+    
+    SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING: {
+        SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE: [0.0, 1.0],
+        SubtileCorner.EXT_INT_45_H_SIDE: [0.2, 0.0],
     },
     
     SubtileCorner.INT_45_FLOOR_45_CEILING: {

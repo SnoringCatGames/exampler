@@ -79,6 +79,8 @@ enum {
     ### Complex 90-45-degree combinations.
     
     EXT_INT_45_FLOOR_45_CEILING,
+    EXT_INT_90H_45_FLOOR_45_CEILING,
+    EXT_INT_90V_45_FLOOR_45_CEILING,
     
     INT_45_FLOOR_45_CEILING,
     

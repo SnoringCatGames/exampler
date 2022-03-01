@@ -155,6 +155,8 @@ static func get_shape_type_for_corner_type(
             ### Complex 90-45-degree combinations.
             
             SubtileCorner.EXT_INT_45_FLOOR_45_CEILING, \
+            SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING, \
+            SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_45_FLOOR_45_CEILING, \
             SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE, \
             SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE, \
@@ -300,6 +302,8 @@ static func get_shape_type_for_corner_type(
             ### Complex 90-45-degree combinations.
             
             SubtileCorner.EXT_INT_45_FLOOR_45_CEILING, \
+            SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING, \
+            SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING, \
             SubtileCorner.INT_45_FLOOR_45_CEILING, \
             SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE, \
             SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE, \
