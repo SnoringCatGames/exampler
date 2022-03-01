@@ -1314,7 +1314,7 @@ static func _check_for_empty_quadrant_non_annotation_pixels(
                     "pixel_position=(%s,%s), " +
                     "pixel_position=(%s,%s), " +
                     "color=%s, " +
-                    "image=%s") % [
+                    "%s") % [
                         quadrant_x,
                         quadrant_y,
                         quadrant_position.x + quadrant_x,
