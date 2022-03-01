@@ -4,7 +4,7 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ------------------------------
-# - Add new corner types:
+# - Add logic to return new corner types as target corners:
 #   - EXT_INT_90H_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
 #   - EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
 # - Actually, go back and add the separate types for the various inner 45
