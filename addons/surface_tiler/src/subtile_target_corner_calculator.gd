@@ -4,11 +4,6 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -----------------------------
-# - Add new corner-types:
-#   - SubtileCorner.EXT_INT_90H_45_FLOOR_45_CEILING
-#   - SubtileCorner.EXT_INT_90V_45_FLOOR_45_CEILING
-#   - Remove all now-redundant extra subtiles in the tile-set that were
-#     previously used to indicate different connection combinations.
 # - Re-add support for (tl|tr|bl|br)_(h|v)d_inbound connections.
 #   - Why:
 #     - TL quadrant of right-corner (lower-side) of diamond uses the wrong
