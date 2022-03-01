@@ -21,8 +21,12 @@ extends TileSet
 #                 SubtileCorner, # H2-inbound-corner
 #                 (Vector2|Dictionary<
 #                   SubtileCorner, # V2-inbound-corner
-#                   Vector2        # Quadrant coordinates
-#                 >)>)>)>)>)>)>)>>
+#                   (Vector2|Dictionary<
+#                     SubtileCorner, # HD-inbound-corner
+#                     (Vector2|Dictionary<
+#                       SubtileCorner, # VD-inbound-corner
+#                       Vector2        # Quadrant coordinates
+#                 >)>)>)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
 
 var are_45_degree_subtiles_used: bool
@@ -82,6 +86,8 @@ func get_quadrants(
             target_corners.get_d_opp_corner_type(corner_direction),
             target_corners.get_h2_inbound_corner_type(corner_direction),
             target_corners.get_v2_inbound_corner_type(corner_direction),
+            target_corners.get_hd_inbound_corner_type(corner_direction),
+            target_corners.get_vd_inbound_corner_type(corner_direction),
         ]
         
         var best_position_and_weight := _get_best_quadrant_match(
@@ -146,7 +152,7 @@ func _get_best_quadrant_match(
     match i:
         0: iteration_exponent = 0
         1, 2: iteration_exponent = 1
-        3, 4, 5, 6, 7: iteration_exponent = 2
+        3, 4, 5, 6, 7, 8, 9: iteration_exponent = 2
         _:
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
     var current_iteration_weight_multiplier := \
@@ -200,7 +206,7 @@ func _get_best_quadrant_match(
     
     if i == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
-        best_position_and_weight.resize(10)
+        best_position_and_weight.resize(12)
         best_position_and_weight[i + 2] = {
             weight_contribution = best_weight_contribution,
             corner_type = best_type,
@@ -312,7 +318,7 @@ func _get_best_quadrant_match(
 #                    str(fallback_position_and_weight[1]),
 #                ])
     
-    best_position_and_weight.resize(10)
+    best_position_and_weight.resize(12)
     best_position_and_weight[i + 2] = {
         weight_contribution = best_weight_contribution,
         corner_type = best_type,
@@ -362,6 +368,8 @@ func _print_subtile_corner_types(
         "Diagonal-opp",
         "H2-inbound",
         "V2-inbound",
+        "H-diag-inbound",
+        "V-diag-inbound",
     ]
     Sc.logger.print(">>>>> CornerMatchTileset.subtile_corner_types")
     for corner_direction in _sort(subtile_corner_types.keys()):
@@ -468,6 +476,8 @@ func _get_position_and_weight_results_string(
         "diag_opp",
         "h2_inbound",
         "v2_inbound",
+        "hd_inbound",
+        "vd_inbound",
     ]
     for i in range(2,10):
         var neighbor_result = position_and_weight[i]

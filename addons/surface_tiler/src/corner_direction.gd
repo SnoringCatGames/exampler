@@ -26,6 +26,15 @@ enum {
     INBOUND_BL_L2,
     INBOUND_BR_B2,
     INBOUND_BR_R2,
+    
+    INBOUND_TL_TD,
+    INBOUND_TL_LD,
+    INBOUND_TR_TD,
+    INBOUND_TR_RD,
+    INBOUND_BL_BD,
+    INBOUND_BL_LD,
+    INBOUND_BR_BD,
+    INBOUND_BR_RD,
 }
 
 const OUTBOUND_CORNERS := [
@@ -53,6 +62,15 @@ const INBOUND_CORNERS := [
     INBOUND_BL_L2,
     INBOUND_BR_B2,
     INBOUND_BR_R2,
+    
+    INBOUND_TL_TD,
+    INBOUND_TL_LD,
+    INBOUND_TR_TD,
+    INBOUND_TR_RD,
+    INBOUND_BL_BD,
+    INBOUND_BL_LD,
+    INBOUND_BR_BD,
+    INBOUND_BR_RD,
 ]
 
 static func get_string(type: int) -> String:
@@ -99,6 +117,22 @@ static func get_string(type: int) -> String:
             return "INBOUND_BR_B2"
         INBOUND_BR_R2:
             return "INBOUND_BR_R2"
+        INBOUND_TL_TD:
+            return "INBOUND_TL_TD"
+        INBOUND_TL_LD:
+            return "INBOUND_TL_LD"
+        INBOUND_TR_TD:
+            return "INBOUND_TR_TD"
+        INBOUND_TR_RD:
+            return "INBOUND_TR_RD"
+        INBOUND_BL_BD:
+            return "INBOUND_BL_BD"
+        INBOUND_BL_LD:
+            return "INBOUND_BL_LD"
+        INBOUND_BR_BD:
+            return "INBOUND_BR_BD"
+        INBOUND_BR_RD:
+            return "INBOUND_BR_RD"
         _:
             Sc.logger.error("CornerDirection.get_string")
             return "??"
@@ -134,6 +168,16 @@ static func get_is_top(type: int) -> bool:
         INBOUND_BR_R2, \
         INBOUND_BL_B2:
             return false
+        INBOUND_TL_TD, \
+        INBOUND_TL_LD, \
+        INBOUND_TR_TD, \
+        INBOUND_TR_RD:
+            return false
+        INBOUND_BL_BD, \
+        INBOUND_BL_LD, \
+        INBOUND_BR_BD, \
+        INBOUND_BR_RD:
+            return true
         _:
             Sc.logger.error("CornerDirection.get_is_top")
             return false
@@ -169,6 +213,16 @@ static func get_is_left(type: int) -> bool:
         INBOUND_BR_B2, \
         INBOUND_BR_R2:
             return false
+        INBOUND_TL_TD, \
+        INBOUND_TL_LD, \
+        INBOUND_BL_BD, \
+        INBOUND_BL_LD:
+            return false
+        INBOUND_TR_TD, \
+        INBOUND_TR_RD, \
+        INBOUND_BR_BD, \
+        INBOUND_BR_RD:
+            return true
         _:
             Sc.logger.error("CornerDirection.get_is_left")
             return false
@@ -201,6 +255,15 @@ static func get_is_outbound(type: int) -> bool:
         INBOUND_BR_B2, \
         INBOUND_BR_R2:
             return false
+        INBOUND_TL_TD, \
+        INBOUND_TL_LD, \
+        INBOUND_TR_TD, \
+        INBOUND_TR_RD, \
+        INBOUND_BL_BD, \
+        INBOUND_BL_LD, \
+        INBOUND_BR_BD, \
+        INBOUND_BR_RD:
+            return false
         _:
             Sc.logger.error("CornerDirection.get_is_outbound")
             return false
@@ -231,6 +294,18 @@ static func get_outbound_from_inbound(inbound_corner: int) -> int:
             return BOTTOM_LEFT
         INBOUND_BR_B2, \
         INBOUND_BR_R2:
+            return BOTTOM_RIGHT
+        INBOUND_TL_TD, \
+        INBOUND_TL_LD:
+            return TOP_LEFT
+        INBOUND_TR_TD, \
+        INBOUND_TR_RD:
+            return TOP_RIGHT
+        INBOUND_BL_BD, \
+        INBOUND_BL_LD:
+            return BOTTOM_LEFT
+        INBOUND_BR_BD, \
+        INBOUND_BR_RD:
             return BOTTOM_RIGHT
         UNKNOWN, \
         TOP_LEFT, \
@@ -276,6 +351,22 @@ static func get_horizontal_flip(corner_direction: int) -> int:
             return INBOUND_BL_B2
         INBOUND_BR_R2:
             return INBOUND_BL_L2
+        INBOUND_TL_TD:
+            return INBOUND_TR_TD
+        INBOUND_TL_LD:
+            return INBOUND_TR_RD
+        INBOUND_TR_TD:
+            return INBOUND_TL_TD
+        INBOUND_TR_RD:
+            return INBOUND_TL_LD
+        INBOUND_BL_BD:
+            return INBOUND_BR_BD
+        INBOUND_BL_LD:
+            return INBOUND_BR_RD
+        INBOUND_BR_BD:
+            return INBOUND_BL_BD
+        INBOUND_BR_RD:
+            return INBOUND_BL_LD
         TOP_LEFT:
             return TOP_RIGHT
         BOTTOM_LEFT:
@@ -325,6 +416,22 @@ static func get_vertical_flip(corner_direction: int) -> int:
             return INBOUND_TR_T2
         INBOUND_BR_R2:
             return INBOUND_TR_R2
+        INBOUND_TL_TD:
+            return INBOUND_BL_BD
+        INBOUND_TL_LD:
+            return INBOUND_BL_LD
+        INBOUND_TR_TD:
+            return INBOUND_BR_BD
+        INBOUND_TR_RD:
+            return INBOUND_BR_RD
+        INBOUND_BL_BD:
+            return INBOUND_TL_TD
+        INBOUND_BL_LD:
+            return INBOUND_TL_LD
+        INBOUND_BR_BD:
+            return INBOUND_TR_TD
+        INBOUND_BR_RD:
+            return INBOUND_TR_RD
         TOP_LEFT:
             return BOTTOM_LEFT
         BOTTOM_LEFT:

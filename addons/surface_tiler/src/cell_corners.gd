@@ -205,6 +205,22 @@ func get_corner_type(corner_direction: int) -> int:
             return inbound_br_b2
         CornerDirection.INBOUND_BR_R2:
             return inbound_br_r2
+        CornerDirection.INBOUND_TL_TD:
+            return inbound_tr_t
+        CornerDirection.INBOUND_TL_LD:
+            return inbound_bl_l
+        CornerDirection.INBOUND_TR_TD:
+            return inbound_tl_t
+        CornerDirection.INBOUND_TR_RD:
+            return inbound_br_r
+        CornerDirection.INBOUND_BL_BD:
+            return inbound_br_b
+        CornerDirection.INBOUND_BL_LD:
+            return inbound_tl_l
+        CornerDirection.INBOUND_BR_BD:
+            return inbound_bl_b
+        CornerDirection.INBOUND_BR_RD:
+            return inbound_tr_r
         _:
             Sc.logger.error("CellCorners.get_corner_type")
             return SubtileCorner.UNKNOWN
@@ -312,4 +328,34 @@ func get_v2_inbound_corner_type(corner_direction: int) -> int:
             return inbound_br_b2
         _:
             Sc.logger.error("CellCorners.get_v2_inbound_corner_type")
+            return SubtileCorner.UNKNOWN
+
+
+func get_hd_inbound_corner_type(corner_direction: int) -> int:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return inbound_bl_l
+        CornerDirection.TOP_RIGHT:
+            return inbound_br_r
+        CornerDirection.BOTTOM_LEFT:
+            return inbound_tl_l
+        CornerDirection.BOTTOM_RIGHT:
+            return inbound_tr_r
+        _:
+            Sc.logger.error("CellCorners.get_hd_inbound_corner_type")
+            return SubtileCorner.UNKNOWN
+
+
+func get_vd_inbound_corner_type(corner_direction: int) -> int:
+    match corner_direction:
+        CornerDirection.TOP_LEFT:
+            return inbound_tr_t
+        CornerDirection.TOP_RIGHT:
+            return inbound_tl_t
+        CornerDirection.BOTTOM_LEFT:
+            return inbound_br_b
+        CornerDirection.BOTTOM_RIGHT:
+            return inbound_bl_b
+        _:
+            Sc.logger.error("CellCorners.get_vd_inbound_corner_type")
             return SubtileCorner.UNKNOWN
