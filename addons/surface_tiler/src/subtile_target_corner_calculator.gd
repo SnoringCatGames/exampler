@@ -3,7 +3,7 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
-# FIXME: LEFT OFF HERE: -----------------------------
+# FIXME: LEFT OFF HERE: ------------------------------
 # - Re-add support for (tl|tr|bl|br)_(h|v)d_inbound connections.
 #   - Why:
 #     - TL quadrant of right-corner (lower-side) of diamond uses the wrong
@@ -298,7 +298,10 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                 if proximity.is_bottom_right_empty:
                     # Only the opposite corner is empty.
                     if proximity.get_is_45_concave_cusp_at_top(0,-1):
-                        return SubtileCorner.EXT_INT_45_H_SIDE
+                        if proximity.get_is_45_concave_cusp_at_left(-1,0):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_45_H_SIDE
                     elif proximity.get_is_45_concave_cusp_at_left(-1,0):
                         return SubtileCorner.EXT_INT_45_V_SIDE
                     elif proximity.get_is_bottom_right_corner_clipped_90_90():
@@ -828,7 +831,10 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                 if proximity.is_bottom_left_empty:
                     # Only the opposite corner is empty.
                     if proximity.get_is_45_concave_cusp_at_top(0,-1):
-                        return SubtileCorner.EXT_INT_45_H_SIDE
+                        if proximity.get_is_45_concave_cusp_at_right(1,0):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_45_H_SIDE
                     elif proximity.get_is_45_concave_cusp_at_right(1,0):
                         return SubtileCorner.EXT_INT_45_V_SIDE
                     elif proximity.get_is_bottom_left_corner_clipped_90_90():
@@ -1358,7 +1364,10 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                 if proximity.is_top_right_empty:
                     # Only the opposite corner is empty.
                     if proximity.get_is_45_concave_cusp_at_bottom(0,1):
-                        return SubtileCorner.EXT_INT_45_H_SIDE
+                        if proximity.get_is_45_concave_cusp_at_left(-1,0):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_45_H_SIDE
                     elif proximity.get_is_45_concave_cusp_at_left(-1,0):
                         return SubtileCorner.EXT_INT_45_V_SIDE
                     elif proximity.get_is_top_right_corner_clipped_90_90():
@@ -1888,7 +1897,10 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                 if proximity.is_top_left_empty:
                     # Only the opposite corner is empty.
                     if proximity.get_is_45_concave_cusp_at_bottom(0,1):
-                        return SubtileCorner.EXT_INT_45_H_SIDE
+                        if proximity.get_is_45_concave_cusp_at_right(1,0):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_45_H_SIDE
                     elif proximity.get_is_45_concave_cusp_at_right(1,0):
                         return SubtileCorner.EXT_INT_45_V_SIDE
                     elif proximity.get_is_top_left_corner_clipped_90_90():
