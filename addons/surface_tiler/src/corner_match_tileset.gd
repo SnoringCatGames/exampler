@@ -383,7 +383,7 @@ func _print_subtile_corner_types(
         "V-diag-inbound",
     ]
     Sc.logger.print(">>>>> CornerMatchTileset.subtile_corner_types")
-    for corner_direction in _sort(subtile_corner_types.keys()):
+    for corner_direction in Sc.utils.cascade_sort(subtile_corner_types.keys()):
         if target_corner_direction >= 0 and \
                 target_corner_direction != corner_direction:
             continue
@@ -437,7 +437,7 @@ func _print_subtile_corner_types_recursively(
                     connection_labels,
                     index + 1)
     else:
-        for connection_type in _sort(map.keys()):
+        for connection_type in Sc.utils.cascade_sort(map.keys()):
             var next_value = map[connection_type]
             if next_value is Vector2:
                 _print_subtile_connection_entry(
@@ -540,8 +540,3 @@ func _get_position_and_weight_results_string(
             ])
     return "quadrant_match(\n    %s\n)" % \
             Sc.utils.join(position_and_weight_result_strings, ",\n    ")
-
-
-func _sort(arr: Array) -> Array:
-    arr.sort()
-    return arr

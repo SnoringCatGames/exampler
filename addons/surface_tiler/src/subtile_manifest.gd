@@ -168,10 +168,16 @@ func register_manifest(manifest: Dictionary) -> void:
         assert(tile_set_config.are_45_degree_subtiles_used is bool)
         assert(tile_set_config.are_27_degree_subtiles_used is bool)
     
+    _validate_subtile_corner_to_depth()
+    _validate_subtile_depth_to_unmatched_corner_weight_multiplier()
     _parse_fallback_corner_types()
     
     for tile_set_config in tile_set_configs:
         initializer.initialize_tileset(tile_set_config)
+
+
+func get_subtile_corner_string(type: int) -> String:
+    return SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]
 
 
 # This hacky function exists for a couple reasons:
@@ -194,11 +200,30 @@ func _parse_subtile_corner_key_values() -> void:
         SUBTILE_CORNER_TYPE_VALUE_TO_KEY[constants[key]] = key
 
 
-func get_subtile_corner_string(type: int) -> String:
-    return SUBTILE_CORNER_TYPE_VALUE_TO_KEY[type]
+func _validate_subtile_corner_to_depth() -> void:
+    assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
+            SubtileCornerToDepth.CORNERS_TO_DEPTHS.size())
+    for corner_type in SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
+        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS.has(corner_type))
+        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS[corner_type] is int)
+
+
+func _validate_subtile_depth_to_unmatched_corner_weight_multiplier() -> void:
+    for weight_multipliers in \
+            SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.values():
+        for weight_multiplier in weight_multipliers.values():
+            assert(weight_multiplier > 0.0 and weight_multiplier < 1.0)
 
 
 func _parse_fallback_corner_types() -> void:
+    _validate_fallback_subtile_corners()
+    _populate_abridged_fallback_multipliers()
+    _record_reverse_fallbacks()
+    _record_transitive_fallbacks()
+    _print_fallbacks()
+
+
+func _validate_fallback_subtile_corners() -> void:
     # Validate FallbackSubtileCorners.
     assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
             FallbackSubtileCorners.FALLBACKS.size())
@@ -214,21 +239,9 @@ func _parse_fallback_corner_types() -> void:
             for multiplier in fallback_multipliers:
                 assert(multiplier is float)
                 assert(multiplier >= 0.0 and multiplier <= 1.0)
-    
-    # Validate SubtileCornerToDepth.
-    assert(SUBTILE_CORNER_TYPE_VALUE_TO_KEY.size() == \
-            SubtileCornerToDepth.CORNERS_TO_DEPTHS.size())
-    for corner_type in SUBTILE_CORNER_TYPE_VALUE_TO_KEY:
-        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS.has(corner_type))
-        assert(SubtileCornerToDepth.CORNERS_TO_DEPTHS[corner_type] is int)
-    
-    # Validate SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.
-    for weight_multipliers in \
-            SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER.values():
-        for weight_multiplier in weight_multipliers.values():
-            assert(weight_multiplier > 0.0 and weight_multiplier < 1.0)
-    
-    # Populate any abridged fallback multipliers.
+
+
+func _populate_abridged_fallback_multipliers() -> void:
     for corner_type in FallbackSubtileCorners.FALLBACKS:
         for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
             var fallback_multipliers: Array = \
@@ -237,14 +250,9 @@ func _parse_fallback_corner_types() -> void:
                 fallback_multipliers.resize(4)
                 fallback_multipliers[2] = fallback_multipliers[1]
                 fallback_multipliers[3] = fallback_multipliers[0]
-    
-    _record_reverse_fallbacks()
-    _record_transitive_fallbacks()
-#    _print_fallbacks()
 
 
 func _record_reverse_fallbacks() -> void:
-    # Record reverse-mappings for FallbackSubtileCorners.
     for corner_type in FallbackSubtileCorners.FALLBACKS:
         var forward_map: Dictionary = \
                 FallbackSubtileCorners.FALLBACKS[corner_type]
@@ -253,6 +261,32 @@ func _record_reverse_fallbacks() -> void:
                     FallbackSubtileCorners.FALLBACKS[fallback_type]
             if !reverse_map.has(corner_type):
                 reverse_map[corner_type] = forward_map[fallback_type]
+            var forward_multipliers: Array = forward_map[fallback_type]
+            var reverse_multipliers: Array = reverse_map[corner_type]
+            for i in 4:
+                assert(forward_multipliers[i] == reverse_multipliers[i],
+                        ("FallbackSubtileCorners: Two corner-types are " +
+                        "mapped to each other with different multipliers: " +
+                        "forward_type=%s, " +
+                        "reverse_type=%s, " +
+                        "index=%s, " +
+                        "forward_multiplier=%s, " +
+                        "reverse_multiplier=%s") % [
+                            get_subtile_corner_string(corner_type),
+                            get_subtile_corner_string(fallback_type),
+                            i,
+                            forward_multipliers[i],
+                            reverse_multipliers[i],
+                        ])
+
+
+# FIXME: -------------------------
+func _record_transitive_fallbacks_new() -> void:
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            var multipliers: Array = \
+                    FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
+            pass
 
 
 func _record_transitive_fallbacks() -> void:
@@ -356,9 +390,11 @@ func _print_fallbacks() -> void:
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print(">>> FALLBACKS                >>>")
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    for corner_type in FallbackSubtileCorners.FALLBACKS:
+    for corner_type in Sc.utils.cascade_sort(
+            FallbackSubtileCorners.FALLBACKS.keys()):
         print("%s:" % get_subtile_corner_string(corner_type))
-        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+        for fallback_type in Sc.utils.cascade_sort(
+                FallbackSubtileCorners.FALLBACKS[corner_type].keys()):
             var multipliers: Array = \
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
             print("    %s [h_opp=%s, v_opp=%s, h_inbound=%s, v_inbound=%s]" % [
