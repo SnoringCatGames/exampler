@@ -345,8 +345,7 @@ func _record_transitive_fallbacks_recursively(
     exclusion_set[corner_type] = true
     
     for fallback_type in current_map:
-        if transitive_basis_map.has(fallback_type) or \
-                exclusion_set.has(fallback_type) and \
+        if exclusion_set.has(fallback_type) and \
                 exclusion_set[fallback_type]:
             # We're already considering this type in the current transitive
             # chain.
@@ -371,7 +370,23 @@ func _record_transitive_fallbacks_recursively(
                 transitive_v_opp_multiplier <= 0.0 and \
                 transitive_h_inbound_multiplier <= 0.0 and \
                 transitive_v_inbound_multiplier <= 0.0:
+            # There is no transitive fallback weight to propagate.
             continue
+        
+        if transitive_basis_map.has(fallback_type):
+            var preexisting_multipliers: Array = \
+                    transitive_basis_map[fallback_type]
+            if preexisting_multipliers[0] >= \
+                        transitive_h_opp_multiplier and \
+                    preexisting_multipliers[1] >= \
+                        transitive_v_opp_multiplier and \
+                    preexisting_multipliers[2] >= \
+                        transitive_h_inbound_multiplier and \
+                    preexisting_multipliers[3] >= \
+                        transitive_v_inbound_multiplier:
+                # This transitive fallback is already mapped with at least the
+                # same weights.
+                continue
         
         _record_transitive_fallbacks_recursively(
                 fallback_type,
