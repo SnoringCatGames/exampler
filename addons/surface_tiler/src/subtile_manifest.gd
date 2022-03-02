@@ -220,7 +220,7 @@ func _parse_fallback_corner_types() -> void:
     _populate_abridged_fallback_multipliers()
     _record_reverse_fallbacks()
     _record_transitive_fallbacks()
-    _print_fallbacks()
+#    _print_fallbacks()
 
 
 func _validate_fallback_subtile_corners() -> void:
@@ -278,15 +278,6 @@ func _record_reverse_fallbacks() -> void:
                             forward_multipliers[i],
                             reverse_multipliers[i],
                         ])
-
-
-# FIXME: -------------------------
-func _record_transitive_fallbacks_new() -> void:
-    for corner_type in FallbackSubtileCorners.FALLBACKS:
-        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
-            var multipliers: Array = \
-                    FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
-            pass
 
 
 func _record_transitive_fallbacks() -> void:
