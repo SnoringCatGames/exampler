@@ -237,7 +237,7 @@ func _parse_corner_type_annotation(
             tile_set_corner_type_annotations_path,
             CornerDirection.BOTTOM_RIGHT)
     
-    # Parse the eight possible internal connection annotations.
+    # Parse the twelve possible internal connection annotations.
     var has_tl_h_internal_implicit_connection := _get_connection_indicator(
             tl_quadrant_position,
             quadrant_size,
@@ -1343,6 +1343,17 @@ func _parse_corner_type_annotation(
             has_br_h_internal_implicit_connection,
             has_br_v_internal_implicit_connection,
             has_br_d_internal_implicit_connection)
+
+
+# FIXME: LEFT OFF HERE: -----------------------------
+#static func _get_connection_type(
+#        bl_h_inbound_corner_annotation,
+#        corner_type_annotation_key,
+#        bl_quadrant_position,
+#        CornerDirection.INBOUND_BL_L,
+#        tile_set_corner_type_annotations_path,
+#        quadrant_size) -> void:
+#    pass
 
 
 static func _record_quadrant_coordinates(

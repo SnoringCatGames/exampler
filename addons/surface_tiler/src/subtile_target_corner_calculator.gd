@@ -4,9 +4,36 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: ------------------------------
-# - Add logic to return new corner types as target corners:
-#   - EXT_INT_90H_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
-#   - EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
+# - LEFT OFF HERE: Adding art to tileset for EXT_90_90_CONCAVE join cases.
+#   - Update this new art to be condensed, and to omit the redundant inner quadrants.
+#     - Configure the implicit connection annotation color, assert that other annotations don't use this color.
+#     - Add an assert when an implicit connection annotation is found, that no other non-implicit or other colored pixels in that annotation region are present.
+# - Add a new feature: CornerConnectionWeightMultipliers
+#   - This is needed for breaking ties when two quadrants have different
+#     connections with equal weight.
+#   - This depends on aspects of the tileset's art. For example, floor art might
+#     extend far enough to impact the lower neighbor art, but wall and ceiling
+#     art might not.
+#   - If you know that your tileset has certain properties, like above, then you
+#     might know that you can essentially ignore, or at least deprioritize, some
+#     quadrant connections.
+#   - Otherwise, you might need to change many quadrant connection annotations
+#     from the original starting template, and also add many additional subtile
+#     combinations to account for various adjacent corner-types.
+#tool
+#class_name CornerConnectionWeightMultipliers
+#extends Reference
+#
+#const MULTIPLIERS := {
+#    SubtileCorner.EXT_90H: {
+#        top = 1.0,
+#        sides = 0.5,
+#        bottom = 0.5,
+#    },
+#    SubtileCorner.EXT_45_H_SIDE: 0.9,
+#    # FIXME: LEFT OFF HERE: ----------------------- ...
+#}
+#
 # - Actually, go back and add the separate types for the various inner 45
 #   corners with interesting joins like (like INT_90H_INT_INT_45_CLIPPED)?
 #   - This will be more logic complexity, but less ambiguity, fewer tileset
