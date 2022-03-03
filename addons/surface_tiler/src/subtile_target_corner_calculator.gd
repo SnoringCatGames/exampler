@@ -4,11 +4,6 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -------------------------------
-# - LEFT OFF HERE: Adding art to tileset for EXT_90_90_CONCAVE join cases.
-#   - Update this new art to be condensed, and to omit the redundant inner quadrants.
-#     - Configure the implicit connection annotation color, assert that other annotations don't use this color.
-#     - Add an assert when an implicit connection annotation is found, that no other non-implicit or other colored pixels in that annotation region are present.
-# - Rename TileSetImageParser to TilesetAnnotationsParser.
 # - Add a new feature: CornerConnectionWeightMultipliers
 #   - This is needed for breaking ties when two quadrants have different
 #     connections with equal weight.
@@ -35,6 +30,8 @@ extends Node
 #    # FIXME: LEFT OFF HERE: ----------------------- ...
 #}
 #
+# - Go through the tile-set and remove redundant quadrants.
+#   - Use the new support for explicit internal connection annotations.
 # - Actually, go back and add the separate types for the various inner 45
 #   corners with interesting joins like (like INT_90H_INT_INT_45_CLIPPED)?
 #   - This will be more logic complexity, but less ambiguity, fewer tileset

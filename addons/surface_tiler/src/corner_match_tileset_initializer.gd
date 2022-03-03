@@ -14,12 +14,12 @@ func initialize_tileset(tile_set_config: Dictionary) -> void:
             load(tile_set_config.tile_set_quadrants_path)
     
     var corner_type_annotation_key: Dictionary = \
-            Su.subtile_manifest.tile_set_image_parser \
+            Su.subtile_manifest.tileset_annotations_parser \
                 .parse_corner_type_annotation_key(
                     Su.subtile_manifest.corner_type_annotation_key_path,
                     tile_set_config.quadrant_size)
     var subtile_corner_types: Dictionary = \
-            Su.subtile_manifest.tile_set_image_parser \
+            Su.subtile_manifest.tileset_annotations_parser \
                 .parse_tile_set_corner_type_annotations(
                     corner_type_annotation_key,
                     tile_set_config.tile_set_corner_type_annotations_path,

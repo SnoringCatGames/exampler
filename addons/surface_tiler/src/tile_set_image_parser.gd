@@ -1,5 +1,5 @@
 tool
-class_name TileSetImageParser
+class_name TilesetAnnotationsParser
 extends Node
 
 
@@ -367,7 +367,7 @@ static func _get_implicit_connection_indicator(
         
         _:
             Sc.logger.error(
-                    "TileSetImageParser._get_implicit_connection_indicator")
+                    "TilesetAnnotationsParser._get_implicit_connection_indicator")
     
     if !CornerDirection.get_is_top(corner_direction):
         y_offset = quadrant_size - 1 - y_offset
@@ -430,7 +430,7 @@ static func _get_annotation(
                     quadrant_size - ANNOTATION_SIZE,
                     0)
         _:
-            Sc.logger.error("TileSetImageParser._get_quadrant_annotation")
+            Sc.logger.error("TilesetAnnotationsParser._get_quadrant_annotation")
     
     if !CornerDirection.get_is_left(corner_direction):
         region_start.x = quadrant_size - ANNOTATION_SIZE - region_start.x
@@ -582,7 +582,7 @@ static func _get_implicit_connection_type(
             neighbor_quadrant_offset = Vector2(0, -quadrant_size * 2)
         
         _:
-            Sc.logger.error("TileSetImageParser._get_implicit_connection_type")
+            Sc.logger.error("TilesetAnnotationsParser._get_implicit_connection_type")
     
     if !CornerDirection.get_is_top(corner_direction):
         neighbor_quadrant_offset.y *= -1
@@ -731,7 +731,7 @@ static func _get_quadrant_position(
         CornerDirection.BOTTOM_RIGHT:
             return subtile_position + Vector2(1,1) * quadrant_size
         _:
-            Sc.logger.error("TileSetImageParser._get_quadrant_position")
+            Sc.logger.error("TilesetAnnotationsParser._get_quadrant_position")
             return Vector2.INF
 
 
