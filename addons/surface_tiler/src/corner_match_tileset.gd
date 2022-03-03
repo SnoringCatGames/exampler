@@ -79,15 +79,15 @@ func get_quadrants(
         
         var corner_types := [
             target_corners.get_corner_type(corner_direction),
-            target_corners.get_h_opp_corner_type(corner_direction),
-            target_corners.get_v_opp_corner_type(corner_direction),
-            target_corners.get_h_inbound_corner_type(corner_direction),
-            target_corners.get_v_inbound_corner_type(corner_direction),
-            target_corners.get_d_opp_corner_type(corner_direction),
-            target_corners.get_h2_inbound_corner_type(corner_direction),
-            target_corners.get_v2_inbound_corner_type(corner_direction),
-            target_corners.get_hd_inbound_corner_type(corner_direction),
-            target_corners.get_vd_inbound_corner_type(corner_direction),
+            target_corners.get_h_internal_corner_type(corner_direction),
+            target_corners.get_v_internal_corner_type(corner_direction),
+            target_corners.get_h_external_corner_type(corner_direction),
+            target_corners.get_v_external_corner_type(corner_direction),
+            target_corners.get_d_internal_corner_type(corner_direction),
+            target_corners.get_h2_external_corner_type(corner_direction),
+            target_corners.get_v2_external_corner_type(corner_direction),
+            target_corners.get_hd_external_corner_type(corner_direction),
+            target_corners.get_vd_external_corner_type(corner_direction),
         ]
         
         var best_position_and_weight := _get_best_quadrant_match(
@@ -159,7 +159,7 @@ func _get_best_quadrant_match(
             Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
     var current_iteration_weight_multiplier := \
             1000.0 / pow(1000,iteration_exponent)
-    var is_inbound_iteration := i > 2 and i != 5
+    var is_external_iteration := i > 2 and i != 5
     var is_h_neighbor := i == 1 or i == 3
     var is_v_neighbor := i == 2 or i == 4
     var is_d_neighbor := i == 5 or i == 8 or i == 9
@@ -264,7 +264,7 @@ func _get_best_quadrant_match(
             var fallback_multipliers: Array = \
                     fallbacks_for_corner_type[fallback_corner_type]
             var fallback_corner_weight_multiplier: float
-            if is_inbound_iteration:
+            if is_external_iteration:
                 if is_h_neighbor:
                     fallback_corner_weight_multiplier = fallback_multipliers[2]
                 else:

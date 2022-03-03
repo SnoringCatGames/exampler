@@ -301,10 +301,10 @@ func _record_transitive_fallbacks() -> void:
 func _record_transitive_fallbacks_recursively(
         corner_type: int,
         transitive_basis_type: int,
-        h_opp_multiplier: float,
-        v_opp_multiplier: float,
-        h_inbound_multiplier: float,
-        v_inbound_multiplier: float,
+        h_internal_multiplier: float,
+        v_internal_multiplier: float,
+        h_external_multiplier: float,
+        v_external_multiplier: float,
         exclusion_set: Dictionary) -> void:
     var transitive_basis_map: Dictionary = \
             FallbackSubtileCorners.FALLBACKS[transitive_basis_type]
@@ -313,23 +313,23 @@ func _record_transitive_fallbacks_recursively(
     # Create a new transitive mapping, if it didn't exist already.
     if !transitive_basis_map.has(corner_type):
         transitive_basis_map[corner_type] = [
-            h_opp_multiplier,
-            v_opp_multiplier,
-            h_inbound_multiplier,
-            v_inbound_multiplier,
+            h_internal_multiplier,
+            v_internal_multiplier,
+            h_external_multiplier,
+            v_external_multiplier,
         ]
     else:
         # Update the multipliers for the transitive mapping to be the max of the
         # previously-recorded and current-transitive values.
         var multipliers: Array = transitive_basis_map[corner_type]
-        h_opp_multiplier = max(multipliers[0], h_opp_multiplier)
-        v_opp_multiplier = max(multipliers[1], v_opp_multiplier)
-        h_inbound_multiplier = max(multipliers[2], h_inbound_multiplier)
-        v_inbound_multiplier = max(multipliers[3], v_inbound_multiplier)
-        multipliers[0] = h_opp_multiplier
-        multipliers[1] = v_opp_multiplier
-        multipliers[2] = h_inbound_multiplier
-        multipliers[3] = v_inbound_multiplier
+        h_internal_multiplier = max(multipliers[0], h_internal_multiplier)
+        v_internal_multiplier = max(multipliers[1], v_internal_multiplier)
+        h_external_multiplier = max(multipliers[2], h_external_multiplier)
+        v_external_multiplier = max(multipliers[3], v_external_multiplier)
+        multipliers[0] = h_internal_multiplier
+        multipliers[1] = v_internal_multiplier
+        multipliers[2] = h_external_multiplier
+        multipliers[3] = v_external_multiplier
     
     assert(!exclusion_set.has(corner_type) or !exclusion_set[corner_type])
     
@@ -344,23 +344,23 @@ func _record_transitive_fallbacks_recursively(
         
         # Calculate the transitive multipliers.
         var fallback_multipliers: Array = current_map[fallback_type]
-        var transitive_h_opp_multiplier := min(
-                h_opp_multiplier,
+        var transitive_h_internal_multiplier := min(
+                h_internal_multiplier,
                 fallback_multipliers[0])
-        var transitive_v_opp_multiplier := min(
-                v_opp_multiplier,
+        var transitive_v_internal_multiplier := min(
+                v_internal_multiplier,
                 fallback_multipliers[1])
-        var transitive_h_inbound_multiplier := min(
-                h_inbound_multiplier,
+        var transitive_h_external_multiplier := min(
+                h_external_multiplier,
                 fallback_multipliers[2])
-        var transitive_v_inbound_multiplier := min(
-                v_inbound_multiplier,
+        var transitive_v_external_multiplier := min(
+                v_external_multiplier,
                 fallback_multipliers[3])
         
-        if transitive_h_opp_multiplier <= 0.0 and \
-                transitive_v_opp_multiplier <= 0.0 and \
-                transitive_h_inbound_multiplier <= 0.0 and \
-                transitive_v_inbound_multiplier <= 0.0:
+        if transitive_h_internal_multiplier <= 0.0 and \
+                transitive_v_internal_multiplier <= 0.0 and \
+                transitive_h_external_multiplier <= 0.0 and \
+                transitive_v_external_multiplier <= 0.0:
             # There is no transitive fallback weight to propagate.
             continue
         
@@ -368,13 +368,13 @@ func _record_transitive_fallbacks_recursively(
             var preexisting_multipliers: Array = \
                     transitive_basis_map[fallback_type]
             if preexisting_multipliers[0] >= \
-                        transitive_h_opp_multiplier and \
+                        transitive_h_internal_multiplier and \
                     preexisting_multipliers[1] >= \
-                        transitive_v_opp_multiplier and \
+                        transitive_v_internal_multiplier and \
                     preexisting_multipliers[2] >= \
-                        transitive_h_inbound_multiplier and \
+                        transitive_h_external_multiplier and \
                     preexisting_multipliers[3] >= \
-                        transitive_v_inbound_multiplier:
+                        transitive_v_external_multiplier:
                 # This transitive fallback is already mapped with at least the
                 # same weights.
                 continue
@@ -382,10 +382,10 @@ func _record_transitive_fallbacks_recursively(
         _record_transitive_fallbacks_recursively(
                 fallback_type,
                 transitive_basis_type,
-                transitive_h_opp_multiplier,
-                transitive_v_opp_multiplier,
-                transitive_h_inbound_multiplier,
-                transitive_v_inbound_multiplier,
+                transitive_h_internal_multiplier,
+                transitive_v_internal_multiplier,
+                transitive_h_external_multiplier,
+                transitive_v_external_multiplier,
                 exclusion_set)
     
     exclusion_set[corner_type] = false

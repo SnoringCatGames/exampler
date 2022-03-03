@@ -9,32 +9,32 @@ enum {
     BOTTOM_LEFT,
     BOTTOM_RIGHT,
     
-    INBOUND_TL_T,
-    INBOUND_TL_L,
-    INBOUND_TR_T,
-    INBOUND_TR_R,
-    INBOUND_BL_B,
-    INBOUND_BL_L,
-    INBOUND_BR_B,
-    INBOUND_BR_R,
+    EXTERNAL_TL_T,
+    EXTERNAL_TL_L,
+    EXTERNAL_TR_T,
+    EXTERNAL_TR_R,
+    EXTERNAL_BL_B,
+    EXTERNAL_BL_L,
+    EXTERNAL_BR_B,
+    EXTERNAL_BR_R,
     
-    INBOUND_TL_T2,
-    INBOUND_TL_L2,
-    INBOUND_TR_T2,
-    INBOUND_TR_R2,
-    INBOUND_BL_B2,
-    INBOUND_BL_L2,
-    INBOUND_BR_B2,
-    INBOUND_BR_R2,
+    EXTERNAL_TL_T2,
+    EXTERNAL_TL_L2,
+    EXTERNAL_TR_T2,
+    EXTERNAL_TR_R2,
+    EXTERNAL_BL_B2,
+    EXTERNAL_BL_L2,
+    EXTERNAL_BR_B2,
+    EXTERNAL_BR_R2,
     
-    INBOUND_TL_TD,
-    INBOUND_TL_LD,
-    INBOUND_TR_TD,
-    INBOUND_TR_RD,
-    INBOUND_BL_BD,
-    INBOUND_BL_LD,
-    INBOUND_BR_BD,
-    INBOUND_BR_RD,
+    EXTERNAL_TL_TD,
+    EXTERNAL_TL_LD,
+    EXTERNAL_TR_TD,
+    EXTERNAL_TR_RD,
+    EXTERNAL_BL_BD,
+    EXTERNAL_BL_LD,
+    EXTERNAL_BR_BD,
+    EXTERNAL_BR_RD,
 }
 
 const OUTBOUND_CORNERS := [
@@ -44,33 +44,33 @@ const OUTBOUND_CORNERS := [
     BOTTOM_RIGHT,
 ]
 
-const INBOUND_CORNERS := [
-    INBOUND_TL_T,
-    INBOUND_TL_L,
-    INBOUND_TR_T,
-    INBOUND_TR_R,
-    INBOUND_BL_B,
-    INBOUND_BL_L,
-    INBOUND_BR_B,
-    INBOUND_BR_R,
+const EXTERNAL_CORNERS := [
+    EXTERNAL_TL_T,
+    EXTERNAL_TL_L,
+    EXTERNAL_TR_T,
+    EXTERNAL_TR_R,
+    EXTERNAL_BL_B,
+    EXTERNAL_BL_L,
+    EXTERNAL_BR_B,
+    EXTERNAL_BR_R,
     
-    INBOUND_TL_T2,
-    INBOUND_TL_L2,
-    INBOUND_TR_T2,
-    INBOUND_TR_R2,
-    INBOUND_BL_B2,
-    INBOUND_BL_L2,
-    INBOUND_BR_B2,
-    INBOUND_BR_R2,
+    EXTERNAL_TL_T2,
+    EXTERNAL_TL_L2,
+    EXTERNAL_TR_T2,
+    EXTERNAL_TR_R2,
+    EXTERNAL_BL_B2,
+    EXTERNAL_BL_L2,
+    EXTERNAL_BR_B2,
+    EXTERNAL_BR_R2,
     
-    INBOUND_TL_TD,
-    INBOUND_TL_LD,
-    INBOUND_TR_TD,
-    INBOUND_TR_RD,
-    INBOUND_BL_BD,
-    INBOUND_BL_LD,
-    INBOUND_BR_BD,
-    INBOUND_BR_RD,
+    EXTERNAL_TL_TD,
+    EXTERNAL_TL_LD,
+    EXTERNAL_TR_TD,
+    EXTERNAL_TR_RD,
+    EXTERNAL_BL_BD,
+    EXTERNAL_BL_LD,
+    EXTERNAL_BR_BD,
+    EXTERNAL_BR_RD,
 ]
 
 static func get_string(type: int) -> String:
@@ -85,54 +85,54 @@ static func get_string(type: int) -> String:
             return "BOTTOM_LEFT"
         BOTTOM_RIGHT:
             return "BOTTOM_RIGHT"
-        INBOUND_TL_T:
-            return "INBOUND_TL_T"
-        INBOUND_TL_L:
-            return "INBOUND_TL_L"
-        INBOUND_TR_T:
-            return "INBOUND_TR_T"
-        INBOUND_TR_R:
-            return "INBOUND_TR_R"
-        INBOUND_BL_B:
-            return "INBOUND_BL_B"
-        INBOUND_BL_L:
-            return "INBOUND_BL_L"
-        INBOUND_BR_B:
-            return "INBOUND_BR_B"
-        INBOUND_BR_R:
-            return "INBOUND_BR_R"
-        INBOUND_TL_T2:
-            return "INBOUND_TL_T2"
-        INBOUND_TL_L2:
-            return "INBOUND_TL_L2"
-        INBOUND_TR_T2:
-            return "INBOUND_TR_T2"
-        INBOUND_TR_R2:
-            return "INBOUND_TR_R2"
-        INBOUND_BL_B2:
-            return "INBOUND_BL_B2"
-        INBOUND_BL_L2:
-            return "INBOUND_BL_L2"
-        INBOUND_BR_B2:
-            return "INBOUND_BR_B2"
-        INBOUND_BR_R2:
-            return "INBOUND_BR_R2"
-        INBOUND_TL_TD:
-            return "INBOUND_TL_TD"
-        INBOUND_TL_LD:
-            return "INBOUND_TL_LD"
-        INBOUND_TR_TD:
-            return "INBOUND_TR_TD"
-        INBOUND_TR_RD:
-            return "INBOUND_TR_RD"
-        INBOUND_BL_BD:
-            return "INBOUND_BL_BD"
-        INBOUND_BL_LD:
-            return "INBOUND_BL_LD"
-        INBOUND_BR_BD:
-            return "INBOUND_BR_BD"
-        INBOUND_BR_RD:
-            return "INBOUND_BR_RD"
+        EXTERNAL_TL_T:
+            return "EXTERNAL_TL_T"
+        EXTERNAL_TL_L:
+            return "EXTERNAL_TL_L"
+        EXTERNAL_TR_T:
+            return "EXTERNAL_TR_T"
+        EXTERNAL_TR_R:
+            return "EXTERNAL_TR_R"
+        EXTERNAL_BL_B:
+            return "EXTERNAL_BL_B"
+        EXTERNAL_BL_L:
+            return "EXTERNAL_BL_L"
+        EXTERNAL_BR_B:
+            return "EXTERNAL_BR_B"
+        EXTERNAL_BR_R:
+            return "EXTERNAL_BR_R"
+        EXTERNAL_TL_T2:
+            return "EXTERNAL_TL_T2"
+        EXTERNAL_TL_L2:
+            return "EXTERNAL_TL_L2"
+        EXTERNAL_TR_T2:
+            return "EXTERNAL_TR_T2"
+        EXTERNAL_TR_R2:
+            return "EXTERNAL_TR_R2"
+        EXTERNAL_BL_B2:
+            return "EXTERNAL_BL_B2"
+        EXTERNAL_BL_L2:
+            return "EXTERNAL_BL_L2"
+        EXTERNAL_BR_B2:
+            return "EXTERNAL_BR_B2"
+        EXTERNAL_BR_R2:
+            return "EXTERNAL_BR_R2"
+        EXTERNAL_TL_TD:
+            return "EXTERNAL_TL_TD"
+        EXTERNAL_TL_LD:
+            return "EXTERNAL_TL_LD"
+        EXTERNAL_TR_TD:
+            return "EXTERNAL_TR_TD"
+        EXTERNAL_TR_RD:
+            return "EXTERNAL_TR_RD"
+        EXTERNAL_BL_BD:
+            return "EXTERNAL_BL_BD"
+        EXTERNAL_BL_LD:
+            return "EXTERNAL_BL_LD"
+        EXTERNAL_BR_BD:
+            return "EXTERNAL_BR_BD"
+        EXTERNAL_BR_RD:
+            return "EXTERNAL_BR_RD"
         _:
             Sc.logger.error("CornerDirection.get_string")
             return "??"
@@ -148,35 +148,35 @@ static func get_is_top(type: int) -> bool:
         BOTTOM_LEFT, \
         BOTTOM_RIGHT:
             return false
-        INBOUND_TL_L, \
-        INBOUND_TR_R, \
-        INBOUND_BL_B, \
-        INBOUND_BR_B:
+        EXTERNAL_TL_L, \
+        EXTERNAL_TR_R, \
+        EXTERNAL_BL_B, \
+        EXTERNAL_BR_B:
             return true
-        INBOUND_TL_T, \
-        INBOUND_TR_T, \
-        INBOUND_BL_L, \
-        INBOUND_BR_R:
+        EXTERNAL_TL_T, \
+        EXTERNAL_TR_T, \
+        EXTERNAL_BL_L, \
+        EXTERNAL_BR_R:
             return false
-        INBOUND_TL_T2, \
-        INBOUND_TR_T2, \
-        INBOUND_TL_L2, \
-        INBOUND_TR_R2:
+        EXTERNAL_TL_T2, \
+        EXTERNAL_TR_T2, \
+        EXTERNAL_TL_L2, \
+        EXTERNAL_TR_R2:
             return true
-        INBOUND_BL_L2, \
-        INBOUND_BR_B2, \
-        INBOUND_BR_R2, \
-        INBOUND_BL_B2:
+        EXTERNAL_BL_L2, \
+        EXTERNAL_BR_B2, \
+        EXTERNAL_BR_R2, \
+        EXTERNAL_BL_B2:
             return false
-        INBOUND_TL_TD, \
-        INBOUND_TL_LD, \
-        INBOUND_TR_TD, \
-        INBOUND_TR_RD:
+        EXTERNAL_TL_TD, \
+        EXTERNAL_TL_LD, \
+        EXTERNAL_TR_TD, \
+        EXTERNAL_TR_RD:
             return false
-        INBOUND_BL_BD, \
-        INBOUND_BL_LD, \
-        INBOUND_BR_BD, \
-        INBOUND_BR_RD:
+        EXTERNAL_BL_BD, \
+        EXTERNAL_BL_LD, \
+        EXTERNAL_BR_BD, \
+        EXTERNAL_BR_RD:
             return true
         _:
             Sc.logger.error("CornerDirection.get_is_top")
@@ -193,35 +193,35 @@ static func get_is_left(type: int) -> bool:
         TOP_RIGHT, \
         BOTTOM_RIGHT:
             return false
-        INBOUND_TL_T, \
-        INBOUND_TR_R, \
-        INBOUND_BL_B, \
-        INBOUND_BR_R:
+        EXTERNAL_TL_T, \
+        EXTERNAL_TR_R, \
+        EXTERNAL_BL_B, \
+        EXTERNAL_BR_R:
             return true
-        INBOUND_TL_L, \
-        INBOUND_TR_T, \
-        INBOUND_BL_L, \
-        INBOUND_BR_B:
+        EXTERNAL_TL_L, \
+        EXTERNAL_TR_T, \
+        EXTERNAL_BL_L, \
+        EXTERNAL_BR_B:
             return false
-        INBOUND_TL_T2, \
-        INBOUND_TL_L2, \
-        INBOUND_BL_B2, \
-        INBOUND_BL_L2:
+        EXTERNAL_TL_T2, \
+        EXTERNAL_TL_L2, \
+        EXTERNAL_BL_B2, \
+        EXTERNAL_BL_L2:
             return true
-        INBOUND_TR_T2, \
-        INBOUND_TR_R2, \
-        INBOUND_BR_B2, \
-        INBOUND_BR_R2:
+        EXTERNAL_TR_T2, \
+        EXTERNAL_TR_R2, \
+        EXTERNAL_BR_B2, \
+        EXTERNAL_BR_R2:
             return false
-        INBOUND_TL_TD, \
-        INBOUND_TL_LD, \
-        INBOUND_BL_BD, \
-        INBOUND_BL_LD:
+        EXTERNAL_TL_TD, \
+        EXTERNAL_TL_LD, \
+        EXTERNAL_BL_BD, \
+        EXTERNAL_BL_LD:
             return false
-        INBOUND_TR_TD, \
-        INBOUND_TR_RD, \
-        INBOUND_BR_BD, \
-        INBOUND_BR_RD:
+        EXTERNAL_TR_TD, \
+        EXTERNAL_TR_RD, \
+        EXTERNAL_BR_BD, \
+        EXTERNAL_BR_RD:
             return true
         _:
             Sc.logger.error("CornerDirection.get_is_left")
@@ -237,75 +237,75 @@ static func get_is_outbound(type: int) -> bool:
         TOP_RIGHT, \
         BOTTOM_RIGHT:
             return true
-        INBOUND_TL_T, \
-        INBOUND_TL_L, \
-        INBOUND_TR_T, \
-        INBOUND_TR_R, \
-        INBOUND_BL_B, \
-        INBOUND_BL_L, \
-        INBOUND_BR_B, \
-        INBOUND_BR_R:
+        EXTERNAL_TL_T, \
+        EXTERNAL_TL_L, \
+        EXTERNAL_TR_T, \
+        EXTERNAL_TR_R, \
+        EXTERNAL_BL_B, \
+        EXTERNAL_BL_L, \
+        EXTERNAL_BR_B, \
+        EXTERNAL_BR_R:
             return false
-        INBOUND_TL_T2, \
-        INBOUND_TL_L2, \
-        INBOUND_TR_T2, \
-        INBOUND_TR_R2, \
-        INBOUND_BL_B2, \
-        INBOUND_BL_L2, \
-        INBOUND_BR_B2, \
-        INBOUND_BR_R2:
+        EXTERNAL_TL_T2, \
+        EXTERNAL_TL_L2, \
+        EXTERNAL_TR_T2, \
+        EXTERNAL_TR_R2, \
+        EXTERNAL_BL_B2, \
+        EXTERNAL_BL_L2, \
+        EXTERNAL_BR_B2, \
+        EXTERNAL_BR_R2:
             return false
-        INBOUND_TL_TD, \
-        INBOUND_TL_LD, \
-        INBOUND_TR_TD, \
-        INBOUND_TR_RD, \
-        INBOUND_BL_BD, \
-        INBOUND_BL_LD, \
-        INBOUND_BR_BD, \
-        INBOUND_BR_RD:
+        EXTERNAL_TL_TD, \
+        EXTERNAL_TL_LD, \
+        EXTERNAL_TR_TD, \
+        EXTERNAL_TR_RD, \
+        EXTERNAL_BL_BD, \
+        EXTERNAL_BL_LD, \
+        EXTERNAL_BR_BD, \
+        EXTERNAL_BR_RD:
             return false
         _:
             Sc.logger.error("CornerDirection.get_is_outbound")
             return false
 
 
-static func get_outbound_from_inbound(inbound_corner: int) -> int:
-    match inbound_corner:
-        INBOUND_TL_T, \
-        INBOUND_TL_L:
+static func get_outbound_from_inbound(external_corner: int) -> int:
+    match external_corner:
+        EXTERNAL_TL_T, \
+        EXTERNAL_TL_L:
             return TOP_LEFT
-        INBOUND_TR_T, \
-        INBOUND_TR_R:
+        EXTERNAL_TR_T, \
+        EXTERNAL_TR_R:
             return TOP_RIGHT
-        INBOUND_BL_B, \
-        INBOUND_BL_L:
+        EXTERNAL_BL_B, \
+        EXTERNAL_BL_L:
             return BOTTOM_LEFT
-        INBOUND_BR_B, \
-        INBOUND_BR_R:
+        EXTERNAL_BR_B, \
+        EXTERNAL_BR_R:
             return BOTTOM_RIGHT
-        INBOUND_TL_T2, \
-        INBOUND_TL_L2:
+        EXTERNAL_TL_T2, \
+        EXTERNAL_TL_L2:
             return TOP_LEFT
-        INBOUND_TR_T2, \
-        INBOUND_TR_R2:
+        EXTERNAL_TR_T2, \
+        EXTERNAL_TR_R2:
             return TOP_RIGHT
-        INBOUND_BL_B2, \
-        INBOUND_BL_L2:
+        EXTERNAL_BL_B2, \
+        EXTERNAL_BL_L2:
             return BOTTOM_LEFT
-        INBOUND_BR_B2, \
-        INBOUND_BR_R2:
+        EXTERNAL_BR_B2, \
+        EXTERNAL_BR_R2:
             return BOTTOM_RIGHT
-        INBOUND_TL_TD, \
-        INBOUND_TL_LD:
+        EXTERNAL_TL_TD, \
+        EXTERNAL_TL_LD:
             return TOP_LEFT
-        INBOUND_TR_TD, \
-        INBOUND_TR_RD:
+        EXTERNAL_TR_TD, \
+        EXTERNAL_TR_RD:
             return TOP_RIGHT
-        INBOUND_BL_BD, \
-        INBOUND_BL_LD:
+        EXTERNAL_BL_BD, \
+        EXTERNAL_BL_LD:
             return BOTTOM_LEFT
-        INBOUND_BR_BD, \
-        INBOUND_BR_RD:
+        EXTERNAL_BR_BD, \
+        EXTERNAL_BR_RD:
             return BOTTOM_RIGHT
         UNKNOWN, \
         TOP_LEFT, \
@@ -319,54 +319,54 @@ static func get_outbound_from_inbound(inbound_corner: int) -> int:
 
 static func get_horizontal_flip(corner_direction: int) -> int:
     match corner_direction:
-        INBOUND_TL_T:
-            return INBOUND_TR_T
-        INBOUND_TL_L:
-            return INBOUND_TR_R
-        INBOUND_TR_T:
-            return INBOUND_TL_T
-        INBOUND_TR_R:
-            return INBOUND_TL_L
-        INBOUND_BL_B:
-            return INBOUND_BR_B
-        INBOUND_BL_L:
-            return INBOUND_BR_R
-        INBOUND_BR_B:
-            return INBOUND_BL_B
-        INBOUND_BR_R:
-            return INBOUND_BL_L
-        INBOUND_TL_T2:
-            return INBOUND_TR_T2
-        INBOUND_TL_L2:
-            return INBOUND_TR_R2
-        INBOUND_TR_T2:
-            return INBOUND_TL_T2
-        INBOUND_TR_R2:
-            return INBOUND_TL_L2
-        INBOUND_BL_B2:
-            return INBOUND_BR_B2
-        INBOUND_BL_L2:
-            return INBOUND_BR_R2
-        INBOUND_BR_B2:
-            return INBOUND_BL_B2
-        INBOUND_BR_R2:
-            return INBOUND_BL_L2
-        INBOUND_TL_TD:
-            return INBOUND_TR_TD
-        INBOUND_TL_LD:
-            return INBOUND_TR_RD
-        INBOUND_TR_TD:
-            return INBOUND_TL_TD
-        INBOUND_TR_RD:
-            return INBOUND_TL_LD
-        INBOUND_BL_BD:
-            return INBOUND_BR_BD
-        INBOUND_BL_LD:
-            return INBOUND_BR_RD
-        INBOUND_BR_BD:
-            return INBOUND_BL_BD
-        INBOUND_BR_RD:
-            return INBOUND_BL_LD
+        EXTERNAL_TL_T:
+            return EXTERNAL_TR_T
+        EXTERNAL_TL_L:
+            return EXTERNAL_TR_R
+        EXTERNAL_TR_T:
+            return EXTERNAL_TL_T
+        EXTERNAL_TR_R:
+            return EXTERNAL_TL_L
+        EXTERNAL_BL_B:
+            return EXTERNAL_BR_B
+        EXTERNAL_BL_L:
+            return EXTERNAL_BR_R
+        EXTERNAL_BR_B:
+            return EXTERNAL_BL_B
+        EXTERNAL_BR_R:
+            return EXTERNAL_BL_L
+        EXTERNAL_TL_T2:
+            return EXTERNAL_TR_T2
+        EXTERNAL_TL_L2:
+            return EXTERNAL_TR_R2
+        EXTERNAL_TR_T2:
+            return EXTERNAL_TL_T2
+        EXTERNAL_TR_R2:
+            return EXTERNAL_TL_L2
+        EXTERNAL_BL_B2:
+            return EXTERNAL_BR_B2
+        EXTERNAL_BL_L2:
+            return EXTERNAL_BR_R2
+        EXTERNAL_BR_B2:
+            return EXTERNAL_BL_B2
+        EXTERNAL_BR_R2:
+            return EXTERNAL_BL_L2
+        EXTERNAL_TL_TD:
+            return EXTERNAL_TR_TD
+        EXTERNAL_TL_LD:
+            return EXTERNAL_TR_RD
+        EXTERNAL_TR_TD:
+            return EXTERNAL_TL_TD
+        EXTERNAL_TR_RD:
+            return EXTERNAL_TL_LD
+        EXTERNAL_BL_BD:
+            return EXTERNAL_BR_BD
+        EXTERNAL_BL_LD:
+            return EXTERNAL_BR_RD
+        EXTERNAL_BR_BD:
+            return EXTERNAL_BL_BD
+        EXTERNAL_BR_RD:
+            return EXTERNAL_BL_LD
         TOP_LEFT:
             return TOP_RIGHT
         BOTTOM_LEFT:
@@ -384,54 +384,54 @@ static func get_horizontal_flip(corner_direction: int) -> int:
 
 static func get_vertical_flip(corner_direction: int) -> int:
     match corner_direction:
-        INBOUND_TL_T:
-            return INBOUND_BL_B
-        INBOUND_TL_L:
-            return INBOUND_BL_L
-        INBOUND_TR_T:
-            return INBOUND_BR_B
-        INBOUND_TR_R:
-            return INBOUND_BR_R
-        INBOUND_BL_B:
-            return INBOUND_TL_T
-        INBOUND_BL_L:
-            return INBOUND_TL_L
-        INBOUND_BR_B:
-            return INBOUND_TR_T
-        INBOUND_BR_R:
-            return INBOUND_TR_R
-        INBOUND_TL_T2:
-            return INBOUND_BL_B2
-        INBOUND_TL_L2:
-            return INBOUND_BL_L2
-        INBOUND_TR_T2:
-            return INBOUND_BR_B2
-        INBOUND_TR_R2:
-            return INBOUND_BR_R2
-        INBOUND_BL_B2:
-            return INBOUND_TL_T2
-        INBOUND_BL_L2:
-            return INBOUND_TL_L2
-        INBOUND_BR_B2:
-            return INBOUND_TR_T2
-        INBOUND_BR_R2:
-            return INBOUND_TR_R2
-        INBOUND_TL_TD:
-            return INBOUND_BL_BD
-        INBOUND_TL_LD:
-            return INBOUND_BL_LD
-        INBOUND_TR_TD:
-            return INBOUND_BR_BD
-        INBOUND_TR_RD:
-            return INBOUND_BR_RD
-        INBOUND_BL_BD:
-            return INBOUND_TL_TD
-        INBOUND_BL_LD:
-            return INBOUND_TL_LD
-        INBOUND_BR_BD:
-            return INBOUND_TR_TD
-        INBOUND_BR_RD:
-            return INBOUND_TR_RD
+        EXTERNAL_TL_T:
+            return EXTERNAL_BL_B
+        EXTERNAL_TL_L:
+            return EXTERNAL_BL_L
+        EXTERNAL_TR_T:
+            return EXTERNAL_BR_B
+        EXTERNAL_TR_R:
+            return EXTERNAL_BR_R
+        EXTERNAL_BL_B:
+            return EXTERNAL_TL_T
+        EXTERNAL_BL_L:
+            return EXTERNAL_TL_L
+        EXTERNAL_BR_B:
+            return EXTERNAL_TR_T
+        EXTERNAL_BR_R:
+            return EXTERNAL_TR_R
+        EXTERNAL_TL_T2:
+            return EXTERNAL_BL_B2
+        EXTERNAL_TL_L2:
+            return EXTERNAL_BL_L2
+        EXTERNAL_TR_T2:
+            return EXTERNAL_BR_B2
+        EXTERNAL_TR_R2:
+            return EXTERNAL_BR_R2
+        EXTERNAL_BL_B2:
+            return EXTERNAL_TL_T2
+        EXTERNAL_BL_L2:
+            return EXTERNAL_TL_L2
+        EXTERNAL_BR_B2:
+            return EXTERNAL_TR_T2
+        EXTERNAL_BR_R2:
+            return EXTERNAL_TR_R2
+        EXTERNAL_TL_TD:
+            return EXTERNAL_BL_BD
+        EXTERNAL_TL_LD:
+            return EXTERNAL_BL_LD
+        EXTERNAL_TR_TD:
+            return EXTERNAL_BR_BD
+        EXTERNAL_TR_RD:
+            return EXTERNAL_BR_RD
+        EXTERNAL_BL_BD:
+            return EXTERNAL_TL_TD
+        EXTERNAL_BL_LD:
+            return EXTERNAL_TL_LD
+        EXTERNAL_BR_BD:
+            return EXTERNAL_TR_TD
+        EXTERNAL_BR_RD:
+            return EXTERNAL_TR_RD
         TOP_LEFT:
             return BOTTOM_LEFT
         BOTTOM_LEFT:

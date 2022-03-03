@@ -193,13 +193,13 @@ func _set_inner_tile_shapes_for_quadrants(
         var self_corner_type_map: Dictionary = \
                 subtile_corner_types[corner_direction]
         for self_corner_type in self_corner_type_map:
-            var h_opp_corner_type_map_or_position = \
+            var h_internal_corner_type_map_or_position = \
                     self_corner_type_map[self_corner_type]
-            if h_opp_corner_type_map_or_position is Vector2:
+            if h_internal_corner_type_map_or_position is Vector2:
                 _set_inner_tile_shapes_for_quadrants_recursively(
                         tile_set,
                         tile_id,
-                        h_opp_corner_type_map_or_position,
+                        h_internal_corner_type_map_or_position,
                         self_corner_type,
                         SubtileCorner.UNKNOWN,
                         SubtileCorner.UNKNOWN,
@@ -207,30 +207,30 @@ func _set_inner_tile_shapes_for_quadrants(
                         collision_shapes,
                         occlusion_shapes)
                 continue
-            for h_opp_corner_type in h_opp_corner_type_map_or_position:
-                var v_opp_corner_type_map_or_position = \
-                        h_opp_corner_type_map_or_position[h_opp_corner_type]
-                if v_opp_corner_type_map_or_position is Vector2:
+            for h_internal_corner_type in h_internal_corner_type_map_or_position:
+                var v_internal_corner_type_map_or_position = \
+                        h_internal_corner_type_map_or_position[h_internal_corner_type]
+                if v_internal_corner_type_map_or_position is Vector2:
                     _set_inner_tile_shapes_for_quadrants_recursively(
                             tile_set,
                             tile_id,
-                            v_opp_corner_type_map_or_position,
+                            v_internal_corner_type_map_or_position,
                             self_corner_type,
-                            h_opp_corner_type,
+                            h_internal_corner_type,
                             SubtileCorner.UNKNOWN,
                             corner_direction,
                             collision_shapes,
                             occlusion_shapes)
                     continue
-                for v_opp_corner_type in v_opp_corner_type_map_or_position:
+                for v_internal_corner_type in v_internal_corner_type_map_or_position:
                     _set_inner_tile_shapes_for_quadrants_recursively(
                             tile_set,
                             tile_id,
-                            v_opp_corner_type_map_or_position \
-                                [v_opp_corner_type],
+                            v_internal_corner_type_map_or_position \
+                                [v_internal_corner_type],
                             self_corner_type,
-                            h_opp_corner_type,
-                            v_opp_corner_type,
+                            h_internal_corner_type,
+                            v_internal_corner_type,
                             corner_direction,
                             collision_shapes,
                             occlusion_shapes)
@@ -241,8 +241,8 @@ func _set_inner_tile_shapes_for_quadrants_recursively(
         tile_id: int,
         position_or_map,
         self_corner_type: int,
-        h_opp_corner_type: int,
-        v_opp_corner_type: int,
+        h_internal_corner_type: int,
+        v_internal_corner_type: int,
         corner_direction: int,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
@@ -252,8 +252,8 @@ func _set_inner_tile_shapes_for_quadrants_recursively(
                 tile_id,
                 position_or_map,
                 self_corner_type,
-                h_opp_corner_type,
-                v_opp_corner_type,
+                h_internal_corner_type,
+                v_internal_corner_type,
                 corner_direction,
                 collision_shapes,
                 occlusion_shapes)
@@ -264,8 +264,8 @@ func _set_inner_tile_shapes_for_quadrants_recursively(
                     tile_id,
                     position_or_map[key],
                     self_corner_type,
-                    h_opp_corner_type,
-                    v_opp_corner_type,
+                    h_internal_corner_type,
+                    v_internal_corner_type,
                     corner_direction,
                     collision_shapes,
                     occlusion_shapes)
@@ -276,21 +276,21 @@ func _set_shapes_for_quadrant(
         tile_id: int,
         quadrant_position: Vector2,
         self_corner_type: int,
-        h_opp_corner_type: int,
-        v_opp_corner_type: int,
+        h_internal_corner_type: int,
+        v_internal_corner_type: int,
         corner_direction: int,
         collision_shapes: Dictionary,
         occlusion_shapes: Dictionary) -> void:
     var collision_shape: Shape2D = collision_shapes \
             [corner_direction] \
             [self_corner_type] \
-            [h_opp_corner_type] \
-            [v_opp_corner_type]
+            [h_internal_corner_type] \
+            [v_internal_corner_type]
     var occlusion_shape: OccluderPolygon2D = occlusion_shapes \
             [corner_direction] \
             [self_corner_type] \
-            [h_opp_corner_type] \
-            [v_opp_corner_type]
+            [h_internal_corner_type] \
+            [v_internal_corner_type]
     
     if is_instance_valid(collision_shape):
         tile_set.tile_add_shape(

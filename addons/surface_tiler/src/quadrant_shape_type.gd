@@ -53,17 +53,17 @@ const _NEIGHBOR_TYPES_THAT_WOULD_CLIP_45 := {
 
 static func get_shape_type_for_corner_type(
         corner_type: int,
-        h_opp_corner_type: int,
-        v_opp_corner_type: int) -> int:
+        h_internal_corner_type: int,
+        v_internal_corner_type: int) -> int:
     var is_opposite_corner_clipped_45 := false
-    if h_opp_corner_type != SubtileCorner.UNKNOWN and \
-            v_opp_corner_type != SubtileCorner.UNKNOWN:
+    if h_internal_corner_type != SubtileCorner.UNKNOWN and \
+            v_internal_corner_type != SubtileCorner.UNKNOWN:
         var naive_shape_type_for_h_opp := get_shape_type_for_corner_type(
-                h_opp_corner_type,
+                h_internal_corner_type,
                 SubtileCorner.UNKNOWN,
                 SubtileCorner.UNKNOWN)
         var naive_shape_type_for_v_opp := get_shape_type_for_corner_type(
-                v_opp_corner_type,
+                v_internal_corner_type,
                 SubtileCorner.UNKNOWN,
                 SubtileCorner.UNKNOWN)
         if _NEIGHBOR_TYPES_THAT_WOULD_CLIP_45.has(
