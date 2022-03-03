@@ -87,6 +87,8 @@ var supports_runtime_autotiling: bool
 
 var corner_type_annotation_key_path: String
 
+var implicit_quadrant_connection_color: Color
+
 var tile_set_image_parser: TileSetImageParser
 var subtile_target_corner_calculator: SubtileTargetCornerCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
@@ -118,6 +120,8 @@ func register_manifest(manifest: Dictionary) -> void:
     
     self.corner_type_annotation_key_path = \
             manifest.corner_type_annotation_key_path
+    self.implicit_quadrant_connection_color = \
+            manifest.implicit_quadrant_connection_color
     
     _parse_subtile_corner_key_values()
     

@@ -3,7 +3,7 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
-# FIXME: LEFT OFF HERE: ------------------------------
+# FIXME: LEFT OFF HERE: -------------------------------
 # - LEFT OFF HERE: Adding art to tileset for EXT_90_90_CONCAVE join cases.
 #   - Update this new art to be condensed, and to omit the redundant inner quadrants.
 #     - Configure the implicit connection annotation color, assert that other annotations don't use this color.

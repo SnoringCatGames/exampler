@@ -82,15 +82,8 @@ static func get_is_top(
     var is_corner_direction_top := \
             CornerDirection.get_is_top(corner_direction)
     var does_connection_direction_flip_top := \
-            connection_direction == V_INTERNAL || \
-            connection_direction == D_INTERNAL || \
-            connection_direction == HD_EXTERNAL || \
-            connection_direction == V_EXTERNAL || \
-            connection_direction == VD_EXTERNAL
-    if is_corner_direction_top:
-        return !does_connection_direction_flip_top
-    else:
-        return does_connection_direction_flip_top
+            get_does_connection_direction_flip_top(connection_direction)
+    return is_corner_direction_top != does_connection_direction_flip_top
 
 
 static func get_is_left(
@@ -99,12 +92,23 @@ static func get_is_left(
     var is_corner_direction_left := \
             CornerDirection.get_is_left(corner_direction)
     var does_connection_direction_flip_left := \
-            connection_direction == H_INTERNAL || \
+            get_does_connection_direction_flip_left(connection_direction)
+    return is_corner_direction_left != does_connection_direction_flip_left
+
+
+static func get_does_connection_direction_flip_top(
+        connection_direction: int) -> bool:
+    return connection_direction == V_INTERNAL || \
+            connection_direction == D_INTERNAL || \
+            connection_direction == HD_EXTERNAL || \
+            connection_direction == V_EXTERNAL || \
+            connection_direction == VD_EXTERNAL
+
+
+static func get_does_connection_direction_flip_left(
+        connection_direction: int) -> bool:
+    return connection_direction == H_INTERNAL || \
             connection_direction == D_INTERNAL || \
             connection_direction == H_EXTERNAL || \
             connection_direction == HD_EXTERNAL || \
             connection_direction == VD_EXTERNAL
-    if is_corner_direction_left:
-        return !does_connection_direction_flip_left
-    else:
-        return does_connection_direction_flip_left

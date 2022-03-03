@@ -206,20 +206,29 @@ func _parse_corner_type_annotation(
                     image,
                     path)
     
-    var is_subtile_empty: bool = \
-            connection_types_map \
-                [CornerDirection.TOP_LEFT][ConnectionDirection.SELF] == \
-                SubtileCorner.UNKNOWN and \
-            connection_types_map \
-                [CornerDirection.TOP_RIGHT][ConnectionDirection.SELF] == \
-                SubtileCorner.UNKNOWN and \
-            connection_types_map \
-                [CornerDirection.BOTTOM_LEFT][ConnectionDirection.SELF] == \
-                SubtileCorner.UNKNOWN and \
-            connection_types_map \
-                [CornerDirection.BOTTOM_RIGHT][ConnectionDirection.SELF] == \
-                SubtileCorner.UNKNOWN
-    if is_subtile_empty:
+    var is_tl_empty: bool = connection_types_map \
+            [CornerDirection.TOP_LEFT][ConnectionDirection.SELF] == \
+            SubtileCorner.UNKNOWN
+    var is_tr_empty: bool = connection_types_map \
+            [CornerDirection.TOP_RIGHT][ConnectionDirection.SELF] == \
+            SubtileCorner.UNKNOWN
+    var is_bl_empty: bool = connection_types_map \
+            [CornerDirection.BOTTOM_LEFT][ConnectionDirection.SELF] == \
+            SubtileCorner.UNKNOWN
+    var is_br_empty: bool = connection_types_map \
+            [CornerDirection.BOTTOM_RIGHT][ConnectionDirection.SELF] == \
+            SubtileCorner.UNKNOWN
+    assert(is_tl_empty == is_tr_empty and \
+            is_tl_empty == is_bl_empty and \
+            is_tl_empty == is_br_empty,
+            ("Subtile corner-type annotations must be either all empty or " +
+            "all occupied: %s") % _get_log_string(
+                subtile_position,
+                CornerDirection.TOP_LEFT,
+                ConnectionDirection.SELF,
+                quadrant_size,
+                path))
+    if is_tl_empty:
         for connection_direction in ConnectionDirection.CONNECTIONS:
             for corner_direction in CornerDirection.CORNERS:
                 assert(connection_types_map \
@@ -236,6 +245,9 @@ func _parse_corner_type_annotation(
                             connection_direction,
                             quadrant_size,
                             path))
+    
+    if is_tl_empty:
+        return
     
     for corner_direction in CornerDirection.CORNERS:
         _record_quadrant(
@@ -357,16 +369,16 @@ static func _get_implicit_connection_indicator(
             Sc.logger.error(
                     "TileSetImageParser._get_implicit_connection_indicator")
     
-    if !ConnectionDirection.get_is_top(corner_direction, connection_direction):
+    if !CornerDirection.get_is_top(corner_direction):
         y_offset = quadrant_size - 1 - y_offset
-    if !ConnectionDirection.get_is_left(corner_direction, connection_direction):
+    if !CornerDirection.get_is_left(corner_direction):
         x_offset = quadrant_size - 1 - x_offset
     
     var x := int(quadrant_position.x + x_offset)
     var y := int(quadrant_position.y + y_offset)
     var color := image.get_pixel(x, y)
     
-    return color.a > 0.0
+    return color == Su.subtile_manifest.implicit_quadrant_connection_color
 
 
 static func _get_annotation(
@@ -420,19 +432,18 @@ static func _get_annotation(
         _:
             Sc.logger.error("TileSetImageParser._get_quadrant_annotation")
     
-    var is_left := CornerDirection.get_is_left(corner_direction)
-    var is_top := CornerDirection.get_is_top(corner_direction)
-    
-    if !is_left:
-        region_start.x = quadrant_size - 1 - region_start.x
-    if !is_top:
-        region_start.y = quadrant_size - 1 - region_start.y
+    if !CornerDirection.get_is_left(corner_direction):
+        region_start.x = quadrant_size - ANNOTATION_SIZE - region_start.x
+    if !CornerDirection.get_is_top(corner_direction):
+        region_start.y = quadrant_size - ANNOTATION_SIZE - region_start.y
     
     return _get_annotation_in_region(
             quadrant_position + region_start,
             image,
-            is_top,
-            is_left)
+            ConnectionDirection.get_is_top(
+                corner_direction, connection_direction),
+            ConnectionDirection.get_is_left(
+                corner_direction, connection_direction))
 
 
 static func _get_annotation_in_region(
@@ -491,6 +502,12 @@ static func _get_explicit_connection_type(
             connection_direction,
             quadrant_size,
             image)
+    if connection_direction != ConnectionDirection.SELF and \
+            annotation.color == \
+            Su.subtile_manifest.implicit_quadrant_connection_color.to_rgba32():
+        # Skip any possible explicit-annotation interpretation for the
+        # implicit-annotation color.
+        return SubtileCorner.UNKNOWN
     _validate_tileset_annotation(
             annotation,
             quadrant_position,
@@ -499,6 +516,9 @@ static func _get_explicit_connection_type(
             quadrant_size,
             corner_type_annotation_key,
             path)
+    if annotation.bits == 0:
+        # Empty quadrant.
+        return SubtileCorner.UNKNOWN
     return _get_corner_type_from_annotation(
             annotation,
             corner_type_annotation_key)
@@ -513,19 +533,14 @@ static func _get_implicit_connection_type(
         connection_types_map: Dictionary,
         image: Image,
         path: String) -> int:
-    var is_top := !ConnectionDirection.get_is_top(
-            corner_direction,
-            connection_direction)
-    var is_left := !ConnectionDirection.get_is_left(
-            corner_direction,
-            connection_direction)
-    
     var neighbor_quadrant_corner_direction := corner_direction
-    if !is_top:
+    if ConnectionDirection \
+            .get_does_connection_direction_flip_top(connection_direction):
         neighbor_quadrant_corner_direction = \
                 CornerDirection.get_vertical_flip(
                     neighbor_quadrant_corner_direction)
-    if !is_left:
+    if ConnectionDirection \
+            .get_does_connection_direction_flip_left(connection_direction):
         neighbor_quadrant_corner_direction = \
                 CornerDirection.get_horizontal_flip(
                     neighbor_quadrant_corner_direction)
@@ -535,13 +550,27 @@ static func _get_implicit_connection_type(
     match connection_direction:
         ConnectionDirection.H_INTERNAL, \
         ConnectionDirection.V_INTERNAL, \
-        ConnectionDirection.D_INTERNAL, \
-        ConnectionDirection.HD_EXTERNAL, \
-        ConnectionDirection.VD_EXTERNAL:
+        ConnectionDirection.D_INTERNAL:
             # This neighbor type should already have been parsed.
             return connection_types_map \
                     [neighbor_quadrant_corner_direction] \
                     [ConnectionDirection.SELF]
+        ConnectionDirection.HD_EXTERNAL:
+            # This neighbor type should already have been parsed.
+            neighbor_quadrant_corner_direction = \
+                    CornerDirection.get_horizontal_flip(
+                        neighbor_quadrant_corner_direction)
+            return connection_types_map \
+                    [neighbor_quadrant_corner_direction] \
+                    [ConnectionDirection.H_EXTERNAL]
+        ConnectionDirection.VD_EXTERNAL:
+            # This neighbor type should already have been parsed.
+            neighbor_quadrant_corner_direction = \
+                    CornerDirection.get_vertical_flip(
+                        neighbor_quadrant_corner_direction)
+            return connection_types_map \
+                    [neighbor_quadrant_corner_direction] \
+                    [ConnectionDirection.V_EXTERNAL]
         
         ConnectionDirection.H_EXTERNAL:
             neighbor_quadrant_offset = Vector2(-quadrant_size, 0)
@@ -555,9 +584,9 @@ static func _get_implicit_connection_type(
         _:
             Sc.logger.error("TileSetImageParser._get_implicit_connection_type")
     
-    if !is_top:
+    if !CornerDirection.get_is_top(corner_direction):
         neighbor_quadrant_offset.y *= -1
-    if !is_left:
+    if !CornerDirection.get_is_left(corner_direction):
         neighbor_quadrant_offset.x *= -1
     
     return _get_explicit_connection_type(
@@ -712,15 +741,23 @@ static func _check_for_empty_non_annotation_pixels(
         quadrant_size: int,
         image: Image,
         path: String) -> void:
-    var is_top := CornerDirection.get_is_top(corner_direction)
-    var is_left := CornerDirection.get_is_left(corner_direction)
-    
     var h_side_region_start := Vector2(
             quadrant_size - ANNOTATION_SIZE,
             ANNOTATION_SIZE)
     var v_side_region_start := Vector2(
             ANNOTATION_SIZE,
             quadrant_size - ANNOTATION_SIZE)
+    
+    if !CornerDirection.get_is_top(corner_direction):
+        h_side_region_start.y = \
+                quadrant_size - ANNOTATION_SIZE - h_side_region_start.y
+        v_side_region_start.y = \
+                quadrant_size - ANNOTATION_SIZE - v_side_region_start.y
+    if !CornerDirection.get_is_left(corner_direction):
+        h_side_region_start.x = \
+                quadrant_size - ANNOTATION_SIZE - h_side_region_start.x
+        v_side_region_start.x = \
+                quadrant_size - ANNOTATION_SIZE - v_side_region_start.x
     
     var h_side_region := Rect2(
             h_side_region_start,
@@ -784,6 +821,22 @@ static func _validate_annotation_key_annotation(
                 quadrant_size,
                 path))
     
+    assert(color != \
+            Su.subtile_manifest.implicit_quadrant_connection_color.to_rgba32(),
+            ("A corner-type annotation cannot use the color that's " +
+            "configured as the implicit_quadrant_connection_color: " +
+            "color=%s, implicit_connection_color=%s, %s") % [
+                Color(color).to_html(),
+                Color(Su.subtile_manifest.implicit_quadrant_connection_color) \
+                    .to_html(),
+                _get_log_string(
+                    quadrant_position,
+                    CornerDirection.TOP_LEFT,
+                    ConnectionDirection.SELF,
+                    quadrant_size,
+                    path),
+            ])
+    
     if quadrant_position == Vector2.ZERO:
         assert(bits == 0,
                 "The first corner-type annotation in the " +
@@ -818,9 +871,6 @@ static func _validate_tileset_annotation(
         quadrant_size: int,
         corner_type_annotation_key: Dictionary,
         path: String) -> void:
-    var bits: int = annotation.bits
-    var color: int = annotation.color
-    
     assert(annotation.color >= 0,
             ("Each corner-type annotation should use only a single color: %s") %
             _get_log_string(
@@ -830,18 +880,12 @@ static func _validate_tileset_annotation(
                 quadrant_size,
                 path))
     
-    if !connection_direction != ConnectionDirection.SELF and \
-            bits == 0:
-        # Only the quadrant's self annotation is required.
-        return
+    var bits: int = annotation.bits
+    var color: int = annotation.color
     
-    assert(bits != 0, "Self corner-type annotations cannot be empty: %s" % 
-            _get_log_string(
-                quadrant_position,
-                corner_direction,
-                connection_direction,
-                quadrant_size,
-                path))
+    if annotation.bits == 0:
+        # Empty quadrant.
+        return
     
     assert(corner_type_annotation_key.has(color),
             ("Annotation color doesn't match the annotation key: " +
