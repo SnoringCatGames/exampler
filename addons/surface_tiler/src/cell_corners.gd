@@ -129,13 +129,105 @@ func _init(proximity: CellProximity) -> void:
         self.external_br_r2 = SubtileCorner.EMPTY
 
 
+func get_corner_type(
+        corner_direction: int,
+        connection_direction := ConnectionDirection.SELF) -> int:
+    match [corner_direction, connection_direction]:
+        [CornerDirection.TOP_LEFT, ConnectionDirection.SELF]:
+            return top_left
+        [CornerDirection.TOP_LEFT, ConnectionDirection.H_INTERNAL]:
+            return top_right
+        [CornerDirection.TOP_LEFT, ConnectionDirection.V_INTERNAL]:
+            return bottom_left
+        [CornerDirection.TOP_LEFT, ConnectionDirection.D_INTERNAL]:
+            return bottom_right
+        [CornerDirection.TOP_LEFT, ConnectionDirection.H_EXTERNAL]:
+            return external_tl_l
+        [CornerDirection.TOP_LEFT, ConnectionDirection.H2_EXTERNAL]:
+            return external_tl_l2
+        [CornerDirection.TOP_LEFT, ConnectionDirection.HD_EXTERNAL]:
+            return external_bl_l
+        [CornerDirection.TOP_LEFT, ConnectionDirection.V_EXTERNAL]:
+            return external_tl_t
+        [CornerDirection.TOP_LEFT, ConnectionDirection.V2_EXTERNAL]:
+            return external_tl_t2
+        [CornerDirection.TOP_LEFT, ConnectionDirection.VD_EXTERNAL]:
+            return external_tr_t
+        
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.SELF]:
+            return top_right
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.H_INTERNAL]:
+            return top_left
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.V_INTERNAL]:
+            return bottom_right
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.D_INTERNAL]:
+            return bottom_left
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.H_EXTERNAL]:
+            return external_tr_r
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.H2_EXTERNAL]:
+            return external_tr_r2
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.HD_EXTERNAL]:
+            return external_br_r
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.V_EXTERNAL]:
+            return external_tr_t
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.V2_EXTERNAL]:
+            return external_tr_t2
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.VD_EXTERNAL]:
+            return external_tl_t
+        
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.SELF]:
+            return bottom_left
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.H_INTERNAL]:
+            return bottom_right
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.V_INTERNAL]:
+            return top_left
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.D_INTERNAL]:
+            return top_right
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.H_EXTERNAL]:
+            return external_bl_l
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.H2_EXTERNAL]:
+            return external_bl_l2
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.HD_EXTERNAL]:
+            return external_tl_l
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.V_EXTERNAL]:
+            return external_bl_b
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.V2_EXTERNAL]:
+            return external_bl_b2
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.VD_EXTERNAL]:
+            return external_br_b
+        
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.SELF]:
+            return bottom_right
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.H_INTERNAL]:
+            return bottom_left
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.V_INTERNAL]:
+            return top_right
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.D_INTERNAL]:
+            return top_left
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.H_EXTERNAL]:
+            return external_br_r
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.H2_EXTERNAL]:
+            return external_br_r2
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.HD_EXTERNAL]:
+            return external_tr_r
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.V_EXTERNAL]:
+            return external_br_b
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.V2_EXTERNAL]:
+            return external_br_b2
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.VD_EXTERNAL]:
+            return external_bl_b
+        
+        _:
+            Sc.logger.error("CellCorners.get_corner_type")
+            return SubtileCorner.UNKNOWN
+
+
 func to_string(uses_newlines := false) -> String:
     var corner_strings := []
-    for corner_directions in [
-            CornerDirection.OUTBOUND_CORNERS,
-            CornerDirection.EXTERNAL_CORNERS]:
-        for corner_direction in corner_directions:
-            var corner_type: int = get_corner_type(corner_direction)
+    for connection_direction in ConnectionDirection.DISTINCT_CONNECTIONS:
+        for corner_direction in CornerDirection.CORNERS:
+            var corner_type := \
+                    get_corner_type(corner_direction, connection_direction)
             var corner_direction_string := \
                     CornerDirection.get_string(corner_direction)
             var corner_type_string: String = \
@@ -152,210 +244,11 @@ func to_string(uses_newlines := false) -> String:
 
 
 func get_are_corners_valid() -> bool:
-    for corner_directions in [
-            CornerDirection.OUTBOUND_CORNERS,
-            CornerDirection.EXTERNAL_CORNERS]:
-        for corner_direction in corner_directions:
-            var corner_type: int = get_corner_type(corner_direction)
+    for connection_direction in ConnectionDirection.DISTINCT_CONNECTIONS:
+        for corner_direction in CornerDirection.CORNERS:
+            var corner_type := \
+                    get_corner_type(corner_direction, connection_direction)
             if corner_type == SubtileCorner.ERROR or \
                     corner_type == SubtileCorner.UNKNOWN:
                 return false
     return true
-
-
-func get_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return top_left
-        CornerDirection.TOP_RIGHT:
-            return top_right
-        CornerDirection.BOTTOM_LEFT:
-            return bottom_left
-        CornerDirection.BOTTOM_RIGHT:
-            return bottom_right
-        CornerDirection.EXTERNAL_TL_T:
-            return external_tl_t
-        CornerDirection.EXTERNAL_TL_L:
-            return external_tl_l
-        CornerDirection.EXTERNAL_TR_T:
-            return external_tr_t
-        CornerDirection.EXTERNAL_TR_R:
-            return external_tr_r
-        CornerDirection.EXTERNAL_BL_B:
-            return external_bl_b
-        CornerDirection.EXTERNAL_BL_L:
-            return external_bl_l
-        CornerDirection.EXTERNAL_BR_B:
-            return external_br_b
-        CornerDirection.EXTERNAL_BR_R:
-            return external_br_r
-        CornerDirection.EXTERNAL_TL_T2:
-            return external_tl_t2
-        CornerDirection.EXTERNAL_TL_L2:
-            return external_tl_l2
-        CornerDirection.EXTERNAL_TR_T2:
-            return external_tr_t2
-        CornerDirection.EXTERNAL_TR_R2:
-            return external_tr_r2
-        CornerDirection.EXTERNAL_BL_B2:
-            return external_bl_b2
-        CornerDirection.EXTERNAL_BL_L2:
-            return external_bl_l2
-        CornerDirection.EXTERNAL_BR_B2:
-            return external_br_b2
-        CornerDirection.EXTERNAL_BR_R2:
-            return external_br_r2
-        CornerDirection.EXTERNAL_TL_TD:
-            return external_tr_t
-        CornerDirection.EXTERNAL_TL_LD:
-            return external_bl_l
-        CornerDirection.EXTERNAL_TR_TD:
-            return external_tl_t
-        CornerDirection.EXTERNAL_TR_RD:
-            return external_br_r
-        CornerDirection.EXTERNAL_BL_BD:
-            return external_br_b
-        CornerDirection.EXTERNAL_BL_LD:
-            return external_tl_l
-        CornerDirection.EXTERNAL_BR_BD:
-            return external_bl_b
-        CornerDirection.EXTERNAL_BR_RD:
-            return external_tr_r
-        _:
-            Sc.logger.error("CellCorners.get_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_h_internal_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return top_right
-        CornerDirection.TOP_RIGHT:
-            return top_left
-        CornerDirection.BOTTOM_LEFT:
-            return bottom_right
-        CornerDirection.BOTTOM_RIGHT:
-            return bottom_left
-        _:
-            Sc.logger.error("CellCorners.get_h_internal_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_v_internal_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return bottom_left
-        CornerDirection.TOP_RIGHT:
-            return bottom_right
-        CornerDirection.BOTTOM_LEFT:
-            return top_left
-        CornerDirection.BOTTOM_RIGHT:
-            return top_right
-        _:
-            Sc.logger.error("CellCorners.get_v_internal_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_h_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_tl_l
-        CornerDirection.TOP_RIGHT:
-            return external_tr_r
-        CornerDirection.BOTTOM_LEFT:
-            return external_bl_l
-        CornerDirection.BOTTOM_RIGHT:
-            return external_br_r
-        _:
-            Sc.logger.error("CellCorners.get_h_external_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_v_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_tl_t
-        CornerDirection.TOP_RIGHT:
-            return external_tr_t
-        CornerDirection.BOTTOM_LEFT:
-            return external_bl_b
-        CornerDirection.BOTTOM_RIGHT:
-            return external_br_b
-        _:
-            Sc.logger.error("CellCorners.get_v_external_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_d_internal_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return bottom_right
-        CornerDirection.TOP_RIGHT:
-            return bottom_left
-        CornerDirection.BOTTOM_LEFT:
-            return top_right
-        CornerDirection.BOTTOM_RIGHT:
-            return top_left
-        _:
-            Sc.logger.error("CellCorners.get_d_internal_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_h2_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_tl_l2
-        CornerDirection.TOP_RIGHT:
-            return external_tr_r2
-        CornerDirection.BOTTOM_LEFT:
-            return external_bl_l2
-        CornerDirection.BOTTOM_RIGHT:
-            return external_br_r2
-        _:
-            Sc.logger.error("CellCorners.get_h2_external_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_v2_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_tl_t2
-        CornerDirection.TOP_RIGHT:
-            return external_tr_t2
-        CornerDirection.BOTTOM_LEFT:
-            return external_bl_b2
-        CornerDirection.BOTTOM_RIGHT:
-            return external_br_b2
-        _:
-            Sc.logger.error("CellCorners.get_v2_external_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_hd_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_bl_l
-        CornerDirection.TOP_RIGHT:
-            return external_br_r
-        CornerDirection.BOTTOM_LEFT:
-            return external_tl_l
-        CornerDirection.BOTTOM_RIGHT:
-            return external_tr_r
-        _:
-            Sc.logger.error("CellCorners.get_hd_external_corner_type")
-            return SubtileCorner.UNKNOWN
-
-
-func get_vd_external_corner_type(corner_direction: int) -> int:
-    match corner_direction:
-        CornerDirection.TOP_LEFT:
-            return external_tr_t
-        CornerDirection.TOP_RIGHT:
-            return external_tl_t
-        CornerDirection.BOTTOM_LEFT:
-            return external_br_b
-        CornerDirection.BOTTOM_RIGHT:
-            return external_bl_b
-        _:
-            Sc.logger.error("CellCorners.get_vd_external_corner_type")
-            return SubtileCorner.UNKNOWN

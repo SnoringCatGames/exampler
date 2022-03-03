@@ -8,6 +8,7 @@ extends Node
 #   - Update this new art to be condensed, and to omit the redundant inner quadrants.
 #     - Configure the implicit connection annotation color, assert that other annotations don't use this color.
 #     - Add an assert when an implicit connection annotation is found, that no other non-implicit or other colored pixels in that annotation region are present.
+# - Rename TileSetImageParser to TilesetAnnotationsParser.
 # - Add a new feature: CornerConnectionWeightMultipliers
 #   - This is needed for breaking ties when two quadrants have different
 #     connections with equal weight.

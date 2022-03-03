@@ -74,20 +74,30 @@ func get_quadrants(
     var quadrant_positions := []
     quadrant_positions.resize(4)
     
-    for i in CornerDirection.OUTBOUND_CORNERS.size():
-        var corner_direction: int = CornerDirection.OUTBOUND_CORNERS[i]
+    for i in CornerDirection.CORNERS.size():
+        var corner_direction: int = CornerDirection.CORNERS[i]
         
         var corner_types := [
-            target_corners.get_corner_type(corner_direction),
-            target_corners.get_h_internal_corner_type(corner_direction),
-            target_corners.get_v_internal_corner_type(corner_direction),
-            target_corners.get_h_external_corner_type(corner_direction),
-            target_corners.get_v_external_corner_type(corner_direction),
-            target_corners.get_d_internal_corner_type(corner_direction),
-            target_corners.get_h2_external_corner_type(corner_direction),
-            target_corners.get_v2_external_corner_type(corner_direction),
-            target_corners.get_hd_external_corner_type(corner_direction),
-            target_corners.get_vd_external_corner_type(corner_direction),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.SELF),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.H_INTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.V_INTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.H_EXTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.V_EXTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.D_INTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.H2_EXTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.V2_EXTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.HD_EXTERNAL),
+            target_corners.get_corner_type(
+                    corner_direction, ConnectionDirection.VD_EXTERNAL),
         ]
         
         var best_position_and_weight := _get_best_quadrant_match(

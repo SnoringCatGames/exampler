@@ -339,6 +339,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/confirm_data_deletion_screen_with_analytics.gd"
 }, {
+"base": "Reference",
+"class": "ConnectionDirection",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/connection_direction.gd"
+}, {
 "base": "ValidEdgeTrajectoryLegendItem",
 "class": "ContinuousEdgeTrajectoryLegendItem",
 "language": "GDScript",
@@ -2296,6 +2301,7 @@ _global_script_class_icons={
 "ColorParamsType": "",
 "ConfirmDataDeletionScreenLocal": "",
 "ConfirmDataDeletionScreenWithAnalytics": "",
+"ConnectionDirection": "",
 "ContinuousEdgeTrajectoryLegendItem": "",
 "ControlRow": "",
 "CornerDirection": "",

@@ -159,7 +159,7 @@ func _create_shape_type_to_shapes(tile_set_config: Dictionary) -> Dictionary:
         var corner_direction_to_shapes := {}
         shape_type_to_shapes[shape_type] = corner_direction_to_shapes
         
-        for corner_direction in CornerDirection.OUTBOUND_CORNERS:
+        for corner_direction in CornerDirection.CORNERS:
             var vertices := _get_shape_vertices(
                     shape_type,
                     corner_direction,
