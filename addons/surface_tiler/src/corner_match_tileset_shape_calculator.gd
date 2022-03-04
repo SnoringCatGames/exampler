@@ -10,9 +10,9 @@ extends Node
 #     Dictionary<
 #       SubtileCorner, # Self-corner
 #       Dictionary<
-#         SubtileCorner, # H-opp-corner
+#         SubtileCorner, # H-internal-corner
 #         Dictionary<
-#           SubtileCorner, # V-opp-corner
+#           SubtileCorner, # V-internal-corner
 #           (Shape2D|OccluderPolygon2D)>>>>>
 func create_tileset_shapes(
         subtile_corner_types: Dictionary,

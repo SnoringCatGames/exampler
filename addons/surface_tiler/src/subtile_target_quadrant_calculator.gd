@@ -127,55 +127,18 @@ func get_quadrants(
     return tileset.clear_quadrants
 
 
-func _get_debug_types(
-        debug_subtile_position: Vector2,
-        debug_corner_direction: int,
-        current_corner_direction: int,
-        tileset: CornerMatchTileset) -> Array:
-    return Su.subtile_manifest.annotations_parser.parse_quadrant(
-                debug_subtile_position * tileset.get_inner_cell_size().x * 2,
-                debug_corner_direction,
-                tileset.get_inner_cell_size().x,
-                tileset._config.tileset_corner_type_annotations_path,
-                tileset.corner_type_annotation_key) if \
-            debug_subtile_position != Vector2.INF and \
-                current_corner_direction == debug_corner_direction else \
-            []
-
-
 # Array<Vector2, float, Dictionary, Dictionary, ...>
 func _get_best_quadrant_match(
         corner_type_map_or_position,
         target_corner_types: Array,
-        i: int,
+        index: int,
         weight: float,
         corner_direction: int,
         debug_types := []) -> Array:
-    var iteration_exponent: int
-    match i:
-        0: iteration_exponent = 0
-        1, 2: iteration_exponent = 1
-        3, 4, 5, 6, 7, 8, 9: iteration_exponent = 2
-        _:
-            Sc.logger.error("CornerMatchTileset._get_best_quadrant_match")
-    var current_iteration_weight_multiplier := \
-            1000.0 / pow(1000,iteration_exponent)
-    var is_external_iteration := i > 2 and i != 5
-    var is_h_neighbor := i == 1 or i == 3
-    var is_v_neighbor := i == 2 or i == 4
-    var is_d_neighbor := i == 5 or i == 8 or i == 9
-    var is_2_neighbor := i == 6 or i == 7
-    var target_corner_type: int = target_corner_types[i]
-    
-    var side_label: String
-    if is_d_neighbor or is_2_neighbor:
-        side_label = ""
-    elif is_h_neighbor:
-        side_label = "side"
-    elif CornerDirection.get_is_top(corner_direction) == is_external_iteration:
-        side_label = "top"
-    else:
-        side_label = "bottom"
+    var target_corner_type: int = target_corner_types[index]
+    var iteration_weight_multiplier := _get_iteration_weight_multiplier(index)
+    var connection_weight_multiplier_label := \
+            _get_connection_weight_multiplier_label(index, corner_direction)
     
     var best_position_and_weight := [Vector2.INF, -INF]
     var best_weight_contribution := -INF
@@ -186,8 +149,8 @@ func _get_best_quadrant_match(
         # Consider direct corner-type matches.
         
         var is_debug_match: bool = \
-                debug_types.size() > i and \
-                debug_types[i] == target_corner_type
+                debug_types.size() > index and \
+                debug_types[index] == target_corner_type
         # Stop debugging in recursive iterations if this wasn't a match.
         var recursive_debug_types := \
                 debug_types if \
@@ -197,11 +160,11 @@ func _get_best_quadrant_match(
         var direct_match_corner_type_map_or_position = \
                 corner_type_map_or_position[target_corner_type]
         var direct_match_weight_contribution := \
-                current_iteration_weight_multiplier
+                iteration_weight_multiplier
         var connection_weight_multiplier := \
                 CornerConnectionWeightMultipliers.get_multiplier(
                     target_corner_type,
-                    side_label)
+                    connection_weight_multiplier_label)
         var direct_match_weight := \
                 weight + \
                 direct_match_weight_contribution * \
@@ -219,7 +182,7 @@ func _get_best_quadrant_match(
             direct_match_position_and_weight = _get_best_quadrant_match(
                     direct_match_corner_type_map_or_position,
                     target_corner_types,
-                    i + 1,
+                    index + 1,
                     direct_match_weight,
                     corner_direction,
                     recursive_debug_types)
@@ -231,18 +194,18 @@ func _get_best_quadrant_match(
         
         if is_debug_match:
             Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
-                Sc.utils.get_spaces(i * 2),
-                str(i),
+                Sc.utils.get_spaces(index * 2),
+                str(index),
                 Su.subtile_manifest.get_subtile_corner_string(target_corner_type),
                 "direct_match",
                 direct_match_weight_contribution,
                 direct_match_weight,
             ])
     
-    if i == 0 or \
+    if index == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
         best_position_and_weight.resize(12)
-        best_position_and_weight[i + 2] = {
+        best_position_and_weight[index + 2] = {
             weight_contribution = best_weight_contribution,
             corner_type = best_type,
             match_label = best_match_label,
@@ -253,8 +216,8 @@ func _get_best_quadrant_match(
         # Consider the UNKNOWN value as a fallback.
         
         var is_debug_match: bool = \
-                debug_types.size() > i and \
-                debug_types[i] == SubtileCorner.UNKNOWN
+                debug_types.size() > index and \
+                debug_types[index] == SubtileCorner.UNKNOWN
         # Stop debugging in recursive iterations if this wasn't a match.
         var recursive_debug_types := \
                 debug_types if \
@@ -264,7 +227,7 @@ func _get_best_quadrant_match(
         var fallback_corner_type_map_or_position = \
                 corner_type_map_or_position[SubtileCorner.UNKNOWN]
         var fallback_weight_contribution := \
-                current_iteration_weight_multiplier * 0.1
+                iteration_weight_multiplier * 0.1
         var fallback_weight := weight + fallback_weight_contribution
         
         var fallback_position_and_weight: Array
@@ -279,7 +242,7 @@ func _get_best_quadrant_match(
             fallback_position_and_weight = _get_best_quadrant_match(
                     fallback_corner_type_map_or_position,
                     target_corner_types,
-                    i + 1,
+                    index + 1,
                     fallback_weight,
                     corner_direction,
                     recursive_debug_types)
@@ -292,121 +255,177 @@ func _get_best_quadrant_match(
         
         if is_debug_match:
             Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
-                Sc.utils.get_spaces(i * 2),
-                str(i),
+                Sc.utils.get_spaces(index * 2),
+                str(index),
                 Su.subtile_manifest.get_subtile_corner_string(SubtileCorner.UNKNOWN),
                 "unknown_match",
                 fallback_weight_contribution,
                 fallback_weight,
             ])
     
-    # FIXME: LEFT OFF HERE: -----------------------------------------
-    # - Should internal and external diagonal connections have configurable
-    #   fallbacks?
-    if !is_d_neighbor and !is_2_neighbor:
-        # Consider all explicitly configured fallbacks.
-        var fallbacks_for_corner_type: Dictionary = \
-                FallbackSubtileCorners.FALLBACKS[target_corner_type]
-        for fallback_corner_type in fallbacks_for_corner_type:
-            var fallback_multipliers: Array = \
-                    fallbacks_for_corner_type[fallback_corner_type]
-            var fallback_corner_weight_multiplier: float
-            if is_external_iteration:
-                if is_h_neighbor:
-                    fallback_corner_weight_multiplier = fallback_multipliers[2]
-                else:
-                    fallback_corner_weight_multiplier = fallback_multipliers[3]
+    # Consider all explicitly configured fallbacks.
+    var fallbacks_for_corner_type: Dictionary = \
+            FallbackSubtileCorners.FALLBACKS[target_corner_type]
+    for fallback_corner_type in fallbacks_for_corner_type:
+        var fallback_corner_weight_multiplier := \
+                _get_fallback_weight_multiplier(
+                    fallbacks_for_corner_type[fallback_corner_type],
+                    index)
+        
+        if fallback_corner_weight_multiplier <= 0.0:
+            # Skip this fallback, since it is for the other direction.
+            continue
+        
+        var connection_weight_multiplier := \
+                CornerConnectionWeightMultipliers.get_multiplier(
+                    fallback_corner_type,
+                    connection_weight_multiplier_label)
+        fallback_corner_weight_multiplier *= connection_weight_multiplier
+        
+        if fallback_corner_weight_multiplier < 1.0:
+            # -   If the weight-multiplier is less than 1.0, then we should
+            #     prefer mappings that use UNKNOWN values.
+            # -   This offset ensures that a non-unknown fallback will
+            #     counter the weight contributed by any match from the other
+            #     direction.
+            fallback_corner_weight_multiplier = \
+                    (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * 0.1
+        else:
+            fallback_corner_weight_multiplier *= 1.0
+        
+        if corner_type_map_or_position.has(fallback_corner_type):
+            # There is a quadrant configured for this fallback corner-type.
+            
+            var is_debug_match: bool = \
+                    debug_types.size() > index and \
+                    debug_types[index] == fallback_corner_type
+            # Stop debugging in recursive iterations if this wasn't a match.
+            var recursive_debug_types := \
+                    debug_types if \
+                    is_debug_match else \
+                    []
+            
+            var fallback_corner_type_map_or_position = \
+                    corner_type_map_or_position[fallback_corner_type]
+            var fallback_weight_contribution := \
+                    iteration_weight_multiplier * \
+                    fallback_corner_weight_multiplier
+            var fallback_weight := weight + fallback_weight_contribution
+            
+            var fallback_position_and_weight: Array
+            if fallback_corner_type_map_or_position is Vector2:
+                # Base case: We found a position.
+                fallback_position_and_weight = [
+                    fallback_corner_type_map_or_position,
+                    fallback_weight,
+                ]
             else:
-                if is_h_neighbor:
-                    fallback_corner_weight_multiplier = fallback_multipliers[0]
-                else:
-                    fallback_corner_weight_multiplier = fallback_multipliers[1]
-            
-            if fallback_corner_weight_multiplier <= 0.0:
-                # Skip this fallback, since it is for the other direction.
-                continue
-            
-            var connection_weight_multiplier := \
-                    CornerConnectionWeightMultipliers.get_multiplier(
-                        fallback_corner_type,
-                        side_label)
-            fallback_corner_weight_multiplier *= connection_weight_multiplier
-            
-            if fallback_corner_weight_multiplier < 1.0:
-                # -   If the weight-multiplier is less than 1.0, then we should
-                #     prefer mappings that use UNKNOWN values.
-                # -   This offset ensures that a non-unknown fallback will
-                #     counter the weight contributed by any match from the other
-                #     direction.
-                fallback_corner_weight_multiplier = \
-                        (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * 0.1
-            else:
-                fallback_corner_weight_multiplier *= 1.0
-            
-            if corner_type_map_or_position.has(fallback_corner_type):
-                # There is a quadrant configured for this fallback corner-type.
-                
-                var is_debug_match: bool = \
-                        debug_types.size() > i and \
-                        debug_types[i] == fallback_corner_type
-                # Stop debugging in recursive iterations if this wasn't a match.
-                var recursive_debug_types := \
-                        debug_types if \
-                        is_debug_match else \
-                        []
-                
-                var fallback_corner_type_map_or_position = \
-                        corner_type_map_or_position[fallback_corner_type]
-                var fallback_weight_contribution := \
-                        current_iteration_weight_multiplier * \
-                        fallback_corner_weight_multiplier
-                var fallback_weight := weight + fallback_weight_contribution
-                
-                var fallback_position_and_weight: Array
-                if fallback_corner_type_map_or_position is Vector2:
-                    # Base case: We found a position.
-                    fallback_position_and_weight = [
+                # Recursive case: We found another mapping to consider.
+                fallback_position_and_weight = _get_best_quadrant_match(
                         fallback_corner_type_map_or_position,
+                        target_corner_types,
+                        index + 1,
                         fallback_weight,
-                    ]
-                else:
-                    # Recursive case: We found another mapping to consider.
-                    fallback_position_and_weight = _get_best_quadrant_match(
-                            fallback_corner_type_map_or_position,
-                            target_corner_types,
-                            i + 1,
-                            fallback_weight,
-                            corner_direction,
-                            recursive_debug_types)
-                
-                var fallback_match_label := \
-                        "good_fallback_match" if \
-                        fallback_weight_contribution > 0 else \
-                        "bad_fallback_match"
-                
-                if fallback_position_and_weight[1] > best_position_and_weight[1]:
-                    best_position_and_weight = fallback_position_and_weight
-                    best_weight_contribution = fallback_weight_contribution
-                    best_type = fallback_corner_type
-                    best_match_label = fallback_match_label
-                
-                if is_debug_match:
-                    Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
-                        Sc.utils.get_spaces(i * 2),
-                        str(i),
-                        Su.subtile_manifest.get_subtile_corner_string(fallback_corner_type),
-                        fallback_match_label,
-                        fallback_weight_contribution,
-                        fallback_weight,
-                    ])
+                        corner_direction,
+                        recursive_debug_types)
+            
+            var fallback_match_label := \
+                    "good_fallback_match" if \
+                    fallback_weight_contribution > 0 else \
+                    "bad_fallback_match"
+            
+            if fallback_position_and_weight[1] > best_position_and_weight[1]:
+                best_position_and_weight = fallback_position_and_weight
+                best_weight_contribution = fallback_weight_contribution
+                best_type = fallback_corner_type
+                best_match_label = fallback_match_label
+            
+            if is_debug_match:
+                Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
+                    Sc.utils.get_spaces(index * 2),
+                    str(index),
+                    Su.subtile_manifest.get_subtile_corner_string(fallback_corner_type),
+                    fallback_match_label,
+                    fallback_weight_contribution,
+                    fallback_weight,
+                ])
     
     best_position_and_weight.resize(12)
-    best_position_and_weight[i + 2] = {
+    best_position_and_weight[index + 2] = {
         weight_contribution = best_weight_contribution,
         corner_type = best_type,
         match_label = best_match_label,
     }
     return best_position_and_weight
+
+
+func _get_debug_types(
+        debug_subtile_position: Vector2,
+        debug_corner_direction: int,
+        current_corner_direction: int,
+        tileset: CornerMatchTileset) -> Array:
+    return Su.subtile_manifest.annotations_parser.parse_quadrant(
+                debug_subtile_position * tileset.get_inner_cell_size().x * 2,
+                debug_corner_direction,
+                tileset.get_inner_cell_size().x,
+                tileset._config.tileset_corner_type_annotations_path,
+                tileset.corner_type_annotation_key) if \
+            debug_subtile_position != Vector2.INF and \
+                current_corner_direction == debug_corner_direction else \
+            []
+
+
+func _get_fallback_weight_multiplier(
+        fallback_multipliers: Array,
+        index: int) -> float:
+    var is_external_iteration := index > 2 and index != 5
+    var is_h_neighbor := index == 1 or index == 3 or index == 6
+    var is_v_neighbor := index == 2 or index == 4 or index == 7
+    var is_d_neighbor := index == 5 or index == 8 or index == 9
+    if is_external_iteration:
+        if is_d_neighbor:
+            return fallback_multipliers[5]
+        elif is_h_neighbor:
+            return fallback_multipliers[2]
+        else:
+            return fallback_multipliers[3]
+    else:
+        if is_d_neighbor:
+            return fallback_multipliers[4]
+        elif is_h_neighbor:
+            return fallback_multipliers[0]
+        else:
+            return fallback_multipliers[1]
+
+
+func _get_connection_weight_multiplier_label(
+        index: int,
+        corner_direction: int) -> String:
+    var is_external_iteration := index > 2 and index != 5
+    var is_h_neighbor := index == 1 or index == 3 or index == 6
+    var is_v_neighbor := index == 2 or index == 4 or index == 7
+    var is_d_neighbor := index == 5 or index == 8 or index == 9
+    var connection_weight_multiplier_label: String
+    if is_d_neighbor:
+        return "diagonal"
+    elif is_h_neighbor:
+        return "side"
+    elif CornerDirection.get_is_top(corner_direction) == is_external_iteration:
+        return "top"
+    else:
+        return "bottom"
+
+
+func _get_iteration_weight_multiplier(index) -> float:
+    var iteration_exponent: int
+    match index:
+        0: iteration_exponent = 0
+        1, 2: iteration_exponent = 1
+        3, 4, 5, 6, 7, 8, 9: iteration_exponent = 2
+        _:
+            Sc.logger.error(
+                "CornerMatchTileset._get_iteration_weight_multiplier")
+    return 1000.0 / pow(1000.0,iteration_exponent)
 
 
 func _print_subtile_corner_types(
@@ -538,25 +557,13 @@ func _print_subtile_connection_entry(
         if fallback_weight >= 0:
             fallback_weight_string = "%.2f" % fallback_weight
             
-            var is_external_iteration := index > 2 and index != 5
-            var is_h_neighbor := index == 1 or index == 3
-            var is_v_neighbor := index == 2 or index == 4
-            var is_d_neighbor := index == 5 or index == 8 or index == 9
-            var is_2_neighbor := index == 6 or index == 7
-            var side_label: String
-            if is_d_neighbor or is_2_neighbor:
-                side_label = ""
-            elif is_h_neighbor:
-                side_label = "side"
-            elif CornerDirection.get_is_top(target_corner_direction) == \
-                    is_external_iteration:
-                side_label = "top"
-            else:
-                side_label = "bottom"
+            var connection_weight_multiplier_label := \
+                    _get_connection_weight_multiplier_label(
+                        index, target_corner_direction)
             var connection_weight_multiplier := \
                     CornerConnectionWeightMultipliers.get_multiplier(
                         target_connection_type,
-                        side_label)
+                        connection_weight_multiplier_label)
             connection_weight_string = \
                     "[%.2f]" % connection_weight_multiplier
         else:

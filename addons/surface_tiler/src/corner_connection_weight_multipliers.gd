@@ -19,14 +19,15 @@ const MULTIPLIERS := {
         top = 1.0,
         side = 1.0,
         bottom = 0.4,
+        diagonal = 1.0,
     },
     SubtileCorner.EXT_90V: {
         top = 1.0,
         side = 0.4,
         bottom = 1.0,
+        diagonal = 1.0,
     },
     SubtileCorner.EXT_45_H_SIDE: 0.9,
-    # FIXME: LEFT OFF HERE: ----------------------- ...
 }
 
 

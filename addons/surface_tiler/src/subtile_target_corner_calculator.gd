@@ -3,12 +3,7 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
-# FIXME: LEFT OFF HERE: -------------------------------
-# - Add diagonal fallback weights.
-#   - Or can I try to be clever and automatically use the higher of h/v internal?
-# - Add logic to use diagonal fallback weights, and logic to use h/v-external
-#   weights for h2/v2-external connections.
-# 
+# FIXME: LEFT OFF HERE: --------------------------------
 # - Fix the current more-glaring regressions in quadrant selections.
 # - Go through the tile-set and remove redundant quadrants.
 #   - Use the new support for explicit internal connection annotations.

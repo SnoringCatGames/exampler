@@ -16,8 +16,8 @@ var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 1.0
 # NOTE: These values should be between 0 and 1, exclusive.
 var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
     # NOTE: We need UNKNOWNs to match with high weight, so that a mapping
-    #       without inbound corners will rank higher than a mapping with the
-    #       wrong inbound corners.
+    #       without external corners will rank higher than a mapping with the
+    #       wrong external corners.
     SubtileDepth.UNKNOWN: {
         SubtileDepth.UNKNOWN: 0.9,
         SubtileDepth.EXTERIOR: 0.9,
@@ -247,7 +247,8 @@ func _validate_fallback_subtile_corners() -> void:
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
             assert(fallback_multipliers is Array)
             assert(fallback_multipliers.size() == 2 or \
-                    fallback_multipliers.size() == 4)
+                    fallback_multipliers.size() == 4 or \
+                    fallback_multipliers.size() == 6)
             for multiplier in fallback_multipliers:
                 assert(multiplier is float)
                 assert(multiplier >= 0.0 and multiplier <= 1.0)
@@ -259,9 +260,15 @@ func _populate_abridged_fallback_multipliers() -> void:
             var fallback_multipliers: Array = \
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
             if fallback_multipliers.size() == 2:
-                fallback_multipliers.resize(4)
+                fallback_multipliers.resize(6)
                 fallback_multipliers[2] = fallback_multipliers[1]
                 fallback_multipliers[3] = fallback_multipliers[0]
+                fallback_multipliers[4] = 0.0
+                fallback_multipliers[5] = 0.0
+            elif fallback_multipliers.size() == 4:
+                fallback_multipliers.resize(6)
+                fallback_multipliers[4] = 0.0
+                fallback_multipliers[5] = 0.0
 
 
 func _record_reverse_fallbacks() -> void:
@@ -275,7 +282,7 @@ func _record_reverse_fallbacks() -> void:
                 reverse_map[corner_type] = forward_map[fallback_type]
             var forward_multipliers: Array = forward_map[fallback_type]
             var reverse_multipliers: Array = reverse_map[corner_type]
-            for i in 4:
+            for i in 6:
                 assert(forward_multipliers[i] == reverse_multipliers[i],
                         ("FallbackSubtileCorners: Two corner-types are " +
                         "mapped to each other with different multipliers: " +
@@ -306,6 +313,8 @@ func _record_transitive_fallbacks() -> void:
                     multipliers[1],
                     multipliers[2],
                     multipliers[3],
+                    multipliers[4],
+                    multipliers[5],
                     exclusion_set)
         exclusion_set[corner_type] = false
 
@@ -317,6 +326,8 @@ func _record_transitive_fallbacks_recursively(
         v_internal_multiplier: float,
         h_external_multiplier: float,
         v_external_multiplier: float,
+        d_internal_multiplier: float,
+        d_external_multiplier: float,
         exclusion_set: Dictionary) -> void:
     var transitive_basis_map: Dictionary = \
             FallbackSubtileCorners.FALLBACKS[transitive_basis_type]
@@ -329,6 +340,8 @@ func _record_transitive_fallbacks_recursively(
             v_internal_multiplier,
             h_external_multiplier,
             v_external_multiplier,
+            d_internal_multiplier,
+            d_external_multiplier,
         ]
     else:
         # Update the multipliers for the transitive mapping to be the max of the
@@ -338,10 +351,14 @@ func _record_transitive_fallbacks_recursively(
         v_internal_multiplier = max(multipliers[1], v_internal_multiplier)
         h_external_multiplier = max(multipliers[2], h_external_multiplier)
         v_external_multiplier = max(multipliers[3], v_external_multiplier)
+        d_internal_multiplier = max(multipliers[4], d_internal_multiplier)
+        d_external_multiplier = max(multipliers[5], d_external_multiplier)
         multipliers[0] = h_internal_multiplier
         multipliers[1] = v_internal_multiplier
         multipliers[2] = h_external_multiplier
         multipliers[3] = v_external_multiplier
+        multipliers[4] = d_internal_multiplier
+        multipliers[5] = d_external_multiplier
     
     assert(!exclusion_set.has(corner_type) or !exclusion_set[corner_type])
     
@@ -368,11 +385,19 @@ func _record_transitive_fallbacks_recursively(
         var transitive_v_external_multiplier := min(
                 v_external_multiplier,
                 fallback_multipliers[3])
+        var transitive_d_internal_multiplier := min(
+                d_internal_multiplier,
+                fallback_multipliers[4])
+        var transitive_d_external_multiplier := min(
+                d_external_multiplier,
+                fallback_multipliers[5])
         
         if transitive_h_internal_multiplier <= 0.0 and \
                 transitive_v_internal_multiplier <= 0.0 and \
                 transitive_h_external_multiplier <= 0.0 and \
-                transitive_v_external_multiplier <= 0.0:
+                transitive_v_external_multiplier <= 0.0 and \
+                transitive_d_internal_multiplier <= 0.0 and \
+                transitive_d_external_multiplier <= 0.0:
             # There is no transitive fallback weight to propagate.
             continue
         
@@ -386,7 +411,11 @@ func _record_transitive_fallbacks_recursively(
                     preexisting_multipliers[2] >= \
                         transitive_h_external_multiplier and \
                     preexisting_multipliers[3] >= \
-                        transitive_v_external_multiplier:
+                        transitive_v_external_multiplier and \
+                    preexisting_multipliers[4] >= \
+                        transitive_d_internal_multiplier and \
+                    preexisting_multipliers[5] >= \
+                        transitive_d_external_multiplier:
                 # This transitive fallback is already mapped with at least the
                 # same weights.
                 continue
@@ -398,6 +427,8 @@ func _record_transitive_fallbacks_recursively(
                 transitive_v_internal_multiplier,
                 transitive_h_external_multiplier,
                 transitive_v_external_multiplier,
+                transitive_d_internal_multiplier,
+                transitive_d_external_multiplier,
                 exclusion_set)
     
     exclusion_set[corner_type] = false
@@ -410,9 +441,11 @@ func _validate_connection_weight_multipliers() -> void:
             assert(value.has("top") and value.top is float)
             assert(value.has("bottom") and value.bottom is float)
             assert(value.has("side") and value.side is float)
+            assert(value.has("diagonal") and value.diagonal is float)
             assert(value.top > 0.0 and value.top <= 1.0)
             assert(value.bottom > 0.0 and value.bottom <= 1.0)
             assert(value.side > 0.0 and value.side <= 1.0)
+            assert(value.diagonal > 0.0 and value.diagonal <= 1.0)
 
 
 func _populate_connection_weight_multipliers_with_fallbacks() -> void:
@@ -423,9 +456,10 @@ func _populate_connection_weight_multipliers_with_fallbacks() -> void:
             # Don't modify preexisting multipliers.
             continue
         
-        var max_bottom := -INF
-        var max_top := -INF
-        var max_side := -INF
+        var min_bottom := INF
+        var min_top := INF
+        var min_side := INF
+        var min_diagonal := INF
         
         for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
             if connection_weight_multipliers.has(fallback_type):
@@ -434,14 +468,17 @@ func _populate_connection_weight_multipliers_with_fallbacks() -> void:
                 var fallback_multiplier_top: float
                 var fallback_multiplier_bottom: float
                 var fallback_multiplier_side: float
+                var fallback_multiplier_diagonal: float
                 if value is Dictionary:
                     fallback_multiplier_top = value.top
                     fallback_multiplier_bottom = value.bottom
                     fallback_multiplier_side = value.side
+                    fallback_multiplier_diagonal = value.diagonal
                 else:
                     fallback_multiplier_top = value
                     fallback_multiplier_bottom = value
                     fallback_multiplier_side = value
+                    fallback_multiplier_diagonal = value
                 
                 var fallback_multipliers: Array = \
                         FallbackSubtileCorners.FALLBACKS \
@@ -452,25 +489,47 @@ func _populate_connection_weight_multipliers_with_fallbacks() -> void:
                 var is_good_vertical_fallback: bool = \
                         fallback_multipliers[1] == 1.0 or \
                         fallback_multipliers[3] == 1.0
+                var is_good_diagonal_fallback: bool = \
+                        fallback_multipliers[4] == 1.0 or \
+                        fallback_multipliers[5] == 1.0
 #                var is_good_horizontal_fallback: bool = \
 #                        fallback_multipliers[0] == 1.0
 #                var is_good_vertical_fallback: bool = \
 #                        fallback_multipliers[1] == 1.0
+#                var is_good_diagonal_fallback: bool = \
+#                        fallback_multipliers[4] == 1.0
                 
                 if is_good_vertical_fallback:
-                    max_top = max(max_top, fallback_multiplier_top)
-                    max_bottom = max(max_bottom, fallback_multiplier_bottom)
+                    min_top = min(min_top, fallback_multiplier_top)
+                    min_bottom = min(min_bottom, fallback_multiplier_bottom)
                 if is_good_horizontal_fallback:
-                    max_side = max(max_side, fallback_multiplier_side)
+                    min_side = min(min_side, fallback_multiplier_side)
+                if is_good_diagonal_fallback:
+                    min_diagonal = min(min_diagonal, fallback_multiplier_diagonal)
         
-        if max_top > 0 and max_bottom > 0 and max_side > 0:
-            if max_top == max_bottom and max_top == max_side:
-                connection_weight_multipliers[corner_type] = max_top
+        if min_top <= 1.0 or \
+                min_bottom <= 1.0 or \
+                min_side <= 1.0 or \
+                min_diagonal <= 1.0:
+            if min_top > 1.0:
+                min_top = 1.0
+            if min_bottom > 1.0:
+                min_bottom = 1.0
+            if min_side > 1.0:
+                min_side = 1.0
+            if min_diagonal > 1.0:
+                min_diagonal = 1.0
+            
+            if min_top == min_bottom and \
+                    min_top == min_side and \
+                    min_top == min_diagonal:
+                connection_weight_multipliers[corner_type] = min_top
             else:
                 connection_weight_multipliers[corner_type] = {
-                    top = max_top,
-                    bottom = max_bottom,
-                    side = max_side,
+                    top = min_top,
+                    bottom = min_bottom,
+                    side = min_side,
+                    diagonal = min_diagonal,
                 }
 
 
@@ -486,7 +545,13 @@ func _print_fallbacks() -> void:
                 FallbackSubtileCorners.FALLBACKS[corner_type].keys()):
             var multipliers: Array = \
                     FallbackSubtileCorners.FALLBACKS[corner_type][fallback_type]
-            print("    %s [h_opp=%s, v_opp=%s, h_inbound=%s, v_inbound=%s]" % [
+            print(("    %s [" +
+                    "h_internal=%s, " +
+                    "v_internal=%s, " +
+                    "h_external=%s, " +
+                    "v_external=%s, " +
+                    "d_internal=%s, " +
+                    "d_external=%s]") % [
                 Sc.utils.pad_string(
                         get_subtile_corner_string(fallback_type) + ":",
                         56,
@@ -496,6 +561,8 @@ func _print_fallbacks() -> void:
                 str(multipliers[1]),
                 str(multipliers[2]),
                 str(multipliers[3]),
+                str(multipliers[4]),
+                str(multipliers[5]),
             ])
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("")
@@ -510,11 +577,12 @@ func _print_connection_weight_multipliers() -> void:
             CornerConnectionWeightMultipliers.MULTIPLIERS.keys()):
         var value = CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type]
         if value is Dictionary:
-            print("%s: [top=%s, bottom=%s, side=%s]" % [
+            print("%s: [top=%s, bottom=%s, side=%s, diagonal=%s]" % [
                 get_subtile_corner_string(corner_type),
                 str(value.top),
                 str(value.bottom),
                 str(value.side),
+                str(value.diagonal),
             ])
         else:
             print("%s: %s" % [
