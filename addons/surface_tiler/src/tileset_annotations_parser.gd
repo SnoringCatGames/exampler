@@ -241,50 +241,30 @@ func _parse_corner_type_annotation(
                     image,
                     path)
     
-    var is_tl_empty: bool = connection_types_map \
-            [CornerDirection.TOP_LEFT][ConnectionDirection.SELF] == \
-            SubtileCorner.UNKNOWN
-    var is_tr_empty: bool = connection_types_map \
-            [CornerDirection.TOP_RIGHT][ConnectionDirection.SELF] == \
-            SubtileCorner.UNKNOWN
-    var is_bl_empty: bool = connection_types_map \
-            [CornerDirection.BOTTOM_LEFT][ConnectionDirection.SELF] == \
-            SubtileCorner.UNKNOWN
-    var is_br_empty: bool = connection_types_map \
-            [CornerDirection.BOTTOM_RIGHT][ConnectionDirection.SELF] == \
-            SubtileCorner.UNKNOWN
-    assert(is_tl_empty == is_tr_empty and \
-            is_tl_empty == is_bl_empty and \
-            is_tl_empty == is_br_empty,
-            ("Subtile corner-type annotations must be either all empty or " +
-            "all occupied: %s") % _get_log_string(
-                subtile_position,
-                CornerDirection.TOP_LEFT,
-                ConnectionDirection.SELF,
-                quadrant_size,
-                path))
-    if is_tl_empty:
-        for connection_direction in ConnectionDirection.CONNECTIONS:
-            for corner_direction in CornerDirection.CORNERS:
-                assert(connection_types_map \
+    for connection_direction in ConnectionDirection.CONNECTIONS:
+        for corner_direction in CornerDirection.CORNERS:
+            assert(connection_types_map \
+                        [corner_direction][ConnectionDirection.SELF] != \
+                        SubtileCorner.UNKNOWN or \
+                    connection_types_map \
                         [corner_direction][connection_direction] == \
                         SubtileCorner.UNKNOWN,
-                        ("Subtile corner-type annotations are all empty, " +
-                        "but not all connection annotations are empty: " +
-                        "%s") % _get_log_string(
-                            _get_quadrant_position(
-                                    subtile_position,
-                                    quadrant_size,
-                                    corner_direction),
-                            corner_direction,
-                            connection_direction,
-                            quadrant_size,
-                            path))
-    
-    if is_tl_empty:
-        return
+                    ("Subtile self-corner-type annotation is empty, " +
+                    "but not all neighbor-connection annotations are empty: " +
+                    "%s") % _get_log_string(
+                        _get_quadrant_position(
+                                subtile_position,
+                                quadrant_size,
+                                corner_direction),
+                        corner_direction,
+                        connection_direction,
+                        quadrant_size,
+                        path))
     
     for corner_direction in CornerDirection.CORNERS:
+        if connection_types_map[corner_direction][ConnectionDirection.SELF] == \
+                SubtileCorner.UNKNOWN:
+            continue
         _record_quadrant(
                 subtile_corner_types,
                 corner_direction,
