@@ -62,11 +62,11 @@ func get_quadrants(
         
         var debug_types := []
         # TODO: This is useful for debugging.
-        debug_types = _get_debug_types(
-                Vector2(8,45),
-                CornerDirection.BOTTOM_RIGHT,
-                corner_direction,
-                tileset)
+#        debug_types = _get_debug_types(
+#                Vector2(8,45),
+#                CornerDirection.BOTTOM_RIGHT,
+#                corner_direction,
+#                tileset)
         
         var best_position_and_weight := _get_best_quadrant_match(
                 tileset.subtile_corner_types[corner_direction],
@@ -177,16 +177,23 @@ func _get_best_quadrant_match(
     else:
         side_label = "bottom"
     
-    # FIXME: -------------------------------------------------------------
-#    Sc.logger.print(">> %s" % str(i))
-    
     var best_position_and_weight := [Vector2.INF, -INF]
     var best_weight_contribution := -INF
     var best_type := SubtileCorner.UNKNOWN
     var best_match_label := "-"
     
-    # Consider direct corner-type matches.
     if corner_type_map_or_position.has(target_corner_type):
+        # Consider direct corner-type matches.
+        
+        var is_debug_match: bool = \
+                debug_types.size() > i and \
+                debug_types[i] == target_corner_type
+        # Stop debugging in recursive iterations if this wasn't a match.
+        var recursive_debug_types := \
+                debug_types if \
+                is_debug_match else \
+                []
+        
         var direct_match_corner_type_map_or_position = \
                 corner_type_map_or_position[target_corner_type]
         var direct_match_weight_contribution := \
@@ -214,17 +221,23 @@ func _get_best_quadrant_match(
                     target_corner_types,
                     i + 1,
                     direct_match_weight,
-                    corner_direction)
+                    corner_direction,
+                    recursive_debug_types)
         
         best_position_and_weight = direct_match_position_and_weight
         best_weight_contribution = direct_match_weight_contribution
         best_type = target_corner_type
         best_match_label = "direct_match"
-        # FIXME: -------------------------------------------------------------
-#        Sc.logger.print("> d %s %s" % [
-#            str(i),
-#            str(best_position_and_weight[1]),
-#        ])
+        
+        if is_debug_match:
+            Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
+                Sc.utils.get_spaces(i * 2),
+                str(i),
+                Su.subtile_manifest.get_subtile_corner_string(target_corner_type),
+                "direct_match",
+                direct_match_weight_contribution,
+                direct_match_weight,
+            ])
     
     if i == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
@@ -236,14 +249,22 @@ func _get_best_quadrant_match(
         }
         return best_position_and_weight
     
-    # Consider the UNKNOWN value as a fallback.
     if corner_type_map_or_position.has(SubtileCorner.UNKNOWN):
+        # Consider the UNKNOWN value as a fallback.
+        
+        var is_debug_match: bool = \
+                debug_types.size() > i and \
+                debug_types[i] == SubtileCorner.UNKNOWN
+        # Stop debugging in recursive iterations if this wasn't a match.
+        var recursive_debug_types := \
+                debug_types if \
+                is_debug_match else \
+                []
+        
         var fallback_corner_type_map_or_position = \
                 corner_type_map_or_position[SubtileCorner.UNKNOWN]
-        var fallback_corner_weight_multiplier: float = 0.01
         var fallback_weight_contribution := \
-                current_iteration_weight_multiplier * \
-                fallback_corner_weight_multiplier
+                current_iteration_weight_multiplier * 0.1
         var fallback_weight := weight + fallback_weight_contribution
         
         var fallback_position_and_weight: Array
@@ -260,18 +281,24 @@ func _get_best_quadrant_match(
                     target_corner_types,
                     i + 1,
                     fallback_weight,
-                    corner_direction)
+                    corner_direction,
+                    recursive_debug_types)
         
         if fallback_position_and_weight[1] > best_position_and_weight[1]:
             best_position_and_weight = fallback_position_and_weight
             best_weight_contribution = fallback_weight_contribution
             best_type = SubtileCorner.UNKNOWN
             best_match_label = "unknown_match"
-        # FIXME: -------------------------------------------------------------
-#        Sc.logger.print("> u %s %s" % [
-#            str(i),
-#            str(fallback_position_and_weight[1]),
-#        ])
+        
+        if is_debug_match:
+            Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
+                Sc.utils.get_spaces(i * 2),
+                str(i),
+                Su.subtile_manifest.get_subtile_corner_string(SubtileCorner.UNKNOWN),
+                "unknown_match",
+                fallback_weight_contribution,
+                fallback_weight,
+            ])
     
     # FIXME: LEFT OFF HERE: -----------------------------------------
     # - Should internal and external diagonal connections have configurable
@@ -312,12 +339,21 @@ func _get_best_quadrant_match(
                 #     counter the weight contributed by any match from the other
                 #     direction.
                 fallback_corner_weight_multiplier = \
-                        (-1.0 - (1.0 - fallback_corner_weight_multiplier))
+                        (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * 0.1
             else:
-                fallback_corner_weight_multiplier *= 0.1
+                fallback_corner_weight_multiplier *= 1.0
             
             if corner_type_map_or_position.has(fallback_corner_type):
                 # There is a quadrant configured for this fallback corner-type.
+                
+                var is_debug_match: bool = \
+                        debug_types.size() > i and \
+                        debug_types[i] == fallback_corner_type
+                # Stop debugging in recursive iterations if this wasn't a match.
+                var recursive_debug_types := \
+                        debug_types if \
+                        is_debug_match else \
+                        []
                 
                 var fallback_corner_type_map_or_position = \
                         corner_type_map_or_position[fallback_corner_type]
@@ -340,21 +376,29 @@ func _get_best_quadrant_match(
                             target_corner_types,
                             i + 1,
                             fallback_weight,
-                            corner_direction)
+                            corner_direction,
+                            recursive_debug_types)
+                
+                var fallback_match_label := \
+                        "good_fallback_match" if \
+                        fallback_weight_contribution > 0 else \
+                        "bad_fallback_match"
                 
                 if fallback_position_and_weight[1] > best_position_and_weight[1]:
                     best_position_and_weight = fallback_position_and_weight
                     best_weight_contribution = fallback_weight_contribution
                     best_type = fallback_corner_type
-                    best_match_label = \
-                            "good_fallback_match" if \
-                            fallback_weight_contribution > 0 else \
-                            "bad_fallback_match"
-                # FIXME: -------------------------------------------------------
-#                Sc.logger.print("> f %s %s" % [
-#                    str(i),
-#                    str(fallback_position_and_weight[1]),
-#                ])
+                    best_match_label = fallback_match_label
+                
+                if is_debug_match:
+                    Sc.logger.print("%s[%s] %s: %s, %s (%s)" % [
+                        Sc.utils.get_spaces(i * 2),
+                        str(i),
+                        Su.subtile_manifest.get_subtile_corner_string(fallback_corner_type),
+                        fallback_match_label,
+                        fallback_weight_contribution,
+                        fallback_weight,
+                    ])
     
     best_position_and_weight.resize(12)
     best_position_and_weight[i + 2] = {
