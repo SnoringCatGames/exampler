@@ -104,7 +104,8 @@ func get_quadrants(
                 subtile_corner_types[corner_direction],
                 corner_types,
                 0,
-                0)
+                0,
+                corner_direction)
         var quadrant_position: Vector2 = best_position_and_weight[0]
         var quadrant_weight: float = best_position_and_weight[1]
         
@@ -159,7 +160,8 @@ func _get_best_quadrant_match(
         corner_type_map_or_position,
         target_corner_types: Array,
         i: int,
-        weight: float) -> Array:
+        weight: float,
+        corner_direction: int) -> Array:
     var iteration_exponent: int
     match i:
         0: iteration_exponent = 0
@@ -205,7 +207,8 @@ func _get_best_quadrant_match(
                     direct_match_corner_type_map_or_position,
                     target_corner_types,
                     i + 1,
-                    direct_match_weight)
+                    direct_match_weight,
+                    corner_direction)
         
         best_position_and_weight = direct_match_position_and_weight
         best_weight_contribution = direct_match_weight_contribution
@@ -231,10 +234,10 @@ func _get_best_quadrant_match(
     if corner_type_map_or_position.has(SubtileCorner.UNKNOWN):
         var fallback_corner_type_map_or_position = \
                 corner_type_map_or_position[SubtileCorner.UNKNOWN]
-        var fallback_corner_weight_multiplier: float = 0.9999
+        var fallback_corner_weight_multiplier: float = 0.01
         var fallback_weight_contribution := \
                 current_iteration_weight_multiplier * \
-                fallback_corner_weight_multiplier * 0.1
+                fallback_corner_weight_multiplier
         var fallback_weight := weight + fallback_weight_contribution
         
         var fallback_position_and_weight: Array
@@ -250,7 +253,8 @@ func _get_best_quadrant_match(
                     fallback_corner_type_map_or_position,
                     target_corner_types,
                     i + 1,
-                    fallback_weight)
+                    fallback_weight,
+                    corner_direction)
         
         if fallback_position_and_weight[1] > best_position_and_weight[1]:
             best_position_and_weight = fallback_position_and_weight
@@ -289,6 +293,20 @@ func _get_best_quadrant_match(
                 # Skip this fallback, since it is for the other direction.
                 continue
             
+            var side_label: String
+            if is_h_neighbor:
+                side_label = "side"
+            else:
+                var is_top := CornerDirection.get_is_top(corner_direction)
+                if is_top == is_external_iteration:
+                    side_label = "top"
+                else:
+                    side_label = "bottom"
+            fallback_corner_weight_multiplier *= \
+                    CornerConnectionWeightMultipliers.get_multiplier(
+                        fallback_corner_type,
+                        side_label)
+            
             if fallback_corner_weight_multiplier < 1.0:
                 # -   If the weight-multiplier is less than 1.0, then we should
                 #     prefer mappings that use UNKNOWN values.
@@ -296,8 +314,9 @@ func _get_best_quadrant_match(
                 #     counter the weight contributed by any match from the other
                 #     direction.
                 fallback_corner_weight_multiplier = \
-                        (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * \
-                        10.0
+                        (-1.0 - (1.0 - fallback_corner_weight_multiplier))
+            else:
+                fallback_corner_weight_multiplier *= 0.1
             
             if corner_type_map_or_position.has(fallback_corner_type):
                 # There is a quadrant configured for this fallback corner-type.
@@ -306,7 +325,7 @@ func _get_best_quadrant_match(
                         corner_type_map_or_position[fallback_corner_type]
                 var fallback_weight_contribution := \
                         current_iteration_weight_multiplier * \
-                        fallback_corner_weight_multiplier * 0.1
+                        fallback_corner_weight_multiplier
                 var fallback_weight := weight + fallback_weight_contribution
                 
                 var fallback_position_and_weight: Array
@@ -322,7 +341,8 @@ func _get_best_quadrant_match(
                             fallback_corner_type_map_or_position,
                             target_corner_types,
                             i + 1,
-                            fallback_weight)
+                            fallback_weight,
+                            corner_direction)
                 
                 if fallback_position_and_weight[1] > best_position_and_weight[1]:
                     best_position_and_weight = fallback_position_and_weight

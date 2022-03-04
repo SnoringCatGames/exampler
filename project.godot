@@ -355,6 +355,11 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/gui/control_row_list/control_row.gd"
 }, {
 "base": "Reference",
+"class": "CornerConnectionWeightMultipliers",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/corner_connection_weight_multipliers.gd"
+}, {
+"base": "Reference",
 "class": "CornerDirection",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/corner_direction.gd"
@@ -2304,6 +2309,7 @@ _global_script_class_icons={
 "ConnectionDirection": "",
 "ContinuousEdgeTrajectoryLegendItem": "",
 "ControlRow": "",
+"CornerConnectionWeightMultipliers": "",
 "CornerDirection": "",
 "CornerMatchInnerTilemap": "",
 "CornerMatchTilemap": "",
