@@ -36,6 +36,24 @@ const CONNECTIONS := [
     VD_EXTERNAL,
 ]
 
+const CONNECTIONS_IN_QUADRANT_MATCH_PRIORITY_ORDER := [
+    SELF,
+    
+    H_INTERNAL,
+    V_INTERNAL,
+    
+    H_EXTERNAL,
+    V_EXTERNAL,
+    
+    D_INTERNAL,
+    
+    H2_EXTERNAL,
+    V2_EXTERNAL,
+    
+    HD_EXTERNAL,
+    VD_EXTERNAL,
+]
+
 const DISTINCT_CONNECTIONS := [
     SELF,
     

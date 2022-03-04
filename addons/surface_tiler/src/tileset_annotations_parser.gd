@@ -15,7 +15,7 @@ var _EMPTY_ANNOTATION := {
 
 
 # -   Returns a mapping from pixel-color to pixel-bit-flag to corner-type.
-# Dictionary<int, Dictionary<int, int>>
+# Dictionary<int<Color>, Dictionary<int<Bits>, SubtileCorner>>
 func parse_corner_type_annotation_key(
         corner_type_annotation_key_path: String,
         quadrant_size: int) -> Dictionary:
@@ -114,10 +114,10 @@ func parse_corner_type_annotation_key(
 #                       Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>)>)>>
 func parse_tileset_corner_type_annotations(
-        corner_type_annotation_key: Dictionary,
         tileset_corner_type_annotations_path: String,
         quadrant_size: int,
         outer_tileset: CornerMatchTileset) -> Dictionary:
+    var corner_type_annotation_key := outer_tileset.corner_type_annotation_key
     var subtile_size := quadrant_size * 2
     
     var texture: Texture = load(tileset_corner_type_annotations_path)
@@ -157,6 +157,41 @@ func parse_tileset_corner_type_annotations(
     image.unlock()
     
     return subtile_corner_types
+
+
+func parse_quadrant(
+        subtile_position: Vector2,
+        corner_direction: int,
+        quadrant_size: int,
+        tileset_image_path: String,
+        corner_type_annotation_key: Dictionary) -> Array:
+    var texture: Texture = load(tileset_image_path)
+    var image: Image = texture.get_data()
+    
+    image.lock()
+    
+    var connection_types_map := {}
+    for connection_direction in ConnectionDirection.CONNECTIONS:
+        for current_corner_direction in CornerDirection.CORNERS:
+            _parse_connection(
+                    connection_types_map,
+                    current_corner_direction,
+                    connection_direction,
+                    subtile_position,
+                    quadrant_size,
+                    corner_type_annotation_key,
+                    image,
+                    tileset_image_path)
+    
+    image.unlock()
+    
+    var results := []
+    for connection_direction in \
+            ConnectionDirection.CONNECTIONS_IN_QUADRANT_MATCH_PRIORITY_ORDER:
+        results.push_back(
+                connection_types_map[corner_direction][connection_direction])
+    
+    return results
 
 
 func _parse_corner_type_annotation(

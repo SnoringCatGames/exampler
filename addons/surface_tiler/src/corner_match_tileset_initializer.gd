@@ -5,6 +5,7 @@ extends Node
 
 func initialize_tileset(tileset_config: Dictionary) -> void:
     var tile_set: CornerMatchTileset = tileset_config.tile_set
+    tile_set._config = tileset_config
     tile_set.are_45_degree_subtiles_used = \
             tileset_config.are_45_degree_subtiles_used
     tile_set.are_27_degree_subtiles_used = \
@@ -14,14 +15,14 @@ func initialize_tileset(tileset_config: Dictionary) -> void:
             load(tileset_config.tileset_quadrants_path)
     
     var corner_type_annotation_key: Dictionary = \
-            Su.subtile_manifest.tileset_annotations_parser \
+            Su.subtile_manifest.annotations_parser \
                 .parse_corner_type_annotation_key(
                     Su.subtile_manifest.corner_type_annotation_key_path,
                     tileset_config.quadrant_size)
+    tile_set.corner_type_annotation_key = corner_type_annotation_key
     var subtile_corner_types: Dictionary = \
-            Su.subtile_manifest.tileset_annotations_parser \
+            Su.subtile_manifest.annotations_parser \
                 .parse_tileset_corner_type_annotations(
-                    corner_type_annotation_key,
                     tileset_config.tileset_corner_type_annotations_path,
                     tileset_config.quadrant_size,
                     tile_set)

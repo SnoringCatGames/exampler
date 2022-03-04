@@ -89,7 +89,7 @@ var corner_type_annotation_key_path: String
 
 var implicit_quadrant_connection_color: Color
 
-var tileset_annotations_parser: TilesetAnnotationsParser
+var annotations_parser: TilesetAnnotationsParser
 var corner_calculator: SubtileTargetCornerCalculator
 var quadrant_calculator: SubtileTargetQuadrantCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
@@ -130,12 +130,12 @@ func register_manifest(manifest: Dictionary) -> void:
             Engine.editor_hint:
         return
     
-    if manifest.has("tileset_annotations_parser_class"):
-        self.tileset_annotations_parser = manifest.tileset_annotations_parser_class.new()
-        assert(self.tileset_annotations_parser is TilesetAnnotationsParser)
+    if manifest.has("annotations_parser_class"):
+        self.annotations_parser = manifest.annotations_parser_class.new()
+        assert(self.annotations_parser is TilesetAnnotationsParser)
     else:
-        self.tileset_annotations_parser = TilesetAnnotationsParser.new()
-    self.add_child(tileset_annotations_parser)
+        self.annotations_parser = TilesetAnnotationsParser.new()
+    self.add_child(annotations_parser)
     
     if manifest.has("corner_calculator_class"):
         self.corner_calculator = manifest.corner_calculator_class.new()

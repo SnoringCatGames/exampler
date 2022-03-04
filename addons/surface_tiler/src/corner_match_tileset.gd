@@ -29,6 +29,11 @@ extends TileSet
 #                 >)>)>)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
 
+# Dictionary<int<Color>, Dictionary<int<Bits>, SubtileCorner>>
+var corner_type_annotation_key: Dictionary
+
+var _config: Dictionary
+
 var are_45_degree_subtiles_used: bool
 var are_27_degree_subtiles_used: bool
 
