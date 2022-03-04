@@ -90,20 +90,21 @@ var corner_type_annotation_key_path: String
 var implicit_quadrant_connection_color: Color
 
 var tileset_annotations_parser: TilesetAnnotationsParser
-var subtile_target_corner_calculator: SubtileTargetCornerCalculator
+var corner_calculator: SubtileTargetCornerCalculator
+var quadrant_calculator: SubtileTargetQuadrantCalculator
 var shape_calculator: CornerMatchTilesetShapeCalculator
 var initializer: CornerMatchTilesetInitializer
 
 # Array<{
 #   tile_set: CornerMatchTileset,
-#   tile_set_quadrants_path: String,
-#   tile_set_corner_type_annotations_path: String,
+#   tileset_quadrants_path: String,
+#   tileset_corner_type_annotations_path: String,
 #   quadrant_size: int,
 #   subtile_collision_margin: float,
 #   are_45_degree_subtiles_used: bool,
 #   are_27_degree_subtiles_used: bool,
 # }>
-var tile_set_configs: Array
+var tileset_configs: Array
 
 ###
 
@@ -136,15 +137,19 @@ func register_manifest(manifest: Dictionary) -> void:
         self.tileset_annotations_parser = TilesetAnnotationsParser.new()
     self.add_child(tileset_annotations_parser)
     
-    if manifest.has("subtile_target_corner_calculator_class"):
-        self.subtile_target_corner_calculator = \
-                manifest.subtile_target_corner_calculator_class.new()
-        assert(self.subtile_target_corner_calculator is \
-                SubtileTargetCornerCalculator)
+    if manifest.has("corner_calculator_class"):
+        self.corner_calculator = manifest.corner_calculator_class.new()
+        assert(self.corner_calculator is SubtileTargetCornerCalculator)
     else:
-        self.subtile_target_corner_calculator = \
-                SubtileTargetCornerCalculator.new()
-    self.add_child(subtile_target_corner_calculator)
+        self.corner_calculator = SubtileTargetCornerCalculator.new()
+    self.add_child(corner_calculator)
+    
+    if manifest.has("quadrant_calculator_class"):
+        self.quadrant_calculator = manifest.quadrant_calculator_class.new()
+        assert(self.quadrant_calculator is SubtileTargetQuadrantCalculator)
+    else:
+        self.quadrant_calculator = SubtileTargetQuadrantCalculator.new()
+    self.add_child(quadrant_calculator)
     
     if manifest.has("shape_calculator_class"):
         self.shape_calculator = manifest.shape_calculator_class.new()
@@ -160,24 +165,24 @@ func register_manifest(manifest: Dictionary) -> void:
         self.initializer = CornerMatchTilesetInitializer.new()
     self.add_child(initializer)
     
-    assert(manifest.tile_sets is Array)
-    self.tile_set_configs = manifest.tile_sets
-    for tile_set_config in manifest.tile_sets:
-        assert(tile_set_config.tile_set is CornerMatchTileset)
-        assert(tile_set_config.tile_set_quadrants_path is String)
-        assert(tile_set_config.tile_set_corner_type_annotations_path is String)
-        assert(tile_set_config.quadrant_size is int)
-        assert(tile_set_config.subtile_collision_margin is float or \
-                tile_set_config.subtile_collision_margin is int)
-        assert(tile_set_config.are_45_degree_subtiles_used is bool)
-        assert(tile_set_config.are_27_degree_subtiles_used is bool)
+    assert(manifest.tilesets is Array)
+    self.tileset_configs = manifest.tilesets
+    for tileset_config in manifest.tilesets:
+        assert(tileset_config.tile_set is CornerMatchTileset)
+        assert(tileset_config.tileset_quadrants_path is String)
+        assert(tileset_config.tileset_corner_type_annotations_path is String)
+        assert(tileset_config.quadrant_size is int)
+        assert(tileset_config.subtile_collision_margin is float or \
+                tileset_config.subtile_collision_margin is int)
+        assert(tileset_config.are_45_degree_subtiles_used is bool)
+        assert(tileset_config.are_27_degree_subtiles_used is bool)
     
     _validate_subtile_corner_to_depth()
     _validate_subtile_depth_to_unmatched_corner_weight_multiplier()
     _parse_fallback_corner_types()
     
-    for tile_set_config in tile_set_configs:
-        initializer.initialize_tileset(tile_set_config)
+    for tileset_config in tileset_configs:
+        initializer.initialize_tileset(tileset_config)
 
 
 func get_subtile_corner_string(type: int) -> String:

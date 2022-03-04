@@ -9,8 +9,8 @@ extends Node
 #   - Use the new support for explicit internal connection annotations.
 # - Actually, go back and add the separate types for the various inner 45
 #   corners with interesting joins like (like INT_90H_INT_INT_45_CLIPPED)?
-#   - This will be more logic complexity, but less ambiguity, fewer tileset
-#     subtiles, and less work for the tileset author.
+#   - This will be more logic complexity, but less ambiguity, fewer tile_set
+#     subtiles, and less work for the tile_set author.
 # - Debug all the error cases for 45-degree target-corner calculations.
 
 

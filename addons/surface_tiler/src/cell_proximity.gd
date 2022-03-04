@@ -140,7 +140,7 @@ func to_string(uses_newlines := false) -> String:
 
 
 func get_world_position() -> Vector2:
-    return Sc.geometry.tile_map_to_world(position, tile_map)
+    return Sc.geometry.tilemap_to_world(position, tile_map)
 
 
 func get_angle_type(relative_x := 0, relative_y := 0) -> int:

@@ -39,14 +39,14 @@ var inner_tilemap: CornerMatchInnerTilemap
 func _ready() -> void:
     if !is_instance_valid(tile_set) or \
             tile_set.resource_path == Su.PLACEHOLDER_SURFACES_TILE_SET_PATH:
-        tile_set = Su.default_tile_set
+        tile_set = Su.default_tileset
         property_list_changed_notify()
     assert(tile_set is CornerMatchTileset)
     
     var children := Sc.utils.get_children_by_type(self, CornerMatchInnerTilemap)
     if children.empty():
         inner_tilemap = CornerMatchInnerTilemap.new()
-        inner_tilemap.name = "InnerTileMap"
+        inner_tilemap.name = "InnerTilemap"
         add_child(inner_tilemap)
         var ancestor := Sc.utils.get_ancestor_by_type(self, ScaffolderLevel)
         inner_tilemap.owner = ancestor
@@ -67,7 +67,7 @@ func _enter_tree() -> void:
 
 func _draw() -> void:
     if draws_tile_indices:
-        Sc.draw.draw_tile_map_indices(
+        Sc.draw.draw_tilemap_indices(
                 self,
                 self,
                 Color.white,
@@ -84,7 +84,7 @@ func _draw() -> void:
     #   - draws_tile_angles
     #   - draws_target_corner_types
     #   - draws_actual_corner_types
-    # - Render these using additional nested TileMaps, since that should be
+    # - Render these using additional nested Tilemaps, since that should be
     #   more efficient.
 
 
@@ -207,7 +207,7 @@ func _on_cell_tile_changed(
     # FIXME: --------------
     # - Trigger debug printing somewhere else (probably through a
     #   click-to-inspect mode that's toggled through the plugin UI).
-    tile_set.get_quadrants(
+    Su.subtile_manifest.quadrant_calculator.get_quadrants(
             cell_position,
             tile_id,
             self,
@@ -224,12 +224,13 @@ func _on_cell_tile_changed(
 func _delegate_quadrant_updates(
         cell_position: Vector2,
         tile_id: int) -> void:
-    var quadrants: Array = tile_set.get_quadrants(
-            cell_position,
-            tile_id,
-            self,
-            false,
-            logs_autotiling_errors)
+    var quadrants: Array = \
+            Su.subtile_manifest.quadrant_calculator.get_quadrants(
+                cell_position,
+                tile_id,
+                self,
+                false,
+                logs_autotiling_errors)
     var cell_offsets := [
         Vector2(0,0),
         Vector2(1,0),

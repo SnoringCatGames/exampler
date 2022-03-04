@@ -113,14 +113,14 @@ func parse_corner_type_annotation_key(
 #                       SubtileCorner, # VD-external-corner
 #                       Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>)>)>>
-func parse_tile_set_corner_type_annotations(
+func parse_tileset_corner_type_annotations(
         corner_type_annotation_key: Dictionary,
-        tile_set_corner_type_annotations_path: String,
+        tileset_corner_type_annotations_path: String,
         quadrant_size: int,
-        outer_tile_set: CornerMatchTileset) -> Dictionary:
+        outer_tileset: CornerMatchTileset) -> Dictionary:
     var subtile_size := quadrant_size * 2
     
-    var texture: Texture = load(tile_set_corner_type_annotations_path)
+    var texture: Texture = load(tileset_corner_type_annotations_path)
     var image: Image = texture.get_data()
     
     var size := image.get_size()
@@ -150,9 +150,9 @@ func parse_tile_set_corner_type_annotations(
                     subtile_position,
                     quadrant_size,
                     image,
-                    tile_set_corner_type_annotations_path)
+                    tileset_corner_type_annotations_path)
     
-    _validate_quadrants(subtile_corner_types, outer_tile_set)
+    _validate_quadrants(subtile_corner_types, outer_tileset)
     
     image.unlock()
     
@@ -924,7 +924,7 @@ static func _validate_tileset_annotation(
 
 static func _validate_quadrants(
         subtile_corner_types: Dictionary,
-        outer_tile_set: CornerMatchTileset) -> void:
+        outer_tileset: CornerMatchTileset) -> void:
     # FIXME: LEFT OFF HERE: ----------------------
     # - Check that many corner-types are defined at least once for all four
     #   corner-directions.
@@ -999,10 +999,10 @@ static func _validate_quadrants(
     
     var required_corner_types_collection := \
             [REQUIRED_90_QUADRANT_CORNER_TYPES]
-    if outer_tile_set.are_45_degree_subtiles_used:
+    if outer_tileset.are_45_degree_subtiles_used:
         required_corner_types_collection.push_back(
                 REQUIRED_45_QUADRANT_CORNER_TYPES)
-    if outer_tile_set.are_27_degree_subtiles_used:
+    if outer_tileset.are_27_degree_subtiles_used:
         required_corner_types_collection.push_back(
                 REQUIRED_27_QUADRANT_CORNER_TYPES)
     

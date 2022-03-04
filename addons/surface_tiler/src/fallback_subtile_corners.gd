@@ -14,7 +14,7 @@ extends Reference
 #    - If ommitted, then the h-opp and v-opp multipliers will automatically be
 #      used for v-inbound and h-inbound positions, respectively.
 # FIXME: LEFT OFF HERE: -----------------------------------------
-# - Should this be configurable by the tileset author?
+# - Should this be configurable by the tile_set author?
 # - Would there be a simpler way to allow the tile-set author to configure which
 #   slopes are allowed to transition into which others?
 # FIXME: LEFT OFF HERE: -----------------------------------------

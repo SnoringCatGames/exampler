@@ -27,13 +27,13 @@ var external_br_r2 := SubtileCorner.UNKNOWN
 
 
 func _init(proximity: CellProximity) -> void:
-    self.top_left = Su.subtile_manifest.subtile_target_corner_calculator \
+    self.top_left = Su.subtile_manifest.corner_calculator \
             .get_target_top_left_corner(proximity)
-    self.top_right = Su.subtile_manifest.subtile_target_corner_calculator \
+    self.top_right = Su.subtile_manifest.corner_calculator \
             .get_target_top_right_corner(proximity)
-    self.bottom_left = Su.subtile_manifest.subtile_target_corner_calculator \
+    self.bottom_left = Su.subtile_manifest.corner_calculator \
             .get_target_bottom_left_corner(proximity)
-    self.bottom_right = Su.subtile_manifest.subtile_target_corner_calculator \
+    self.bottom_right = Su.subtile_manifest.corner_calculator \
             .get_target_bottom_right_corner(proximity)
     
     if proximity.get_is_present(0, -1):
@@ -42,16 +42,16 @@ func _init(proximity: CellProximity) -> void:
                 proximity.tile_set,
                 proximity.position + Vector2(0, -1))
         self.external_tl_t = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_left_corner(top_proximity)
         self.external_tr_t = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_right_corner(top_proximity)
         self.external_tl_t2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_left_corner(top_proximity)
         self.external_tr_t2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_right_corner(top_proximity)
     else:
         self.external_tl_t = SubtileCorner.EMPTY
@@ -65,16 +65,16 @@ func _init(proximity: CellProximity) -> void:
                 proximity.tile_set,
                 proximity.position + Vector2(0, 1))
         self.external_bl_b = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_left_corner(bottom_proximity)
         self.external_br_b = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_right_corner(bottom_proximity)
         self.external_bl_b2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_left_corner(bottom_proximity)
         self.external_br_b2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_right_corner(bottom_proximity)
     else:
         self.external_bl_b = SubtileCorner.EMPTY
@@ -88,16 +88,16 @@ func _init(proximity: CellProximity) -> void:
                 proximity.tile_set,
                 proximity.position + Vector2(-1, 0))
         self.external_tl_l = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_right_corner(left_proximity)
         self.external_bl_l = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_right_corner(left_proximity)
         self.external_tl_l2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_left_corner(left_proximity)
         self.external_bl_l2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_left_corner(left_proximity)
     else:
         self.external_tl_l = SubtileCorner.EMPTY
@@ -111,16 +111,16 @@ func _init(proximity: CellProximity) -> void:
                 proximity.tile_set,
                 proximity.position + Vector2(1, 0))
         self.external_tr_r = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_left_corner(right_proximity)
         self.external_br_r = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_left_corner(right_proximity)
         self.external_tr_r2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_top_right_corner(right_proximity)
         self.external_br_r2 = \
-                Su.subtile_manifest.subtile_target_corner_calculator \
+                Su.subtile_manifest.corner_calculator \
                     .get_target_bottom_right_corner(right_proximity)
     else:
         self.external_tr_r = SubtileCorner.EMPTY

@@ -3,10 +3,10 @@ class_name CornerConnectionWeightMultipliers
 extends Reference
 ## -   This is needed for breaking ties when two quadrants have different
 ##     connections with equal weight.
-## -   This depends on aspects of the tileset's art.
+## -   This depends on aspects of the tile_set's art.
 ##     -   For example, floor art might extend far enough to impact the lower
 ##         neighbor art, but wall and ceiling art might not.
-## -   If you know that your tileset has certain properties, like above, then
+## -   If you know that your tile_set has certain properties, like above, then
 ##     you might know that you can essentially ignore, or at least deprioritize,
 ##     some quadrant connections.
 ## -   Otherwise, you might need to change many quadrant connection annotations
