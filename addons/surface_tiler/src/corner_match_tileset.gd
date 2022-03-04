@@ -178,6 +178,16 @@ func _get_best_quadrant_match(
     var is_2_neighbor := i == 6 or i == 7
     var target_corner_type: int = target_corner_types[i]
     
+    var side_label: String
+    if is_d_neighbor or is_2_neighbor:
+        side_label = ""
+    elif is_h_neighbor:
+        side_label = "side"
+    elif CornerDirection.get_is_top(corner_direction) == is_external_iteration:
+        side_label = "top"
+    else:
+        side_label = "bottom"
+    
     # FIXME: -------------------------------------------------------------
 #    Sc.logger.print(">> %s" % str(i))
     
@@ -192,7 +202,14 @@ func _get_best_quadrant_match(
                 corner_type_map_or_position[target_corner_type]
         var direct_match_weight_contribution := \
                 current_iteration_weight_multiplier
-        var direct_match_weight := weight + direct_match_weight_contribution
+        var connection_weight_multiplier := \
+                CornerConnectionWeightMultipliers.get_multiplier(
+                    target_corner_type,
+                    side_label)
+        var direct_match_weight := \
+                weight + \
+                direct_match_weight_contribution * \
+                connection_weight_multiplier
         
         var direct_match_position_and_weight: Array
         if direct_match_corner_type_map_or_position is Vector2:
@@ -293,19 +310,11 @@ func _get_best_quadrant_match(
                 # Skip this fallback, since it is for the other direction.
                 continue
             
-            var side_label: String
-            if is_h_neighbor:
-                side_label = "side"
-            else:
-                var is_top := CornerDirection.get_is_top(corner_direction)
-                if is_top == is_external_iteration:
-                    side_label = "top"
-                else:
-                    side_label = "bottom"
-            fallback_corner_weight_multiplier *= \
+            var connection_weight_multiplier := \
                     CornerConnectionWeightMultipliers.get_multiplier(
                         fallback_corner_type,
                         side_label)
+            fallback_corner_weight_multiplier *= connection_weight_multiplier
             
             if fallback_corner_weight_multiplier < 1.0:
                 # -   If the weight-multiplier is less than 1.0, then we should

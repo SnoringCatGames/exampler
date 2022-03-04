@@ -11,7 +11,7 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: --------------------------------
-var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 500.0
+var ACCEPTABLE_MATCH_PRIORITY_THRESHOLD := 1.0
 
 # NOTE: These values should be between 0 and 1, exclusive.
 var SUBTILE_DEPTH_TO_UNMATCHED_CORNER_WEIGHT_MULTIPLIER := {
@@ -227,50 +227,7 @@ func _parse_fallback_corner_types() -> void:
     _validate_connection_weight_multipliers()
     _populate_connection_weight_multipliers_with_fallbacks()
 #    _print_fallbacks()
-
-
-func _validate_connection_weight_multipliers() -> void:
-    for value in CornerConnectionWeightMultipliers.MULTIPLIERS.values():
-        assert(value is float or value is Dictionary)
-        if value is Dictionary:
-            assert(value.has("top") and value.top is float)
-            assert(value.has("bottom") and value.bottom is float)
-            assert(value.has("side") and value.side is float)
-
-
-func _populate_connection_weight_multipliers_with_fallbacks() -> void:
-    for corner_type in FallbackSubtileCorners.FALLBACKS:
-        if CornerConnectionWeightMultipliers.MULTIPLIERS.has(corner_type):
-            # Don't modify preexisting multipliers.
-            continue
-        
-        var max_bottom := -INF
-        var max_top := -INF
-        var max_sides := -INF
-        
-        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
-            if CornerConnectionWeightMultipliers.MULTIPLIERS.has(corner_type):
-                var value = CornerConnectionWeightMultipliers \
-                        .MULTIPLIERS[corner_type]
-                if value is Dictionary:
-                    max_top = max(max_top, value.top)
-                    max_bottom = max(max_bottom, value.bottom)
-                    max_sides = max(max_sides, value.side)
-                else:
-                    max_top = max(max_top, value)
-                    max_bottom = max(max_bottom, value)
-                    max_sides = max(max_sides, value)
-        
-        if max_top > 0 and max_bottom > 0 and max_sides > 0:
-            if max_top == max_bottom and max_top == max_sides:
-                CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type] = \
-                        max_top
-            else:
-                CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type] = {
-                    top = max_top,
-                    bottom = max_bottom,
-                    sides = max_sides,
-                }
+    _print_connection_weight_multipliers()
 
 
 func _validate_fallback_subtile_corners() -> void:
@@ -441,11 +398,82 @@ func _record_transitive_fallbacks_recursively(
     exclusion_set[corner_type] = false
 
 
+func _validate_connection_weight_multipliers() -> void:
+    for value in CornerConnectionWeightMultipliers.MULTIPLIERS.values():
+        assert(value is float or value is Dictionary)
+        if value is Dictionary:
+            assert(value.has("top") and value.top is float)
+            assert(value.has("bottom") and value.bottom is float)
+            assert(value.has("side") and value.side is float)
+            assert(value.top > 0.0 and value.top <= 1.0)
+            assert(value.bottom > 0.0 and value.bottom <= 1.0)
+            assert(value.side > 0.0 and value.side <= 1.0)
+
+
+func _populate_connection_weight_multipliers_with_fallbacks() -> void:
+    var connection_weight_multipliers: Dictionary = \
+            CornerConnectionWeightMultipliers.MULTIPLIERS
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        if connection_weight_multipliers.has(corner_type):
+            # Don't modify preexisting multipliers.
+            continue
+        
+        var max_bottom := -INF
+        var max_top := -INF
+        var max_side := -INF
+        
+        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            if connection_weight_multipliers.has(fallback_type):
+                var value = connection_weight_multipliers[fallback_type]
+                
+                var fallback_multiplier_top: float
+                var fallback_multiplier_bottom: float
+                var fallback_multiplier_side: float
+                if value is Dictionary:
+                    fallback_multiplier_top = value.top
+                    fallback_multiplier_bottom = value.bottom
+                    fallback_multiplier_side = value.side
+                else:
+                    fallback_multiplier_top = value
+                    fallback_multiplier_bottom = value
+                    fallback_multiplier_side = value
+                
+                var fallback_multipliers: Array = \
+                        FallbackSubtileCorners.FALLBACKS \
+                            [corner_type][fallback_type]
+                var is_good_horizontal_fallback: bool = \
+                        fallback_multipliers[0] == 1.0 or \
+                        fallback_multipliers[2] == 1.0
+                var is_good_vertical_fallback: bool = \
+                        fallback_multipliers[1] == 1.0 or \
+                        fallback_multipliers[3] == 1.0
+#                var is_good_horizontal_fallback: bool = \
+#                        fallback_multipliers[0] == 1.0
+#                var is_good_vertical_fallback: bool = \
+#                        fallback_multipliers[1] == 1.0
+                
+                if is_good_vertical_fallback:
+                    max_top = max(max_top, fallback_multiplier_top)
+                    max_bottom = max(max_bottom, fallback_multiplier_bottom)
+                if is_good_horizontal_fallback:
+                    max_side = max(max_side, fallback_multiplier_side)
+        
+        if max_top > 0 and max_bottom > 0 and max_side > 0:
+            if max_top == max_bottom and max_top == max_side:
+                connection_weight_multipliers[corner_type] = max_top
+            else:
+                connection_weight_multipliers[corner_type] = {
+                    top = max_top,
+                    bottom = max_bottom,
+                    side = max_side,
+                }
+
+
 func _print_fallbacks() -> void:
     print("")
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print(">>> FALLBACKS                >>>")
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>> SUBTILE CORNER-TYPE FALLBACKS >>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     for corner_type in Sc.utils.cascade_sort(
             FallbackSubtileCorners.FALLBACKS.keys()):
         print("%s:" % get_subtile_corner_string(corner_type))
@@ -464,5 +492,29 @@ func _print_fallbacks() -> void:
                 str(multipliers[2]),
                 str(multipliers[3]),
             ])
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print("")
+
+
+func _print_connection_weight_multipliers() -> void:
+    print("")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    print(">>> SUBTILE CONNECTION-WEIGHT MULTIPLIERS >>>")
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+    for corner_type in Sc.utils.cascade_sort(
+            CornerConnectionWeightMultipliers.MULTIPLIERS.keys()):
+        var value = CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type]
+        if value is Dictionary:
+            print("%s: [top=%s, bottom=%s, side=%s]" % [
+                get_subtile_corner_string(corner_type),
+                str(value.top),
+                str(value.bottom),
+                str(value.side),
+            ])
+        else:
+            print("%s: %s" % [
+                get_subtile_corner_string(corner_type),
+                str(value),
+            ])
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     print("")

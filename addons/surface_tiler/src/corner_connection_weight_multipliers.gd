@@ -17,8 +17,13 @@ extends Reference
 const MULTIPLIERS := {
     SubtileCorner.EXT_90H: {
         top = 1.0,
-        side = 0.5,
-        bottom = 0.5,
+        side = 1.0,
+        bottom = 0.4,
+    },
+    SubtileCorner.EXT_90V: {
+        top = 1.0,
+        side = 0.4,
+        bottom = 1.0,
     },
     SubtileCorner.EXT_45_H_SIDE: 0.9,
     # FIXME: LEFT OFF HERE: ----------------------- ...
@@ -28,7 +33,9 @@ const MULTIPLIERS := {
 static func get_multiplier(
         corner_type: int,
         side_label: String) -> float:
-    if MULTIPLIERS.has(corner_type):
+    if side_label == "":
+        return 1.0
+    elif MULTIPLIERS.has(corner_type):
         if MULTIPLIERS[corner_type] is Dictionary:
             return MULTIPLIERS[corner_type][side_label]
         else:
