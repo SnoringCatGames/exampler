@@ -94,23 +94,23 @@ func parse_corner_type_annotation_key(
 #   Dictionary<
 #     SubtileCorner, # Self-corner
 #     (Vector2|Dictionary<
-#       SubtileCorner, # H-opp-corner
+#       SubtileCorner, # H-internal-corner
 #       (Vector2|Dictionary<
-#         SubtileCorner, # V-opp-corner
+#         SubtileCorner, # V-internal-corner
 #         (Vector2|Dictionary<
-#           SubtileCorner, # H-inbound-corner
+#           SubtileCorner, # H-external-corner
 #           (Vector2|Dictionary<
-#             SubtileCorner, # V-inbound-corner
+#             SubtileCorner, # V-external-corner
 #             (Vector2|Dictionary<
-#               SubtileCorner, # Diagonal-opp-corner
+#               SubtileCorner, # Diagonal-internal-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-inbound-corner
+#                 SubtileCorner, # H2-external-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-inbound-corner
+#                   SubtileCorner, # V2-external-corner
 #                   (Vector2|Dictionary<
-#                     SubtileCorner, # HD-inbound-corner
+#                     SubtileCorner, # HD-external-corner
 #                     (Vector2|Dictionary<
-#                       SubtileCorner, # VD-inbound-corner
+#                       SubtileCorner, # VD-external-corner
 #                       Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>)>)>>
 func parse_tile_set_corner_type_annotations(
@@ -943,13 +943,13 @@ static func _validate_quadrants(
     # - Abandon the below config-based checks, and instead parse a separate
     #   min-required-corner-types image.
     
-    # [self, h_opp, v_opp]
+    # [self, h_internal, v_internal]
     var REQUIRED_90_QUADRANT_CORNER_TYPES := [
 #        [SubtileCorner.ERROR, SubtileCorner.ERROR, SubtileCorner.ERROR],
 #        [SubtileCorner.EMPTY, SubtileCorner.EMPTY, SubtileCorner.EMPTY],
         
         # FIXME: LEFT OFF HERE: ------------------
-        # - Update these to include more h-opp/v-opp UNKNOWN values, now that
+        # - Update these to include more h-internal/v-internal UNKNOWN values, now that
         #   I've added the simple interior connection annotation.
 #        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX],
 #        [SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90_90_CONVEX, SubtileCorner.EXT_90V],
@@ -987,12 +987,12 @@ static func _validate_quadrants(
 #        [SubtileCorner.EXT_90V, SubtileCorner.EXT_INT_90V, SubtileCorner.EXT_90V],
     ]
     
-    # [self, h_opp, v_opp]
+    # [self, h_internal, v_internal]
     var REQUIRED_45_QUADRANT_CORNER_TYPES := [
 #        [SubtileCorner., SubtileCorner., SubtileCorner.],
     ]
     
-    # [self, h_opp, v_opp]
+    # [self, h_internal, v_internal]
     var REQUIRED_27_QUADRANT_CORNER_TYPES := [
 #        [SubtileCorner., SubtileCorner., SubtileCorner.],
     ]

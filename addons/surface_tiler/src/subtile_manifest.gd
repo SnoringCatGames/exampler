@@ -224,7 +224,53 @@ func _parse_fallback_corner_types() -> void:
     _populate_abridged_fallback_multipliers()
     _record_reverse_fallbacks()
     _record_transitive_fallbacks()
+    _validate_connection_weight_multipliers()
+    _populate_connection_weight_multipliers_with_fallbacks()
 #    _print_fallbacks()
+
+
+func _validate_connection_weight_multipliers() -> void:
+    for value in CornerConnectionWeightMultipliers.MULTIPLIERS.values():
+        assert(value is float or value is Dictionary)
+        if value is Dictionary:
+            assert(value.has("top") and value.top is float)
+            assert(value.has("bottom") and value.bottom is float)
+            assert(value.has("side") and value.side is float)
+
+
+func _populate_connection_weight_multipliers_with_fallbacks() -> void:
+    for corner_type in FallbackSubtileCorners.FALLBACKS:
+        if CornerConnectionWeightMultipliers.MULTIPLIERS.has(corner_type):
+            # Don't modify preexisting multipliers.
+            continue
+        
+        var max_bottom := -INF
+        var max_top := -INF
+        var max_sides := -INF
+        
+        for fallback_type in FallbackSubtileCorners.FALLBACKS[corner_type]:
+            if CornerConnectionWeightMultipliers.MULTIPLIERS.has(corner_type):
+                var value = CornerConnectionWeightMultipliers \
+                        .MULTIPLIERS[corner_type]
+                if value is Dictionary:
+                    max_top = max(max_top, value.top)
+                    max_bottom = max(max_bottom, value.bottom)
+                    max_sides = max(max_sides, value.side)
+                else:
+                    max_top = max(max_top, value)
+                    max_bottom = max(max_bottom, value)
+                    max_sides = max(max_sides, value)
+        
+        if max_top > 0 and max_bottom > 0 and max_sides > 0:
+            if max_top == max_bottom and max_top == max_sides:
+                CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type] = \
+                        max_top
+            else:
+                CornerConnectionWeightMultipliers.MULTIPLIERS[corner_type] = {
+                    top = max_top,
+                    bottom = max_bottom,
+                    sides = max_sides,
+                }
 
 
 func _validate_fallback_subtile_corners() -> void:

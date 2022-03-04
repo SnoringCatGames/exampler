@@ -8,23 +8,23 @@ extends TileSet
 #   Dictionary<
 #     SubtileCorner, # Self-corner
 #     (Vector2|Dictionary<
-#       SubtileCorner, # H-opp-corner
+#       SubtileCorner, # H-internal-corner
 #       (Vector2|Dictionary<
-#         SubtileCorner, # V-opp-corner
+#         SubtileCorner, # V-internal-corner
 #         (Vector2|Dictionary<
-#           SubtileCorner, # H-inbound-corner
+#           SubtileCorner, # H-external-corner
 #           (Vector2|Dictionary<
-#             SubtileCorner, # V-inbound-corner
+#             SubtileCorner, # V-external-corner
 #             (Vector2|Dictionary<
-#               SubtileCorner, # Diagonal-opp-corner
+#               SubtileCorner, # Diagonal-internal-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-inbound-corner
+#                 SubtileCorner, # H2-external-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-inbound-corner
+#                   SubtileCorner, # V2-external-corner
 #                   (Vector2|Dictionary<
-#                     SubtileCorner, # HD-inbound-corner
+#                     SubtileCorner, # HD-external-corner
 #                     (Vector2|Dictionary<
-#                       SubtileCorner, # VD-inbound-corner
+#                       SubtileCorner, # VD-external-corner
 #                       Vector2        # Quadrant coordinates
 #                 >)>)>)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
@@ -146,7 +146,7 @@ func get_quadrants(
         quadrant_positions[i] = quadrant_position
     
     # If the matching quadrants represent the normal empty subtile, with no
-    # interesting inbound neighbor matches, then we return Vector2.INF values,
+    # interesting external neighbor matches, then we return Vector2.INF values,
     # so that the tilemap can clear the cell instead of assigning the empty
     # subtile.
     for i in quadrant_positions.size():
@@ -268,7 +268,7 @@ func _get_best_quadrant_match(
 #        ])
     
     # FIXME: LEFT OFF HERE: -----------------------------------------
-    # - Should internal and inbound diagonal connections have configurable
+    # - Should internal and external diagonal connections have configurable
     #   fallbacks?
     if !is_d_neighbor and !is_2_neighbor:
         # Consider all explicitly configured fallbacks.
@@ -402,15 +402,15 @@ func _print_subtile_corner_types(
         filter_connection_types: Array) -> void:
     var connection_labels := [
         "Self",
-        "H-opp",
-        "V-opp",
-        "H-inbound",
-        "V-inbound",
-        "Diagonal-opp",
-        "H2-inbound",
-        "V2-inbound",
-        "H-diag-inbound",
-        "V-diag-inbound",
+        "H-internal",
+        "V-internal",
+        "H-external",
+        "V-external",
+        "Diagonal-internal",
+        "H2-external",
+        "V2-external",
+        "H-diag-external",
+        "V-diag-external",
     ]
     Sc.logger.print(">>>>> CornerMatchTileset.subtile_corner_types")
     for corner_direction in Sc.utils.cascade_sort(subtile_corner_types.keys()):
@@ -543,15 +543,15 @@ func _get_position_and_weight_results_string(
             "w=" + str(position_and_weight[1]))
     var neighbor_labels := [
         "self",
-        "h_opp",
-        "v_opp",
-        "h_inbound",
-        "v_inbound",
-        "diag_opp",
-        "h2_inbound",
-        "v2_inbound",
-        "hd_inbound",
-        "vd_inbound",
+        "h_internal",
+        "v_internal",
+        "h_external",
+        "v_external",
+        "diag_internal",
+        "h2_external",
+        "v2_external",
+        "hd_external",
+        "vd_external",
     ]
     for i in range(2,10):
         var neighbor_result = position_and_weight[i]
