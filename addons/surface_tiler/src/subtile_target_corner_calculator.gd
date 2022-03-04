@@ -4,7 +4,11 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -------------------------------
-# - Fix the current glaring regressions in quadrant selections.
+# - Add diagonal fallback weights.
+# - Add logic to use diagonal fallback weights, and logic to use h/v-external
+#   weights for h2/v2-external connections.
+# 
+# - Fix the current more-glaring regressions in quadrant selections.
 # - Go through the tile-set and remove redundant quadrants.
 #   - Use the new support for explicit internal connection annotations.
 # - Actually, go back and add the separate types for the various inner 45
