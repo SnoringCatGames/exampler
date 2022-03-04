@@ -31,39 +31,35 @@ const FALLBACKS := {
     SubtileCorner.EXT_90H: {},
     SubtileCorner.EXT_90V: {},
     SubtileCorner.EXT_90_90_CONVEX: {
-#        SubtileCorner.EMPTY: [1.0, 1.0],
-        SubtileCorner.EXT_90H: [0.7, 0.0],
-        SubtileCorner.EXT_90V: [0.0, 0.7],
+        SubtileCorner.EXT_90H: [1.0, 0.0],
     },
     SubtileCorner.EXT_90_90_CONCAVE: {
-        SubtileCorner.EXT_90H: [0.0, 0.2],
-        SubtileCorner.EXT_90V: [0.2, 0.0],
+        SubtileCorner.EXT_90H: [0.0, 0.0, 1.0, 0.0],
+        SubtileCorner.EXT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     
     SubtileCorner.EXT_INT_90H: {},
     SubtileCorner.EXT_INT_90V: {},
     SubtileCorner.EXT_INT_90_90_CONVEX: {
-        SubtileCorner.EXT_INT_90H: [0.0, 0.2],
-        SubtileCorner.EXT_INT_90V: [0.2, 0.0],
+        SubtileCorner.EXT_INT_90H: [0.0, 0.0, 1.0, 0.0],
+        SubtileCorner.EXT_INT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     SubtileCorner.EXT_INT_90_90_CONCAVE: {
-        SubtileCorner.EXT_INT_90H: [1.0, 0.0],
-        SubtileCorner.EXT_INT_90V: [0.0, 1.0],
+        SubtileCorner.EXT_INT_90H: [1.0, 0.0, 0.0, 0.0],
+        SubtileCorner.EXT_INT_90V: [0.0, 1.0, 0.0, 0.0],
     },
     
     SubtileCorner.INT_90H: {
-        SubtileCorner.FULLY_INTERIOR: [0.0, 1.0],
     },
     SubtileCorner.INT_90V: {
-        SubtileCorner.FULLY_INTERIOR: [1.0, 0.0],
     },
     SubtileCorner.INT_90_90_CONVEX: {
         SubtileCorner.INT_90H: [1.0, 0.0],
         SubtileCorner.INT_90V: [0.0, 1.0],
     },
     SubtileCorner.INT_90_90_CONCAVE: {
-        SubtileCorner.INT_90H: [0.0, 0.2],
-        SubtileCorner.INT_90V: [0.2, 0.0],
+        SubtileCorner.INT_90H: [0.0, 0.0, 1.0, 0.0],
+        SubtileCorner.INT_90V: [0.0, 0.0, 0.0, 1.0],
     },
     
     ### 45-degree.
