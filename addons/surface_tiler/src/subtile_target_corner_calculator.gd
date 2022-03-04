@@ -4,12 +4,7 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: -------------------------------
-# - Add a new feature: CornerConnectionWeightMultipliers
-#   - Hook-up the logic to use this.
-#   - Encode the multipliers.
-#     - I can probably hold-off on most values though, and just add them as
-#       needed.
-#
+# - Fix the current glaring regressions in quadrant selections.
 # - Go through the tile-set and remove redundant quadrants.
 #   - Use the new support for explicit internal connection annotations.
 # - Actually, go back and add the separate types for the various inner 45
