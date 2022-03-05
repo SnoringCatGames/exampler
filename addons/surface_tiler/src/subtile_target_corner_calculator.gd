@@ -4,6 +4,19 @@ extends Node
 
 
 # FIXME: LEFT OFF HERE: --------------------------------
+# - Remove a lot of the bottom internal corner-types.
+#     - And use connection annotations instead.
+#   - INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_H_SIDE
+#   - INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_V_SIDE
+#   - INT_INT_EXT_90H_45_CONCAVE_INT_45_H_SIDE
+#   - INT_INT_EXT_90H_45_CONCAVE_INT_45_V_SIDE
+#   - INT_INT_EXT_90V_45_CONCAVE_INT_45_H_SIDE
+#   - INT_INT_EXT_90V_45_CONCAVE_INT_45_V_SIDE
+#   - INT_INT_EXT_90H_45_CONCAVE_INT_45_FLOOR_45_CEILING
+#   - INT_INT_EXT_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING
+#   - INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_FLOOR_45_CEILING
+#   - ... (most others in the last column of the legend?)
+#   - 
 # - Fix the current more-glaring regressions in quadrant selections.
 # - Go through the tile-set and remove redundant quadrants.
 #   - Use the new support for explicit internal connection annotations.

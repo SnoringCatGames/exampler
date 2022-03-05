@@ -96,7 +96,7 @@ func get_quadrants(
             Sc.logger.print("")
         
         if quadrant_weight < \
-                Su.subtile_manifest.ACCEPTABLE_MATCH_PRIORITY_THRESHOLD and \
+                Su.subtile_manifest.ACCEPTABLE_MATCH_WEIGHT_THRESHOLD and \
                 logs_error_info:
             Sc.logger.warning(
                 ("No matching quadrant was found: " +
