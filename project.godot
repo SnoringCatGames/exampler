@@ -2610,7 +2610,7 @@ _global_script_class_icons={
 "SurfaceEnablement": "res://addons/surfacer/assets/images/editor_icons/surface_enablement.png",
 "SurfaceFinder": "",
 "SurfaceLegendItem": "",
-"SurfaceMark": "res://addons/surfacer/assets/images/editor_icons/surfaces_tilemap.png",
+"SurfaceMark": "res://addons/surfacer/assets/images/editor_icons/surfaces_tile_map.png",
 "SurfaceNavigator": "",
 "SurfaceParser": "",
 "SurfaceParserGroupItemController": "",
