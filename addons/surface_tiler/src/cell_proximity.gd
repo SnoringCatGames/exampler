@@ -887,22 +887,30 @@ func get_is_straight_45_neg_ceiling(relative_x := 0, relative_y := 0) -> bool:
 
 
 func get_is_45_concave_cusp_at_top(relative_x := 0, relative_y := 0) -> bool:
-    return get_is_45_neg_floor(relative_x, relative_y) and \
+    return get_is_present(relative_x - 1, relative_y) and \
+            get_is_present(relative_x + 1, relative_y) and \
+            get_is_45_neg_floor(relative_x, relative_y) and \
             get_is_45_pos_floor(relative_x, relative_y)
 
 
 func get_is_45_concave_cusp_at_bottom(relative_x := 0, relative_y := 0) -> bool:
-    return get_is_45_pos_ceiling(relative_x, relative_y) and \
+    return get_is_present(relative_x - 1, relative_y) and \
+            get_is_present(relative_x + 1, relative_y) and \
+            get_is_45_pos_ceiling(relative_x, relative_y) and \
             get_is_45_neg_ceiling(relative_x, relative_y)
 
 
 func get_is_45_concave_cusp_at_left(relative_x := 0, relative_y := 0) -> bool:
-    return get_is_45_neg_ceiling(relative_x, relative_y) and \
+    return get_is_present(relative_x, 1 - relative_y) and \
+            get_is_present(relative_x, 1 + relative_y) and \
+            get_is_45_neg_ceiling(relative_x, relative_y) and \
             get_is_45_pos_floor(relative_x, relative_y)
 
 
 func get_is_45_concave_cusp_at_right(relative_x := 0, relative_y := 0) -> bool:
-    return get_is_45_pos_ceiling(relative_x, relative_y) and \
+    return get_is_present(relative_x, 1 - relative_y) and \
+            get_is_present(relative_x, 1 + relative_y) and \
+            get_is_45_pos_ceiling(relative_x, relative_y) and \
             get_is_45_neg_floor(relative_x, relative_y)
 
 
