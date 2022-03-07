@@ -289,7 +289,7 @@ func _get_best_quadrant_match(
             #     counter the weight contributed by any match from the other
             #     direction.
             fallback_corner_weight_multiplier = \
-                    (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * 0.1
+                    (-1.0 - (1.0 - fallback_corner_weight_multiplier)) * 1.0
         else:
             fallback_corner_weight_multiplier *= 1.0
         

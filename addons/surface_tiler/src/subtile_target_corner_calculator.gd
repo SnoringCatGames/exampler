@@ -3,7 +3,7 @@ class_name SubtileTargetCornerCalculator
 extends Node
 
 
-# FIXME: LEFT OFF HERE: --------------------------------
+# FIXME: LEFT OFF HERE: ---------------------------------
 # - Remove a lot of the bottom internal corner-types.
 #     - And use connection annotations instead.
 #   - INT_INT_EXT_90H_45_CONCAVE_90V_45_CONCAVE_INT_45_H_SIDE
@@ -221,9 +221,8 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                             return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                         else:
                             return SubtileCorner.EXT_INT_90_90_CONVEX
-                    elif proximity.get_is_bottom_left_corner_clipped_45_45():
-                        return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
-                    elif proximity.get_is_bottom_left_corner_clipped_90V_45():
+                    elif proximity.get_is_bottom_left_corner_clipped_45_45() or \
+                            proximity.get_is_bottom_left_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
                     else:
                         # FIXME: LEFT OFF HERE: -------- A27
@@ -758,9 +757,8 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                             return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                         else:
                             return SubtileCorner.EXT_INT_90_90_CONVEX
-                    elif proximity.get_is_bottom_right_corner_clipped_45_45():
-                        return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
-                    elif proximity.get_is_bottom_right_corner_clipped_90V_45():
+                    elif proximity.get_is_bottom_right_corner_clipped_45_45() or \
+                            proximity.get_is_bottom_right_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
                     else:
                         # FIXME: RIGHT OFF HERE: -------- A27
@@ -1295,9 +1293,8 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                             return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                         else:
                             return SubtileCorner.EXT_INT_90_90_CONVEX
-                    elif proximity.get_is_top_left_corner_clipped_45_45():
-                        return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
-                    elif proximity.get_is_top_left_corner_clipped_90V_45():
+                    elif proximity.get_is_top_left_corner_clipped_45_45() or \
+                            proximity.get_is_top_left_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
                     else:
                         # FIXME: LEFT OFF HERE: -------- A27
@@ -1832,9 +1829,8 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                             return SubtileCorner.EXT_INT_90H_45_CONCAVE_90V_45_CONCAVE
                         else:
                             return SubtileCorner.EXT_INT_90_90_CONVEX
-                    elif proximity.get_is_top_right_corner_clipped_45_45():
-                        return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
-                    elif proximity.get_is_top_right_corner_clipped_90V_45():
+                    elif proximity.get_is_top_right_corner_clipped_45_45() or \
+                            proximity.get_is_top_right_corner_clipped_90V_45():
                         return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE_45_FLOOR_45_CEILING
                     else:
                         # FIXME: RIGHT OFF HERE: -------- A27
