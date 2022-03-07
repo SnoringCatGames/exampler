@@ -225,6 +225,8 @@ func get_corner_type(
 func to_string(uses_newlines := false) -> String:
     var corner_strings := []
     for connection_direction in ConnectionDirection.DISTINCT_CONNECTIONS:
+        var connection_direction_string := \
+                ConnectionDirection.get_string(connection_direction)
         for corner_direction in CornerDirection.CORNERS:
             var corner_type := \
                     get_corner_type(corner_direction, connection_direction)
@@ -232,8 +234,9 @@ func to_string(uses_newlines := false) -> String:
                     CornerDirection.get_string(corner_direction)
             var corner_type_string: String = \
                     Su.subtile_manifest.get_subtile_corner_string(corner_type)
-            corner_strings.push_back("%s=%s" % [
+            corner_strings.push_back("%s-%s=%s" % [
                     corner_direction_string,
+                    connection_direction_string,
                     corner_type_string,
                ])
     if uses_newlines:

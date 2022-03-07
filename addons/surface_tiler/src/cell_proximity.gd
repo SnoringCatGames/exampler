@@ -590,6 +590,38 @@ func get_is_90_right_wall(
             return false
 
 
+func get_is_90_floor_side_or_corner(
+        relative_x := 0,
+        relative_y := 0) -> bool:
+    return get_is_90_floor(relative_x, relative_y) or \
+            get_is_top_left_corner_clipped_90_90(relative_x, relative_y) or \
+            get_is_top_right_corner_clipped_90_90(relative_x, relative_y)
+
+
+func get_is_90_ceiling_side_or_corner(
+        relative_x := 0,
+        relative_y := 0) -> bool:
+    return get_is_90_ceiling(relative_x, relative_y) or \
+            get_is_bottom_left_corner_clipped_90_90(relative_x, relative_y) or \
+            get_is_bottom_right_corner_clipped_90_90(relative_x, relative_y)
+
+
+func get_is_90_right_wall_side_or_corner(
+        relative_x := 0,
+        relative_y := 0) -> bool:
+    return get_is_90_right_wall(relative_x, relative_y) or \
+            get_is_top_left_corner_clipped_90_90(relative_x, relative_y) or \
+            get_is_bottom_left_corner_clipped_90_90(relative_x, relative_y)
+
+
+func get_is_90_left_wall_side_or_corner(
+        relative_x := 0,
+        relative_y := 0) -> bool:
+    return get_is_90_left_wall(relative_x, relative_y) or \
+            get_is_top_right_corner_clipped_90_90(relative_x, relative_y) or \
+            get_is_bottom_right_corner_clipped_90_90(relative_x, relative_y)
+
+
 func get_is_45_pos_floor(relative_x := 0, relative_y := 0) -> bool:
     if get_is_empty(relative_x, relative_y):
         return false
