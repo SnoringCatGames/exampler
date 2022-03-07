@@ -34,12 +34,14 @@ const MULTIPLIERS := {
 static func get_multiplier(
         corner_type: int,
         side_label: String) -> float:
+    var multiplier: float
     if side_label == "":
-        return 1.0
+        multiplier = 1.0
     elif MULTIPLIERS.has(corner_type):
         if MULTIPLIERS[corner_type] is Dictionary:
-            return MULTIPLIERS[corner_type][side_label]
+            multiplier = MULTIPLIERS[corner_type][side_label]
         else:
-            return MULTIPLIERS[corner_type]
+            multiplier = MULTIPLIERS[corner_type]
     else:
-        return 1.0
+        multiplier = 1.0
+    return 1.0 - (1.0 - multiplier) / 10000.0
