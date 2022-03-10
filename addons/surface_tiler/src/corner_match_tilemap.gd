@@ -60,7 +60,7 @@ func _ready() -> void:
     assert(cell_size == Sc.level_session.config.cell_size)
     
     # TODO: This is useful when updating the tileset.
-#    refresh_all_cells()
+    refresh_all_cells()
 
 
 func _enter_tree() -> void:
