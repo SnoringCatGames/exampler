@@ -143,7 +143,15 @@ func get_target_top_left_corner(proximity: CellProximity) -> int:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
                 else:
-                    return SubtileCorner.EXT_INT_90_90_CONVEX
+                    if proximity.get_is_45_neg_ceiling(-1,0):
+                        if proximity.get_is_45_neg_floor(0,-1):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
+                    elif proximity.get_is_45_neg_floor(0,-1):
+                        return SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE
+                    else:
+                        return SubtileCorner.EXT_INT_90_90_CONVEX
             else:
                 # Adjacent sides and corner and opposite horizontal side are present.
                 if proximity.is_top_right_empty:
@@ -679,7 +687,15 @@ func get_target_top_right_corner(proximity: CellProximity) -> int:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
                 else:
-                    return SubtileCorner.EXT_INT_90_90_CONVEX
+                    if proximity.get_is_45_pos_ceiling(1,0):
+                        if proximity.get_is_45_pos_floor(0,-1):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
+                    elif proximity.get_is_45_pos_floor(0,-1):
+                        return SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE
+                    else:
+                        return SubtileCorner.EXT_INT_90_90_CONVEX
             else:
                 # Adjacent sides and corner and opposite horizontal side are present.
                 if proximity.is_top_left_empty:
@@ -1215,7 +1231,15 @@ func get_target_bottom_left_corner(proximity: CellProximity) -> int:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
                 else:
-                    return SubtileCorner.EXT_INT_90_90_CONVEX
+                    if proximity.get_is_45_pos_floor(-1,0):
+                        if proximity.get_is_45_pos_ceiling(0,1):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
+                    elif proximity.get_is_45_pos_ceiling(0,1):
+                        return SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE
+                    else:
+                        return SubtileCorner.EXT_INT_90_90_CONVEX
             else:
                 # Adjacent sides and corner and opposite horizontal side are present.
                 if proximity.is_bottom_right_empty:
@@ -1751,7 +1775,15 @@ func get_target_bottom_right_corner(proximity: CellProximity) -> int:
                     # FIXME: LEFT OFF HERE: -------- A27
                     pass
                 else:
-                    return SubtileCorner.EXT_INT_90_90_CONVEX
+                    if proximity.get_is_45_neg_floor(1,0):
+                        if proximity.get_is_45_neg_ceiling(0,1):
+                            return SubtileCorner.EXT_INT_45_FLOOR_45_CEILING
+                        else:
+                            return SubtileCorner.EXT_INT_90V_45_CONVEX_ACUTE
+                    elif proximity.get_is_45_neg_ceiling(0,1):
+                        return SubtileCorner.EXT_INT_90H_45_CONVEX_ACUTE
+                    else:
+                        return SubtileCorner.EXT_INT_90_90_CONVEX
             else:
                 # Adjacent sides and corner and opposite horizontal side are present.
                 if proximity.is_bottom_left_empty:
