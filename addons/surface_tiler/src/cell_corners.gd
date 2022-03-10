@@ -147,12 +147,16 @@ func get_corner_type(
             return external_tl_l2
         [CornerDirection.TOP_LEFT, ConnectionDirection.HD_EXTERNAL]:
             return external_bl_l
+        [CornerDirection.TOP_LEFT, ConnectionDirection.HD2_EXTERNAL]:
+            return external_bl_l2
         [CornerDirection.TOP_LEFT, ConnectionDirection.V_EXTERNAL]:
             return external_tl_t
         [CornerDirection.TOP_LEFT, ConnectionDirection.V2_EXTERNAL]:
             return external_tl_t2
         [CornerDirection.TOP_LEFT, ConnectionDirection.VD_EXTERNAL]:
             return external_tr_t
+        [CornerDirection.TOP_LEFT, ConnectionDirection.VD2_EXTERNAL]:
+            return external_tr_t2
         
         [CornerDirection.TOP_RIGHT, ConnectionDirection.SELF]:
             return top_right
@@ -168,12 +172,16 @@ func get_corner_type(
             return external_tr_r2
         [CornerDirection.TOP_RIGHT, ConnectionDirection.HD_EXTERNAL]:
             return external_br_r
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.HD2_EXTERNAL]:
+            return external_br_r2
         [CornerDirection.TOP_RIGHT, ConnectionDirection.V_EXTERNAL]:
             return external_tr_t
         [CornerDirection.TOP_RIGHT, ConnectionDirection.V2_EXTERNAL]:
             return external_tr_t2
         [CornerDirection.TOP_RIGHT, ConnectionDirection.VD_EXTERNAL]:
             return external_tl_t
+        [CornerDirection.TOP_RIGHT, ConnectionDirection.VD2_EXTERNAL]:
+            return external_tl_t2
         
         [CornerDirection.BOTTOM_LEFT, ConnectionDirection.SELF]:
             return bottom_left
@@ -189,12 +197,16 @@ func get_corner_type(
             return external_bl_l2
         [CornerDirection.BOTTOM_LEFT, ConnectionDirection.HD_EXTERNAL]:
             return external_tl_l
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.HD2_EXTERNAL]:
+            return external_tl_l2
         [CornerDirection.BOTTOM_LEFT, ConnectionDirection.V_EXTERNAL]:
             return external_bl_b
         [CornerDirection.BOTTOM_LEFT, ConnectionDirection.V2_EXTERNAL]:
             return external_bl_b2
         [CornerDirection.BOTTOM_LEFT, ConnectionDirection.VD_EXTERNAL]:
             return external_br_b
+        [CornerDirection.BOTTOM_LEFT, ConnectionDirection.VD2_EXTERNAL]:
+            return external_br_b2
         
         [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.SELF]:
             return bottom_right
@@ -210,12 +222,16 @@ func get_corner_type(
             return external_br_r2
         [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.HD_EXTERNAL]:
             return external_tr_r
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.HD2_EXTERNAL]:
+            return external_tr_r2
         [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.V_EXTERNAL]:
             return external_br_b
         [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.V2_EXTERNAL]:
             return external_br_b2
         [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.VD_EXTERNAL]:
             return external_bl_b
+        [CornerDirection.BOTTOM_RIGHT, ConnectionDirection.VD2_EXTERNAL]:
+            return external_bl_b2
         
         _:
             Sc.logger.error("CellCorners.get_corner_type")

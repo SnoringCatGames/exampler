@@ -104,15 +104,19 @@ func parse_corner_type_annotation_key(
 #             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-internal-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-external-corner
+#                 SubtileCorner, # HD-external-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-external-corner
+#                   SubtileCorner, # VD-external-corner
 #                   (Vector2|Dictionary<
-#                     SubtileCorner, # HD-external-corner
+#                     SubtileCorner, # H2-external-corner
 #                     (Vector2|Dictionary<
-#                       SubtileCorner, # VD-external-corner
-#                       Vector2        # Quadrant coordinates
-#                 >)>)>)>)>)>)>)>)>)>>
+#                       SubtileCorner, # V2-external-corner
+#                       (Vector2|Dictionary<
+#                         SubtileCorner, # HD2-external-corner
+#                         (Vector2|Dictionary<
+#                           SubtileCorner, # VD2-external-corner
+#                           Vector2        # Quadrant coordinates
+#                         >)>)>)>)>)>)>)>)>)>>
 func parse_tileset_corner_type_annotations(
         tileset_corner_type_annotations_path: String,
         quadrant_size: int,
@@ -369,6 +373,9 @@ static func _get_implicit_connection_indicator(
         ConnectionDirection.HD_EXTERNAL:
             x_offset = 0
             y_offset = quadrant_size - 1
+        ConnectionDirection.HD2_EXTERNAL:
+            x_offset = 1
+            y_offset = quadrant_size - 1
         
         ConnectionDirection.V_EXTERNAL:
             x_offset = quadrant_size - 2
@@ -379,6 +386,9 @@ static func _get_implicit_connection_indicator(
         ConnectionDirection.VD_EXTERNAL:
             x_offset = quadrant_size - 1
             y_offset = 0
+        ConnectionDirection.VD2_EXTERNAL:
+            x_offset = quadrant_size - 1
+            y_offset = 1
         
         _:
             Sc.logger.error(
@@ -432,6 +442,10 @@ static func _get_annotation(
             region_start = Vector2(
                     0,
                     quadrant_size - ANNOTATION_SIZE)
+        ConnectionDirection.HD2_EXTERNAL:
+            region_start = Vector2(
+                    ANNOTATION_SIZE,
+                    quadrant_size - ANNOTATION_SIZE)
         ConnectionDirection.V_EXTERNAL:
             region_start = Vector2(
                     0,
@@ -444,6 +458,10 @@ static func _get_annotation(
             region_start = Vector2(
                     quadrant_size - ANNOTATION_SIZE,
                     0)
+        ConnectionDirection.VD2_EXTERNAL:
+            region_start = Vector2(
+                    quadrant_size - ANNOTATION_SIZE,
+                    ANNOTATION_SIZE)
         _:
             Sc.logger.error("TilesetAnnotationsParser._get_quadrant_annotation")
     
@@ -629,19 +647,11 @@ static func _record_quadrant(
     var corner_to_connections: Dictionary = \
             connection_types_map[corner_direction]
     
-    var keys := [
-        corner_to_connections[ConnectionDirection.SELF],
-        corner_to_connections[ConnectionDirection.H_INTERNAL],
-        corner_to_connections[ConnectionDirection.V_INTERNAL],
-        corner_to_connections[ConnectionDirection.H_EXTERNAL],
-        corner_to_connections[ConnectionDirection.V_EXTERNAL],
-        corner_to_connections[ConnectionDirection.D_INTERNAL],
-        corner_to_connections[ConnectionDirection.H2_EXTERNAL],
-        corner_to_connections[ConnectionDirection.V2_EXTERNAL],
-        corner_to_connections[ConnectionDirection.HD_EXTERNAL],
-        corner_to_connections[ConnectionDirection.VD_EXTERNAL],
-        quadrant_coordinates,
-    ]
+    var keys := ConnectionDirection \
+            .CONNECTIONS_IN_QUADRANT_MATCH_PRIORITY_ORDER.duplicate()
+    for i in keys.size():
+        keys[i] = corner_to_connections[keys[i]]
+    keys.push_back(quadrant_coordinates)
     
     var index_of_last_known_type := 0
     for i in keys.size() - 1:
@@ -756,64 +766,32 @@ static func _check_for_empty_non_annotation_pixels(
         quadrant_size: int,
         image: Image,
         path: String) -> void:
-    var h_side_region_start := Vector2(
-            quadrant_size - ANNOTATION_SIZE,
-            ANNOTATION_SIZE)
-    var v_side_region_start := Vector2(
-            ANNOTATION_SIZE,
-            quadrant_size - ANNOTATION_SIZE)
-    
-    if !CornerDirection.get_is_top(corner_direction):
-        h_side_region_start.y = \
-                quadrant_size - ANNOTATION_SIZE - h_side_region_start.y
-        v_side_region_start.y = \
-                quadrant_size - ANNOTATION_SIZE - v_side_region_start.y
-    if !CornerDirection.get_is_left(corner_direction):
-        h_side_region_start.x = \
-                quadrant_size - ANNOTATION_SIZE - h_side_region_start.x
-        v_side_region_start.x = \
-                quadrant_size - ANNOTATION_SIZE - v_side_region_start.x
-    
-    var h_side_region := Rect2(
-            h_side_region_start,
-            Vector2.ONE * ANNOTATION_SIZE)
-    var v_side_region := Rect2(
-            v_side_region_start,
-            Vector2.ONE * ANNOTATION_SIZE)
     var center_region := Rect2(
             Vector2.ONE * ANNOTATION_SIZE,
             Vector2.ONE * (quadrant_size - ANNOTATION_SIZE * 2))
-    
-    var regions := [
-        center_region,
-        h_side_region,
-        v_side_region,
-    ]
-    
-    for region in regions:
-        for quadrant_y in range(region.position.y, region.end.y):
-            for quadrant_x in range(region.position.x, region.end.x):
-                var color := image.get_pixel(
+    for quadrant_y in range(center_region.position.y, center_region.end.y):
+        for quadrant_x in range(center_region.position.x, center_region.end.x):
+            var color := image.get_pixel(
+                    quadrant_position.x + quadrant_x,
+                    quadrant_position.y + quadrant_y)
+            assert(color.a == 0,
+                    ("Non-annotation-region pixels must be empty: " +
+                    "pixel_position=(%s,%s), " +
+                    "pixel_position=(%s,%s), " +
+                    "color=%s, " +
+                    "%s") % [
+                        quadrant_x,
+                        quadrant_y,
                         quadrant_position.x + quadrant_x,
-                        quadrant_position.y + quadrant_y)
-                assert(color.a == 0,
-                        ("Non-annotation-region pixels must be empty: " +
-                        "pixel_position=(%s,%s), " +
-                        "pixel_position=(%s,%s), " +
-                        "color=%s, " +
-                        "%s") % [
-                            quadrant_x,
-                            quadrant_y,
-                            quadrant_position.x + quadrant_x,
-                            quadrant_position.y + quadrant_y,
-                            str(color),
-                            _get_log_string(
-                                quadrant_position,
-                                corner_direction,
-                                ConnectionDirection.SELF,
-                                quadrant_size,
-                                path),
-                        ])
+                        quadrant_position.y + quadrant_y,
+                        str(color),
+                        _get_log_string(
+                            quadrant_position,
+                            corner_direction,
+                            ConnectionDirection.SELF,
+                            quadrant_size,
+                            path),
+                    ])
 
 
 static func _validate_annotation_key_annotation(

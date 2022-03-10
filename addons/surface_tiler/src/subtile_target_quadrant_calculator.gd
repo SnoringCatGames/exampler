@@ -3,6 +3,9 @@ class_name SubtileTargetQuadrantCalculator
 extends Node
 
 
+const _QUADRANT_DEBUG_RESULTS_COUNT := 14
+
+
 func get_quadrants(
         cell_position: Vector2,
         tile_id: int,
@@ -37,28 +40,11 @@ func get_quadrants(
     for i in CornerDirection.CORNERS.size():
         var corner_direction: int = CornerDirection.CORNERS[i]
         
-        var corner_types := [
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.SELF),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.H_INTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.V_INTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.H_EXTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.V_EXTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.D_INTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.H2_EXTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.V2_EXTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.HD_EXTERNAL),
-            target_corners.get_corner_type(
-                    corner_direction, ConnectionDirection.VD_EXTERNAL),
-        ]
+        var corner_types := ConnectionDirection \
+                .CONNECTIONS_IN_QUADRANT_MATCH_PRIORITY_ORDER.duplicate()
+        for j in corner_types.size():
+            corner_types[j] = target_corners.get_corner_type(
+                    corner_direction, corner_types[j])
         
         var debug_types := []
         # TODO: This is useful for debugging.
@@ -204,7 +190,7 @@ func _get_best_quadrant_match(
     
     if index == 0 or \
             !Su.subtile_manifest.allows_fallback_corner_matches:
-        best_position_and_weight.resize(12)
+        best_position_and_weight.resize(_QUADRANT_DEBUG_RESULTS_COUNT)
         best_position_and_weight[index + 2] = {
             weight_contribution = best_weight_contribution,
             corner_type = best_type,
@@ -350,7 +336,7 @@ func _get_best_quadrant_match(
                     fallback_weight,
                 ])
     
-    best_position_and_weight.resize(12)
+    best_position_and_weight.resize(_QUADRANT_DEBUG_RESULTS_COUNT)
     best_position_and_weight[index + 2] = {
         weight_contribution = best_weight_contribution,
         corner_type = best_type,
@@ -378,10 +364,12 @@ func _get_debug_types(
 func _get_fallback_weight_multiplier(
         fallback_multipliers: Array,
         index: int) -> float:
+    assert(index >= 0 and index <= 11)
     var is_external_iteration := index > 2 and index != 5
-    var is_h_neighbor := index == 1 or index == 3 or index == 6
-    var is_v_neighbor := index == 2 or index == 4 or index == 7
-    var is_d_neighbor := index == 5 or index == 8 or index == 9
+    var is_h_neighbor := index == 1 or index == 3 or index == 8
+    var is_v_neighbor := index == 2 or index == 4 or index == 9
+    var is_d_neighbor := \
+            index == 5 or index == 6 or index == 7 or index == 10 or index == 11
     if is_external_iteration:
         if is_d_neighbor:
             return fallback_multipliers[5]
@@ -401,10 +389,12 @@ func _get_fallback_weight_multiplier(
 func _get_connection_weight_multiplier_label(
         index: int,
         corner_direction: int) -> String:
+    assert(index >= 0 and index <= 11)
     var is_external_iteration := index > 2 and index != 5
-    var is_h_neighbor := index == 1 or index == 3 or index == 6
-    var is_v_neighbor := index == 2 or index == 4 or index == 7
-    var is_d_neighbor := index == 5 or index == 8 or index == 9
+    var is_h_neighbor := index == 1 or index == 3 or index == 8
+    var is_v_neighbor := index == 2 or index == 4 or index == 9
+    var is_d_neighbor := \
+            index == 5 or index == 6 or index == 7 or index == 10 or index == 11
     var connection_weight_multiplier_label: String
     if is_d_neighbor:
         return "diagonal"
@@ -421,10 +411,10 @@ func _get_iteration_weight_multiplier(index) -> float:
     match index:
         0: iteration_exponent = 0
         1, 2: iteration_exponent = 1
-        3, 4, 5, 6, 7, 8, 9: iteration_exponent = 2
+        3, 4, 5, 6, 7, 8, 9, 10, 11: iteration_exponent = 2
         _:
             Sc.logger.error(
-                "CornerMatchTileset._get_iteration_weight_multiplier")
+                "SubtileTargetQuadrantCalculator._get_iteration_weight_multiplier")
     return 1000.0 / pow(1000.0,iteration_exponent)
 
 
@@ -433,19 +423,7 @@ func _print_subtile_corner_types(
         target_corner_types: Array,
         filter_connection_types: Array,
         subtile_corner_types: Dictionary) -> void:
-    var connection_labels := [
-        "Self",
-        "H-internal",
-        "V-internal",
-        "H-external",
-        "V-external",
-        "Diagonal-internal",
-        "H2-external",
-        "V2-external",
-        "H-diag-external",
-        "V-diag-external",
-    ]
-    Sc.logger.print(">>>>> CornerMatchTileset.subtile_corner_types")
+    Sc.logger.print(">>>>> SubtileTargetQuadrantCalculator.subtile_corner_types")
     for corner_direction in Sc.utils.cascade_sort(subtile_corner_types.keys()):
         if target_corner_direction >= 0 and \
                 target_corner_direction != corner_direction:
@@ -455,7 +433,6 @@ func _print_subtile_corner_types(
                 subtile_corner_types[corner_direction],
                 target_corner_types,
                 filter_connection_types,
-                connection_labels,
                 0,
                 target_corner_direction)
     Sc.logger.print(">>>>>")
@@ -465,7 +442,6 @@ func _print_subtile_corner_types_recursively(
         map: Dictionary,
         target_corner_types: Array,
         filter_connection_types: Array,
-        connection_labels: Array,
         index: int,
         target_corner_direction: int) -> void:
     if filter_connection_types.size() > index:
@@ -484,7 +460,6 @@ func _print_subtile_corner_types_recursively(
         var next_value = map[target_connection_type]
         if next_value is Vector2:
             _print_subtile_connection_entry(
-                    connection_labels,
                     index,
                     target_corner_direction,
                     target_connection_type,
@@ -492,7 +467,6 @@ func _print_subtile_corner_types_recursively(
                     next_value)
         else:
             _print_subtile_connection_entry(
-                    connection_labels,
                     index,
                     target_corner_direction,
                     target_connection_type,
@@ -501,7 +475,6 @@ func _print_subtile_corner_types_recursively(
                     next_value,
                     target_corner_types,
                     filter_connection_types,
-                    connection_labels,
                     index + 1,
                     target_corner_direction)
     else:
@@ -509,7 +482,6 @@ func _print_subtile_corner_types_recursively(
             var next_value = map[connection_type]
             if next_value is Vector2:
                 _print_subtile_connection_entry(
-                        connection_labels,
                         index,
                         target_corner_direction,
                         connection_type,
@@ -517,7 +489,6 @@ func _print_subtile_corner_types_recursively(
                         next_value)
             else:
                 _print_subtile_connection_entry(
-                        connection_labels,
                         index,
                         target_corner_direction,
                         connection_type,
@@ -526,13 +497,11 @@ func _print_subtile_corner_types_recursively(
                         next_value,
                         target_corner_types,
                         filter_connection_types,
-                        connection_labels,
                         index + 1,
                         target_corner_direction)
 
 
 func _print_subtile_connection_entry(
-        connection_labels: Array,
         index: int,
         target_corner_direction: int,
         connection_type: int,
@@ -540,36 +509,34 @@ func _print_subtile_connection_entry(
         quadrant_coordinates := Vector2.INF) -> void:
     var target_connection_type: int = target_corner_types[index]
     var is_direct_match_to_target := connection_type == target_connection_type
-    var is_index_valid_for_fallback := index >= 1 and index <= 4
     
     var fallback_weight := -INF
     if is_direct_match_to_target:
         fallback_weight = 1.0
-    elif is_index_valid_for_fallback:
+    else:
         if FallbackSubtileCorners.FALLBACKS[target_connection_type] \
                 .has(connection_type):
-            fallback_weight = FallbackSubtileCorners.FALLBACKS \
-                    [target_connection_type][connection_type][index - 1]
+            fallback_weight = _get_fallback_weight_multiplier(
+                    FallbackSubtileCorners.FALLBACKS \
+                        [target_connection_type][connection_type],
+                    index)
     
     var fallback_weight_string: String
     var connection_weight_string := ""
-    if is_index_valid_for_fallback or is_direct_match_to_target:
-        if fallback_weight >= 0:
-            fallback_weight_string = "%.2f" % fallback_weight
-            
-            var connection_weight_multiplier_label := \
-                    _get_connection_weight_multiplier_label(
-                        index, target_corner_direction)
-            var connection_weight_multiplier := \
-                    CornerConnectionWeightMultipliers.get_multiplier(
-                        target_connection_type,
-                        connection_weight_multiplier_label)
-            connection_weight_string = \
-                    "[%.2f]" % connection_weight_multiplier
-        else:
-            fallback_weight_string = "--"
+    if fallback_weight >= 0:
+        fallback_weight_string = "%.2f" % fallback_weight
+        
+        var connection_weight_multiplier_label := \
+                _get_connection_weight_multiplier_label(
+                    index, target_corner_direction)
+        var connection_weight_multiplier := \
+                CornerConnectionWeightMultipliers.get_multiplier(
+                    target_connection_type,
+                    connection_weight_multiplier_label)
+        connection_weight_string = \
+                "[%.2f]" % connection_weight_multiplier
     else:
-        fallback_weight_string = "N/A"
+        fallback_weight_string = "--"
     
     var spaces := Sc.utils.get_spaces((index + 1) * 2)
     var quadrant_coordinates_string := \
@@ -582,7 +549,7 @@ func _print_subtile_connection_entry(
     
     var message := "%s%s: %s%s [%s]%s" % [
         spaces,
-        connection_labels[index],
+        _get_neighbor_label_for_index(index),
         Su.subtile_manifest.get_subtile_corner_string(connection_type),
         quadrant_coordinates_string,
         fallback_weight_string,
@@ -601,19 +568,7 @@ func _get_position_and_weight_results_string(
     ])
     position_and_weight_result_strings.push_back(
             "w=" + str(position_and_weight[1]))
-    var neighbor_labels := [
-        "self",
-        "h_internal",
-        "v_internal",
-        "h_external",
-        "v_external",
-        "diag_internal",
-        "h2_external",
-        "v2_external",
-        "hd_external",
-        "vd_external",
-    ]
-    for i in range(2,10):
+    for i in range(2,_QUADRANT_DEBUG_RESULTS_COUNT):
         var neighbor_result = position_and_weight[i]
         var contribution_string := \
                 "NULL" if \
@@ -625,8 +580,27 @@ func _get_position_and_weight_results_string(
                     str(neighbor_result.weight_contribution),
                 ]
         position_and_weight_result_strings.push_back("%s=%s" % [
-                neighbor_labels[i - 2],
+                _get_neighbor_label_for_index(i - 2),
                 contribution_string,
             ])
     return "quadrant_match(\n    %s\n)" % \
             Sc.utils.join(position_and_weight_result_strings, ",\n    ")
+
+
+func _get_neighbor_label_for_index(index: int) -> String:
+    var neighbor_labels := [
+        "Self",
+        "H-internal",
+        "V-internal",
+        "H-external",
+        "V-external",
+        "Diagonal-internal",
+        "H-diag-external",
+        "V-diag-external",
+        "H2-external",
+        "V2-external",
+        "H2-diag-external",
+        "V2-diag-external",
+    ]
+    return neighbor_labels[index]
+    

@@ -18,15 +18,19 @@ extends TileSet
 #             (Vector2|Dictionary<
 #               SubtileCorner, # Diagonal-internal-corner
 #               (Vector2|Dictionary<
-#                 SubtileCorner, # H2-external-corner
+#                 SubtileCorner, # HD-external-corner
 #                 (Vector2|Dictionary<
-#                   SubtileCorner, # V2-external-corner
+#                   SubtileCorner, # VD-external-corner
 #                   (Vector2|Dictionary<
-#                     SubtileCorner, # HD-external-corner
+#                     SubtileCorner, # H2-external-corner
 #                     (Vector2|Dictionary<
-#                       SubtileCorner, # VD-external-corner
-#                       Vector2        # Quadrant coordinates
-#                 >)>)>)>)>)>)>)>)>)>>
+#                       SubtileCorner, # V2-external-corner
+#                       (Vector2|Dictionary<
+#                         SubtileCorner, # HD2-external-corner
+#                         (Vector2|Dictionary<
+#                           SubtileCorner, # VD2-external-corner
+#                           Vector2        # Quadrant coordinates
+#                         >)>)>)>)>)>)>)>)>)>>
 var subtile_corner_types: Dictionary
 
 # Dictionary<int<Color>, Dictionary<int<Bits>, SubtileCorner>>
