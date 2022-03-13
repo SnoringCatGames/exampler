@@ -374,6 +374,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/corner_match_tilemap.gd"
 }, {
+"base": "EditorInspectorPlugin",
+"class": "CornerMatchTilemapInspectorPlugin",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/corner_match_tilemap_inspector_plugin.gd"
+}, {
 "base": "TileSet",
 "class": "CornerMatchTileset",
 "language": "GDScript",
@@ -2318,6 +2323,7 @@ _global_script_class_icons={
 "CornerDirection": "",
 "CornerMatchInnerTilemap": "",
 "CornerMatchTilemap": "",
+"CornerMatchTilemapInspectorPlugin": "",
 "CornerMatchTileset": "",
 "CornerMatchTilesetInitializer": "",
 "CornerMatchTilesetShapeCalculator": "",
@@ -2721,7 +2727,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray(  )
+enabled=PoolStringArray( "res://addons/surface_tiler/plugin.cfg" )
 
 [importer_defaults]
 
