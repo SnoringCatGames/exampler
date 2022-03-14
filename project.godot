@@ -167,17 +167,17 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "CellAngleType",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/cell_angle_type.gd"
+"path": "res://addons/surface_tiler/src/models/cell_angle_type.gd"
 }, {
 "base": "Reference",
 "class": "CellCorners",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/cell_corners.gd"
+"path": "res://addons/surface_tiler/src/models/cell_corners.gd"
 }, {
 "base": "Reference",
 "class": "CellProximity",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/cell_proximity.gd"
+"path": "res://addons/surface_tiler/src/models/cell_proximity.gd"
 }, {
 "base": "PanelContainer",
 "class": "CenteredPanel",
@@ -342,7 +342,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "ConnectionDirection",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/connection_direction.gd"
+"path": "res://addons/surface_tiler/src/models/connection_direction.gd"
 }, {
 "base": "ValidEdgeTrajectoryLegendItem",
 "class": "ContinuousEdgeTrajectoryLegendItem",
@@ -357,12 +357,12 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "CornerConnectionWeightMultipliers",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/corner_connection_weight_multipliers.gd"
+"path": "res://addons/surface_tiler/src/config/corner_connection_weight_multipliers.gd"
 }, {
 "base": "Reference",
 "class": "CornerDirection",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/corner_direction.gd"
+"path": "res://addons/surface_tiler/src/models/corner_direction.gd"
 }, {
 "base": "TileMap",
 "class": "CornerMatchInnerTilemap",
@@ -387,12 +387,12 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "CornerMatchTilesetInitializer",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/corner_match_tileset_initializer.gd"
+"path": "res://addons/surface_tiler/src/calculators/corner_match_tileset_initializer.gd"
 }, {
 "base": "Node",
 "class": "CornerMatchTilesetShapeCalculator",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/corner_match_tileset_shape_calculator.gd"
+"path": "res://addons/surface_tiler/src/calculators/corner_match_tileset_shape_calculator.gd"
 }, {
 "base": "Node",
 "class": "CrashReporter",
@@ -732,7 +732,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "FallbackSubtileCorners",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/fallback_subtile_corners.gd"
+"path": "res://addons/surface_tiler/src/config/fallback_subtile_corners.gd"
 }, {
 "base": "TextControlRow",
 "class": "FastestTimeControlRow",
@@ -1362,7 +1362,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "QuadrantShapeType",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/quadrant_shape_type.gd"
+"path": "res://addons/surface_tiler/src/models/quadrant_shape_type.gd"
 }, {
 "base": "Screen",
 "class": "RateAppScreen",
@@ -1777,32 +1777,27 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "SubtileCorner",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_corner.gd"
+"path": "res://addons/surface_tiler/src/models/subtile_corner.gd"
 }, {
 "base": "Reference",
 "class": "SubtileCornerToDepth",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_corner_to_depth.gd"
+"path": "res://addons/surface_tiler/src/config/subtile_corner_to_depth.gd"
 }, {
 "base": "Reference",
 "class": "SubtileDepth",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_depth.gd"
-}, {
-"base": "Node",
-"class": "SubtileManifest",
-"language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_manifest.gd"
+"path": "res://addons/surface_tiler/src/models/subtile_depth.gd"
 }, {
 "base": "Node",
 "class": "SubtileTargetCornerCalculator",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_target_corner_calculator.gd"
+"path": "res://addons/surface_tiler/src/calculators/subtile_target_corner_calculator.gd"
 }, {
 "base": "Node",
 "class": "SubtileTargetQuadrantCalculator",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/subtile_target_quadrant_calculator.gd"
+"path": "res://addons/surface_tiler/src/calculators/subtile_target_quadrant_calculator.gd"
 }, {
 "base": "Reference",
 "class": "Surface",
@@ -1878,6 +1873,11 @@ _global_script_classes=[ {
 "class": "SurfaceStore",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_store.gd"
+}, {
+"base": "CenterContainer",
+"class": "SurfaceTilerMainPanel",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/surface_tiler_main_panel.gd"
 }, {
 "base": "Reference",
 "class": "SurfaceType",
@@ -2087,7 +2087,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "TilesetAnnotationsParser",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/tileset_annotations_parser.gd"
+"path": "res://addons/surface_tiler/src/calculators/tileset_annotations_parser.gd"
 }, {
 "base": "SurfacesTileset",
 "class": "TilesetOld",
@@ -2606,7 +2606,6 @@ _global_script_class_icons={
 "SubtileCorner": "",
 "SubtileCornerToDepth": "",
 "SubtileDepth": "",
-"SubtileManifest": "",
 "SubtileTargetCornerCalculator": "",
 "SubtileTargetQuadrantCalculator": "",
 "Surface": "",
@@ -2624,6 +2623,7 @@ _global_script_class_icons={
 "SurfaceReachability": "",
 "SurfaceSide": "",
 "SurfaceStore": "",
+"SurfaceTilerMainPanel": "",
 "SurfaceType": "",
 "SurfacerAnnotationElement": "",
 "SurfacerAnnotationParameters": "",
@@ -2715,6 +2715,7 @@ config/quit_on_go_back=false
 Sc="*res://addons/scaffolder/src/config/sc.gd"
 Su="*res://addons/surfacer/src/config/su.gd"
 SquirrelAway="*res://addons/squirrel_away/src/config/squirrel_away.gd"
+St="*res://addons/surface_tiler/src/config/st.gd"
 
 [display]
 
