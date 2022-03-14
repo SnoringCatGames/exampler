@@ -819,7 +819,17 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/framework_config.gd"
 }, {
-"base": "Node",
+"base": "Reference",
+"class": "FrameworkManifestController",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/framework_manifest_controller.gd"
+}, {
+"base": "VBoxContainer",
+"class": "FrameworkManifestPanel",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/framework_manifest_panel.gd"
+}, {
+"base": "Reference",
 "class": "FrameworkManifestSchema",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/plugin/framework_manifest_schema.gd"
@@ -2452,6 +2462,8 @@ _global_script_class_icons={
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
 "FrameworkConfig": "",
+"FrameworkManifestController": "",
+"FrameworkManifestPanel": "",
 "FrameworkManifestSchema": "",
 "FromAirCalculator": "",
 "FromAirEdge": "",
