@@ -404,6 +404,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/crash_test_dummy.gd"
 }, {
+"base": "Reference",
+"class": "DTS",
+"language": "GDScript",
+"path": "res://addons/dialogic/Localization/translation_service.gd"
+}, {
 "base": "Screen",
 "class": "DataAgreementScreen",
 "language": "GDScript",
@@ -468,6 +473,31 @@ _global_script_classes=[ {
 "class": "DeviceUtils",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/utils/device_utils.gd"
+}, {
+"base": "Node",
+"class": "Dialogic",
+"language": "GDScript",
+"path": "res://addons/dialogic/Other/DialogicClass.gd"
+}, {
+"base": "Control",
+"class": "DialogicBackgroundMusic",
+"language": "GDScript",
+"path": "res://addons/dialogic/Nodes/BackgroundMusic.gd"
+}, {
+"base": "Node",
+"class": "DialogicDefinitionsUtil",
+"language": "GDScript",
+"path": "res://addons/dialogic/Other/DialogicDefinitionsUtil.gd"
+}, {
+"base": "Reference",
+"class": "DialogicResources",
+"language": "GDScript",
+"path": "res://addons/dialogic/Other/DialogicResources.gd"
+}, {
+"base": "Reference",
+"class": "DialogicUtil",
+"language": "GDScript",
+"path": "res://addons/dialogic/Other/DialogicUtil.gd"
 }, {
 "base": "ValidEdgeTrajectoryLegendItem",
 "class": "DiscreteEdgeTrajectoryLegendItem",
@@ -788,6 +818,11 @@ _global_script_classes=[ {
 "class": "FrameworkConfig",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/framework_config.gd"
+}, {
+"base": "Node",
+"class": "FrameworkManifestSchema",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/framework_manifest_schema.gd"
 }, {
 "base": "EdgeCalculator",
 "class": "FromAirCalculator",
@@ -1879,6 +1914,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/plugin/surface_tiler_main_panel.gd"
 }, {
+"base": "FrameworkManifestSchema",
+"class": "SurfaceTilerManifestSchema",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/surface_tiler_manifest_schema.gd"
+}, {
 "base": "Reference",
 "class": "SurfaceType",
 "language": "GDScript",
@@ -2329,6 +2369,7 @@ _global_script_class_icons={
 "CornerMatchTilesetShapeCalculator": "",
 "CrashReporter": "",
 "CrashTestDummy": "",
+"DTS": "",
 "DataAgreementScreen": "",
 "DebugLevel": "",
 "DebugPanel": "res://addons/scaffolder/assets/images/editor_icons/debug_panel.png",
@@ -2342,6 +2383,11 @@ _global_script_class_icons={
 "DestinationSurfaceLegendItem": "",
 "DeveloperSplashScreen": "",
 "DeviceUtils": "",
+"Dialogic": "",
+"DialogicBackgroundMusic": "",
+"DialogicDefinitionsUtil": "",
+"DialogicResources": "",
+"DialogicUtil": "",
 "DiscreteEdgeTrajectoryLegendItem": "",
 "DropdownControlRow": "",
 "DummyItemController": "",
@@ -2406,6 +2452,7 @@ _global_script_class_icons={
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
 "FrameworkConfig": "",
+"FrameworkManifestSchema": "",
 "FromAirCalculator": "",
 "FromAirEdge": "",
 "FullScreenPanel": "res://addons/scaffolder/assets/images/editor_icons/full_screen_panel.png",
@@ -2624,6 +2671,7 @@ _global_script_class_icons={
 "SurfaceSide": "",
 "SurfaceStore": "",
 "SurfaceTilerMainPanel": "",
+"SurfaceTilerManifestSchema": "",
 "SurfaceType": "",
 "SurfacerAnnotationElement": "",
 "SurfacerAnnotationParameters": "",
@@ -2728,7 +2776,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/surface_tiler/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/surface_tiler/plugin.cfg" )
 
 [importer_defaults]
 
