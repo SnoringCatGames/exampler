@@ -829,7 +829,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/plugin/framework_manifest_controller.gd"
 }, {
-"base": "VBoxContainer",
+"base": "ScrollContainer",
 "class": "FrameworkManifestPanel",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/plugin/framework_manifest_panel.gd"
