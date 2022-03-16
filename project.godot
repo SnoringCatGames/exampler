@@ -819,6 +819,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/framework_config.gd"
 }, {
+"base": "PanelContainer",
+"class": "FrameworkManifestArrayButtons",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/framework_manifest_array_buttons.gd"
+}, {
 "base": "Reference",
 "class": "FrameworkManifestController",
 "language": "GDScript",
@@ -2467,6 +2472,7 @@ _global_script_class_icons={
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
 "FrameworkConfig": "",
+"FrameworkManifestArrayButtons": "",
 "FrameworkManifestController": "",
 "FrameworkManifestPanel": "",
 "FrameworkManifestRow": "",
