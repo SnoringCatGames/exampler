@@ -829,6 +829,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/plugin/framework_manifest_controller.gd"
 }, {
+"base": "Reference",
+"class": "FrameworkManifestCustomProperty",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/framework_manifest_custom_property.gd"
+}, {
 "base": "ScrollContainer",
 "class": "FrameworkManifestPanel",
 "language": "GDScript",
@@ -1428,6 +1433,11 @@ _global_script_classes=[ {
 "class": "RateAppScreen",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/rate_app_screen.gd"
+}, {
+"base": "FrameworkManifestCustomProperty",
+"class": "RecalculateTilesetCustomProperty",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/recalculate_tileset_custom_property.gd"
 }, {
 "base": "CheckboxControlRow",
 "class": "RecentMovementAnnotatorControlRow",
@@ -2484,6 +2494,7 @@ _global_script_class_icons={
 "FrameworkConfig": "",
 "FrameworkManifestArrayButtons": "",
 "FrameworkManifestController": "",
+"FrameworkManifestCustomProperty": "",
 "FrameworkManifestPanel": "",
 "FrameworkManifestRow": "",
 "FrameworkManifestRowGroup": "",
@@ -2604,6 +2615,7 @@ _global_script_class_icons={
 "ProximityDetector": "res://addons/scaffolder/assets/images/editor_icons/proximity_detector.png",
 "QuadrantShapeType": "",
 "RateAppScreen": "",
+"RecalculateTilesetCustomProperty": "",
 "RecentMovementAnnotatorControlRow": "",
 "ReturnBehavior": "",
 "RightWallsItemController": "",
