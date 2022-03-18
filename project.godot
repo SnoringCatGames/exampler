@@ -1649,6 +1649,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/widgets/scaffolder_panel_container.gd"
 }, {
+"base": "FrameworkPlugin",
+"class": "ScaffolderPlugin",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/scaffolder_plugin.gd"
+}, {
 "base": "ProgressBar",
 "class": "ScaffolderProgressBar",
 "language": "GDScript",
@@ -1813,6 +1818,11 @@ _global_script_classes=[ {
 "class": "SquirrelAwayMain",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
+}, {
+"base": "FrameworkPlugin",
+"class": "SquirrelAwayPlugin",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/plugin/squirrel_away_plugin.gd"
 }, {
 "base": "SurfacesTileset",
 "class": "SquirrelAwaySurfacesTileset",
@@ -2098,6 +2108,11 @@ _global_script_classes=[ {
 "class": "SurfacerMovementManifest",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_movement_manifest.gd"
+}, {
+"base": "FrameworkPlugin",
+"class": "SurfacerPlugin",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/plugin/surfacer_plugin.gd"
 }, {
 "base": "ScaffolderSpawnPosition",
 "class": "SurfacerSpawnPosition",
@@ -2673,6 +2688,7 @@ _global_script_class_icons={
 "ScaffolderLog": "",
 "ScaffolderOptionButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_option_button.png",
 "ScaffolderPanelContainer": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
+"ScaffolderPlugin": "",
 "ScaffolderProgressBar": "res://addons/scaffolder/assets/images/editor_icons/progress_bar.png",
 "ScaffolderProjectSettings": "",
 "ScaffolderSlider": "res://addons/scaffolder/assets/images/editor_icons/slider.png",
@@ -2706,6 +2722,7 @@ _global_script_class_icons={
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
+"SquirrelAwayPlugin": "",
 "SquirrelAwaySurfacesTileset": "",
 "SquirrelAwayThirdPartyLicenses": "",
 "SquirrelAwayTilemap": "",
@@ -2763,6 +2780,7 @@ _global_script_class_icons={
 "SurfacerLevelSession": "",
 "SurfacerLoadingScreen": "",
 "SurfacerMovementManifest": "",
+"SurfacerPlugin": "",
 "SurfacerSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
 "SurfacerSurfacePropertiesManifest": "",
 "SurfacerThirdPartyLicenses": "",
@@ -2842,7 +2860,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/surface_tiler/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
 
 [importer_defaults]
 
