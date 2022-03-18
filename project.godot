@@ -815,9 +815,9 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/gui/font_size.gd"
 }, {
 "base": "Node",
-"class": "FrameworkConfig",
+"class": "FrameworkGlobal",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/framework_config.gd"
+"path": "res://addons/scaffolder/src/config/framework_global.gd"
 }, {
 "base": "PanelContainer",
 "class": "FrameworkManifestArrayButtons",
@@ -855,9 +855,9 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/plugin/framework_manifest_row_group.gd"
 }, {
 "base": "Reference",
-"class": "FrameworkManifestSchema",
+"class": "  ",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/plugin/framework_manifest_schema.gd"
+"path": "res://addons/scaffolder/src/plugin/framework_schema.gd"
 }, {
 "base": "EditorPlugin",
 "class": "FrameworkPlugin",
@@ -1639,10 +1639,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/data/scaffolder_log.gd"
 }, {
-"base": "FrameworkManifestSchema",
-"class": "ScaffolderManifestSchema",
+"base": "FrameworkSchema",
+"class": "ScaffolderSchema",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/plugin/scaffolder_manifest_schema.gd"
+"path": "res://addons/scaffolder/src/plugin/scaffolder_schema.gd"
 }, {
 "base": "OptionButton",
 "class": "ScaffolderOptionButton",
@@ -1834,10 +1834,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
 }, {
-"base": "FrameworkManifestSchema",
-"class": "SquirrelAwayManifestSchema",
+"base": "FrameworkSchema",
+"class": "SquirrelAwaySchema",
 "language": "GDScript",
-"path": "res://addons/squirrel_away/src/plugin/squirrel_away_manifest_schema.gd"
+"path": "res://addons/squirrel_away/src/plugin/squirrel_away_schema.gd"
 }, {
 "base": "FrameworkPlugin",
 "class": "SquirrelAwayPlugin",
@@ -1984,10 +1984,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_store.gd"
 }, {
-"base": "FrameworkManifestSchema",
-"class": "SurfaceTilerManifestSchema",
+"base": "FrameworkSchema",
+"class": "SurfaceTilerSchema",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/plugin/surface_tiler_manifest_schema.gd"
+"path": "res://addons/surface_tiler/src/plugin/surface_tiler_schema.gd"
 }, {
 "base": "FrameworkPlugin",
 "class": "SurfaceTilerPlugin",
@@ -2079,7 +2079,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_colors.gd"
 }, {
-"base": "FrameworkConfig",
+"base": "FrameworkGlobal",
 "class": "SurfacerDefaultAppManifest",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_default_app_manifest.gd"
@@ -2119,10 +2119,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/screens/surfacer_loading_screen.gd"
 }, {
-"base": "FrameworkManifestSchema",
-"class": "SurfacerManifestSchema",
+"base": "FrameworkSchema",
+"class": "SurfacerSchema",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/plugin/surfacer_manifest_schema.gd"
+"path": "res://addons/surfacer/src/plugin/surfacer_schema.gd"
 }, {
 "base": "Node",
 "class": "SurfacerMovementManifest",
@@ -2541,7 +2541,7 @@ _global_script_class_icons={
 "FloorsItemController": "",
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
-"FrameworkConfig": "",
+"FrameworkGlobal": "",
 "FrameworkManifestArrayButtons": "",
 "FrameworkManifestController": "",
 "FrameworkManifestCustomProperty": "",
@@ -2549,7 +2549,7 @@ _global_script_class_icons={
 "FrameworkManifestPanel": "",
 "FrameworkManifestRow": "",
 "FrameworkManifestRowGroup": "",
-"FrameworkManifestSchema": "",
+"FrameworkSchema": "",
 "FrameworkPlugin": "",
 "FromAirCalculator": "",
 "FromAirEdge": "",
@@ -2706,7 +2706,7 @@ _global_script_class_icons={
 "ScaffolderLevelSession": "",
 "ScaffolderLoadingScreen": "",
 "ScaffolderLog": "",
-"ScaffolderManifestSchema": "",
+"ScaffolderSchema": "",
 "ScaffolderOptionButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_option_button.png",
 "ScaffolderPanelContainer": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "ScaffolderPlugin": "",
@@ -2745,7 +2745,7 @@ _global_script_class_icons={
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
-"SquirrelAwayManifestSchema": "",
+"SquirrelAwaySchema": "",
 "SquirrelAwayPlugin": "",
 "SquirrelAwaySurfacesTileset": "",
 "SquirrelAwayThirdPartyLicenses": "",
@@ -2775,7 +2775,7 @@ _global_script_class_icons={
 "SurfaceReachability": "",
 "SurfaceSide": "",
 "SurfaceStore": "",
-"SurfaceTilerManifestSchema": "",
+"SurfaceTilerSchema": "",
 "SurfaceTilerPlugin": "",
 "SurfaceType": "",
 "SurfacerAnnotationElement": "",
@@ -2802,7 +2802,7 @@ _global_script_class_icons={
 "SurfacerLevelConfig": "",
 "SurfacerLevelSession": "",
 "SurfacerLoadingScreen": "",
-"SurfacerManifestSchema": "",
+"SurfacerSchema": "",
 "SurfacerMovementManifest": "",
 "SurfacerPlugin": "",
 "SurfacerSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
