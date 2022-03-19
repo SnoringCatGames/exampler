@@ -1512,7 +1512,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderBootstrap",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_bootstrap.gd"
+"path": "res://addons/scaffolder/src/config/framework_bootstrap.gd"
 }, {
 "base": "Button",
 "class": "ScaffolderButton",
@@ -1657,7 +1657,7 @@ _global_script_classes=[ {
 "base": "CenterContainer",
 "class": "ScaffolderPluginMainPanel",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/plugin/scaffolder_plugin_main_panel.gd"
+"path": "res://addons/scaffolder/src/plugin/framework_plugin_main_panel.gd"
 }, {
 "base": "ProgressBar",
 "class": "ScaffolderProgressBar",
