@@ -864,6 +864,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/plugin/framework_schema.gd"
 }, {
+"base": "Reference",
+"class": "FrameworkSchemaMode",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/framework_schema_mode.gd"
+}, {
 "base": "EdgeCalculator",
 "class": "FromAirCalculator",
 "language": "GDScript",
@@ -2551,6 +2556,7 @@ _global_script_class_icons={
 "FrameworkManifestRowGroup": "",
 "FrameworkPlugin": "",
 "FrameworkSchema": "",
+"FrameworkSchemaMode": "",
 "FromAirCalculator": "",
 "FromAirEdge": "",
 "FullScreenPanel": "res://addons/scaffolder/assets/images/editor_icons/full_screen_panel.png",
