@@ -1725,6 +1725,11 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/config/scaffolder_third_party_licenses.gd"
 }, {
 "base": "Node",
+"class": "ScaffolderTime",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/utils/time/scaffolder_time.gd"
+}, {
+"base": "Node",
 "class": "ScaffolderTween",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/utils/time/scaffolder_tween.gd"
@@ -2249,11 +2254,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/tiles/tileset_with_square_corners.gd"
 }, {
-"base": "Node",
-"class": "Time",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/utils/time/time.gd"
-}, {
 "base": "TextControlRow",
 "class": "TimeControlRow",
 "language": "GDScript",
@@ -2748,6 +2748,7 @@ _global_script_class_icons={
 "ScaffolderTextureLink": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_texture_link.png",
 "ScaffolderTextureRect": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_texture_rect.png",
 "ScaffolderThirdPartyLicenses": "",
+"ScaffolderTime": "",
 "ScaffolderTween": "",
 "ScaffolderVSeparator": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_v_separator.png",
 "ScoreControlRow": "",
@@ -2853,7 +2854,6 @@ _global_script_class_icons={
 "TilesetOld": "",
 "TilesetWithManyAngles": "",
 "TilesetWithSquareCorners": "",
-"Time": "",
 "TimeControlRow": "",
 "TimeScaleControlRow": "",
 "TimeType": "",
