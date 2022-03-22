@@ -1670,9 +1670,9 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/plugin/scaffolder_plugin.gd"
 }, {
 "base": "CenterContainer",
-"class": "ScaffolderPluginMainPanel",
+"class": "ScaffolderPluginMainScreen",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/plugin/framework_plugin_main_panel.gd"
+"path": "res://addons/scaffolder/src/plugin/framework_plugin_main_screen.gd"
 }, {
 "base": "ProgressBar",
 "class": "ScaffolderProgressBar",
@@ -2737,7 +2737,7 @@ _global_script_class_icons={
 "ScaffolderOptionButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_option_button.png",
 "ScaffolderPanelContainer": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "ScaffolderPlugin": "",
-"ScaffolderPluginMainPanel": "",
+"ScaffolderPluginMainScreen": "",
 "ScaffolderProgressBar": "res://addons/scaffolder/assets/images/editor_icons/progress_bar.png",
 "ScaffolderProjectSettings": "",
 "ScaffolderSchema": "",
