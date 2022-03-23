@@ -824,7 +824,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_body.gd"
 }, {
-"base": "Reference",
+"base": "HBoxContainer",
 "class": "FrameworkManifestAccordionHeader",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_header.gd"
@@ -864,7 +864,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_row.gd"
 }, {
-"base": "Reference",
+"base": "FrameworkManifestAccordionPanel",
 "class": "FrameworkManifestRowGroup",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_row_group.gd"
@@ -2628,7 +2628,7 @@ _global_script_class_icons={
 "FontSize": "",
 "FrameworkGlobal": "",
 "FrameworkManifestAccordionBody": "",
-"FrameworkManifestAccordionHeader": "",
+"FrameworkManifestAccordionHeader": "res://addons/scaffolder/assets/images/editor_icons/accordion_header.png",
 "FrameworkManifestAccordionPanel": "",
 "FrameworkManifestArrayButtons": "",
 "FrameworkManifestController": "",
@@ -2636,7 +2636,7 @@ _global_script_class_icons={
 "FrameworkManifestEditorNode": "",
 "FrameworkManifestPanel": "res://addons/scaffolder/assets/images/editor_icons/control_row_list.png",
 "FrameworkManifestRow": "",
-"FrameworkManifestRowGroup": "",
+"FrameworkManifestRowGroup": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_placeholder.png",
 "FrameworkPlugin": "",
 "FrameworkSchema": "",
 "FrameworkSchemaMode": "",
