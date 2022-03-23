@@ -1400,6 +1400,11 @@ _global_script_classes=[ {
 "path": "res://addons/surfacer/src/gui/control_rows/player/player_slow_mo_trajectory_annotator_control_row.gd"
 }, {
 "base": "Reference",
+"class": "PluginMetadata",
+"language": "GDScript",
+"path": "res://addons/scaffolder/addons/plugger/src/plugin_metadata.gd"
+}, {
+"base": "Reference",
 "class": "PointerSelectionPosition",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/pointer_selection_position.gd"
@@ -1518,6 +1523,11 @@ _global_script_classes=[ {
 "class": "SaveState",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/data/save_state.gd"
+}, {
+"base": "FrameworkGlobal",
+"class": "ScInterface",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/config/sc.gd"
 }, {
 "base": "Node",
 "class": "ScaffolderAnnotationParameters",
@@ -1668,6 +1678,11 @@ _global_script_classes=[ {
 "class": "ScaffolderLog",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/data/scaffolder_log.gd"
+}, {
+"base": "PluginMetadata",
+"class": "ScaffolderMetadata",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/scaffolder_metadata.gd"
 }, {
 "base": "OptionButton",
 "class": "ScaffolderOptionButton",
@@ -1844,6 +1859,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/characters/squirrel/squirrel.gd"
 }, {
+"base": "SurfacerDefaultAppManifest",
+"class": "SquirrelAwayInterface",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/config/squirrel_away.gd"
+}, {
 "base": "SurfacerLevel",
 "class": "SquirrelAwayLevel",
 "language": "GDScript",
@@ -1868,6 +1888,11 @@ _global_script_classes=[ {
 "class": "SquirrelAwayMain",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
+}, {
+"base": "PluginMetadata",
+"class": "SquirrelAwayMetadata",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/plugin/squirrel_away_metadata.gd"
 }, {
 "base": "FrameworkPlugin",
 "class": "SquirrelAwayPlugin",
@@ -1899,6 +1924,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/tiles/squirrel_away_tilemap_with_many_angles.gd"
 }, {
+"base": "FrameworkGlobal",
+"class": "StInterface",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/config/st.gd"
+}, {
 "base": "TextControlRow",
 "class": "StaticTextControlRow",
 "language": "GDScript",
@@ -1918,6 +1948,11 @@ _global_script_classes=[ {
 "class": "StyleBoxTextureScalable",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/style_box_texture_scalable.gd"
+}, {
+"base": "FrameworkGlobal",
+"class": "SuInterface",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/config/su.gd"
 }, {
 "base": "Reference",
 "class": "SubtileCorner",
@@ -2018,6 +2053,11 @@ _global_script_classes=[ {
 "class": "SurfaceStore",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_store.gd"
+}, {
+"base": "PluginMetadata",
+"class": "SurfaceTilerMetadata",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/plugin/surface_tiler_metadata.gd"
 }, {
 "base": "FrameworkPlugin",
 "class": "SurfaceTilerPlugin",
@@ -2153,6 +2193,11 @@ _global_script_classes=[ {
 "class": "SurfacerLoadingScreen",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/screens/surfacer_loading_screen.gd"
+}, {
+"base": "PluginMetadata",
+"class": "SurfacerMetadata",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/plugin/surfacer_metadata.gd"
 }, {
 "base": "Node",
 "class": "SurfacerMovementManifest",
@@ -2698,6 +2743,7 @@ _global_script_class_icons={
 "PlayerPreselectionTrajectoryAnnotatorControlRow": "",
 "PlayerPreviousTrajectoryAnnotatorControlRow": "",
 "PlayerSlowMoTrajectoryAnnotatorControlRow": "",
+"PluginMetadata": "",
 "PointerSelectionPosition": "",
 "PolylineAnnotationElement": "",
 "PolylineLegendItem": "",
@@ -2722,6 +2768,7 @@ _global_script_class_icons={
 "RulerAnnotatorControlRow": "",
 "RunAwayBehavior": "res://addons/surfacer/assets/images/editor_icons/run_away_behavior.png",
 "SaveState": "",
+"ScInterface": "",
 "ScaffolderAnnotationParameters": "",
 "ScaffolderAnnotators": "",
 "ScaffolderAppMetadata": "",
@@ -2752,6 +2799,7 @@ _global_script_class_icons={
 "ScaffolderLevelSession": "",
 "ScaffolderLoadingScreen": "",
 "ScaffolderLog": "",
+"ScaffolderMetadata": "",
 "ScaffolderOptionButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_option_button.png",
 "ScaffolderPanelContainer": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "ScaffolderPlugin": "",
@@ -2787,21 +2835,25 @@ _global_script_class_icons={
 "Spacer": "res://addons/scaffolder/assets/images/editor_icons/spacer.png",
 "SplashScreen": "",
 "Squirrel": "",
+"SquirrelAwayInterface": "",
 "SquirrelAwayLevel": "",
 "SquirrelAwayLevelConfig": "",
 "SquirrelAwayLevelSession": "",
 "SquirrelAwayLoadingImage": "",
 "SquirrelAwayMain": "res://addons/scaffolder/assets/images/editor_icons/star.png",
+"SquirrelAwayMetadata": "",
 "SquirrelAwayPlugin": "",
 "SquirrelAwaySchema": "",
 "SquirrelAwaySurfacesTileset": "",
 "SquirrelAwayThirdPartyLicenses": "",
 "SquirrelAwayTilemap": "",
 "SquirrelAwayTilemapWithManyAngles": "",
+"StInterface": "",
 "StaticTextControlRow": "",
 "Stopwatch": "",
 "StyleBoxFlatScalable": "",
 "StyleBoxTextureScalable": "",
+"SuInterface": "",
 "SubtileCorner": "",
 "SubtileCornerToDepth": "",
 "SubtileDepth": "",
@@ -2822,6 +2874,7 @@ _global_script_class_icons={
 "SurfaceReachability": "",
 "SurfaceSide": "",
 "SurfaceStore": "",
+"SurfaceTilerMetadata": "",
 "SurfaceTilerPlugin": "",
 "SurfaceTilerSchema": "",
 "SurfaceType": "",
@@ -2849,6 +2902,7 @@ _global_script_class_icons={
 "SurfacerLevelConfig": "",
 "SurfacerLevelSession": "",
 "SurfacerLoadingScreen": "",
+"SurfacerMetadata": "",
 "SurfacerMovementManifest": "",
 "SurfacerPlugin": "",
 "SurfacerSchema": "",
@@ -2930,7 +2984,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg" )
 
 [importer_defaults]
 
