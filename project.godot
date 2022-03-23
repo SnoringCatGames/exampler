@@ -2972,6 +2972,9 @@ config/quit_on_go_back=false
 
 Sc="*res://addons/scaffolder/src/config/sc.gd"
 Pl="*res://addons/scaffolder/addons/plugger/src/pl.gd"
+SquirrelAway="*res://addons/squirrel_away/src/config/squirrel_away.gd"
+St="*res://addons/surface_tiler/src/config/st.gd"
+Su="*res://addons/surfacer/src/config/su.gd"
 
 [display]
 
@@ -2984,7 +2987,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
 
 [importer_defaults]
 
