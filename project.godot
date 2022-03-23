@@ -819,7 +819,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/framework_global.gd"
 }, {
-"base": "Reference",
+"base": "VBoxContainer",
 "class": "FrameworkManifestAccordionBody",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_body.gd"
@@ -839,7 +839,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_panel.gd"
 }, {
-"base": "Reference",
+"base": "PanelContainer",
 "class": "FrameworkManifestArrayButtons",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_array_buttons.gd"
@@ -2632,11 +2632,11 @@ _global_script_class_icons={
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
 "FrameworkGlobal": "",
-"FrameworkManifestAccordionBody": "",
+"FrameworkManifestAccordionBody": "res://addons/scaffolder/assets/images/editor_icons/accordion_body.png",
 "FrameworkManifestAccordionHeader": "res://addons/scaffolder/assets/images/editor_icons/accordion_header.png",
 "FrameworkManifestAccordionHeaderCaret": "res://addons/scaffolder/addons/plugger/assets/images/caret_right_dark_theme_1.png",
 "FrameworkManifestAccordionPanel": "res://addons/scaffolder/assets/images/editor_icons/accordion_panel.png",
-"FrameworkManifestArrayButtons": "",
+"FrameworkManifestArrayButtons": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_placeholder.png",
 "FrameworkManifestController": "",
 "FrameworkManifestCustomProperty": "",
 "FrameworkManifestEditorNode": "",
