@@ -879,6 +879,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/framework_plugin.gd"
 }, {
+"base": "CenterContainer",
+"class": "FrameworkPluginMainScreen",
+"language": "GDScript",
+"path": "res://addons/scaffolder/addons/plugger/src/gui/framework_plugin_main_screen.gd"
+}, {
 "base": "Reference",
 "class": "FrameworkSchema",
 "language": "GDScript",
@@ -1708,11 +1713,6 @@ _global_script_classes=[ {
 "class": "ScaffolderPlugin",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/plugin/scaffolder_plugin.gd"
-}, {
-"base": "CenterContainer",
-"class": "ScaffolderPluginMainScreen",
-"language": "GDScript",
-"path": "res://addons/scaffolder/addons/plugger/src/gui/framework_plugin_main_screen.gd"
 }, {
 "base": "ProgressBar",
 "class": "ScaffolderProgressBar",
@@ -2649,6 +2649,7 @@ _global_script_class_icons={
 "FrameworkManifestRow": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_placeholder.png",
 "FrameworkManifestRowGroup": "res://addons/scaffolder/assets/images/editor_icons/accordion_panel.png",
 "FrameworkPlugin": "",
+"FrameworkPluginMainScreen": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "FrameworkSchema": "",
 "FrameworkSchemaMode": "",
 "FromAirCalculator": "",
@@ -2815,7 +2816,6 @@ _global_script_class_icons={
 "ScaffolderOptionButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_option_button.png",
 "ScaffolderPanelContainer": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "ScaffolderPlugin": "",
-"ScaffolderPluginMainScreen": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "ScaffolderProgressBar": "res://addons/scaffolder/assets/images/editor_icons/progress_bar.png",
 "ScaffolderProjectSettings": "",
 "ScaffolderSchema": "",
