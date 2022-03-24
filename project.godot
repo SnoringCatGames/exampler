@@ -815,6 +815,11 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/src/gui/font_size.gd"
 }, {
 "base": "Node",
+"class": "FrameworkBootstrap",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/config/framework_bootstrap.gd"
+}, {
+"base": "Node",
 "class": "FrameworkGlobal",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/framework_global.gd"
@@ -1564,11 +1569,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/scaffolder_audio_manifest.gd"
 }, {
-"base": "Node",
-"class": "ScaffolderBootstrap",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/config/framework_bootstrap.gd"
-}, {
 "base": "Button",
 "class": "ScaffolderButton",
 "language": "GDScript",
@@ -2109,7 +2109,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/utils/surfacer_beat_tracker.gd"
 }, {
-"base": "ScaffolderBootstrap",
+"base": "FrameworkBootstrap",
 "class": "SurfacerBootstrap",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_bootstrap.gd"
@@ -2636,6 +2636,7 @@ _global_script_class_icons={
 "FloorsItemController": "",
 "FollowBehavior": "res://addons/surfacer/assets/images/editor_icons/follow_behavior.png",
 "FontSize": "",
+"FrameworkBootstrap": "",
 "FrameworkGlobal": "",
 "FrameworkManifestAccordionBody": "res://addons/scaffolder/assets/images/editor_icons/accordion_body.png",
 "FrameworkManifestAccordionHeader": "res://addons/scaffolder/assets/images/editor_icons/accordion_header.png",
@@ -2786,7 +2787,6 @@ _global_script_class_icons={
 "ScaffolderAnnotators": "",
 "ScaffolderAppMetadata": "",
 "ScaffolderAudioManifest": "",
-"ScaffolderBootstrap": "",
 "ScaffolderButton": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_button.png",
 "ScaffolderCharacter": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character.png",
 "ScaffolderCharacterAnimator": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_character_animator.png",
