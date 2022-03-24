@@ -1489,7 +1489,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/control_rows/displays/recent_movement_annotator_control_row.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Rect2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/rect2_editor.gd"
@@ -2369,12 +2369,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/legend/valid_edge_trajectory_legend_item.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Vector2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector2_editor.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Vector3Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector3_editor.gd"
