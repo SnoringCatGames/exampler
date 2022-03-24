@@ -1199,7 +1199,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/utils/movement_utils.gd"
 }, {
-"base": "Reference",
+"base": "VBoxContainer",
 "class": "MultiNumberEditor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/multi_number_editor.gd"
