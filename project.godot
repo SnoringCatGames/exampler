@@ -829,7 +829,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_header.gd"
 }, {
-"base": "TextureRect",
+"base": "Control",
 "class": "FrameworkManifestAccordionHeaderCaret",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_accordion_header_caret.gd"
