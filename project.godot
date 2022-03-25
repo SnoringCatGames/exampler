@@ -884,7 +884,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/framework_plugin.gd"
 }, {
-"base": "CenterContainer",
+"base": "VBoxContainer",
 "class": "FrameworkPluginMainScreen",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_plugin_main_screen.gd"
