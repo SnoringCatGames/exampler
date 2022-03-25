@@ -894,10 +894,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/framework_schema.gd"
 }, {
-"base": "Reference",
-"class": "FrameworkSchemaMode",
+"base": "Node",
+"class": "FrameworkSchemaModes",
 "language": "GDScript",
-"path": "res://addons/scaffolder/addons/plugger/src/framework_schema_mode.gd"
+"path": "res://addons/scaffolder/addons/plugger/src/framework_schema_modes.gd"
 }, {
 "base": "EdgeCalculator",
 "class": "FromAirCalculator",
@@ -1504,7 +1504,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/control_rows/displays/recent_movement_annotator_control_row.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Rect2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/rect2_editor.gd"
@@ -2374,12 +2374,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/legend/valid_edge_trajectory_legend_item.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Vector2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector2_editor.gd"
 }, {
-"base": "MultiNumberEditor",
+"base": "Reference",
 "class": "Vector3Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector3_editor.gd"
@@ -2652,7 +2652,7 @@ _global_script_class_icons={
 "FrameworkPlugin": "",
 "FrameworkPluginMainScreen": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "FrameworkSchema": "",
-"FrameworkSchemaMode": "",
+"FrameworkSchemaModes": "",
 "FromAirCalculator": "",
 "FromAirEdge": "",
 "FullScreenPanel": "res://addons/scaffolder/assets/images/editor_icons/full_screen_panel.png",
@@ -3084,5 +3084,5 @@ common/physics_fps=60.0
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_clear_color=Color( 0.270588, 0.239216, 0.188235, 1 )
+environment/default_clear_color=Color( 0.12549, 0.133333, 0.164706, 1 )
 quality/2d/use_pixel_snap=true
