@@ -77,6 +77,9 @@ Thumbs.db
 # Releases that shouldn't be included in the repo
 *.apk
 
+# Plugin local metadata
+plugin_open_rows.json
+
 # App-release secrets
 secret/
 secrets/
