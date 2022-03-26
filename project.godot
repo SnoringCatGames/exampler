@@ -1869,7 +1869,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/characters/squirrel/squirrel.gd"
 }, {
-"base": "SurfacerDefaultAppManifest",
+"base": "SurfacerFrameworkGlobal",
 "class": "SquirrelAwayInterface",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away.gd"
@@ -2164,15 +2164,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_colors.gd"
 }, {
-"base": "FrameworkGlobal",
-"class": "SurfacerDefaultAppManifest",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_default_app_manifest.gd"
-}, {
 "base": "ScaffolderDrawUtils",
 "class": "SurfacerDrawUtils",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/utils/surfacer_draw_utils.gd"
+}, {
+"base": "FrameworkGlobal",
+"class": "SurfacerFrameworkGlobal",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/config/surfacer_framework_global.gd"
 }, {
 "base": "ScaffolderGeometry",
 "class": "SurfacerGeometry",
@@ -2906,8 +2906,8 @@ _global_script_class_icons={
 "SurfacerCharacterRecentMovementAnnotator": "",
 "SurfacerClickAnnotator": "",
 "SurfacerColors": "",
-"SurfacerDefaultAppManifest": "",
 "SurfacerDrawUtils": "",
+"SurfacerFrameworkGlobal": "",
 "SurfacerGeometry": "",
 "SurfacerHud": "",
 "SurfacerLevel": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_level.png",
@@ -3084,5 +3084,5 @@ common/physics_fps=60.0
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_clear_color=Color( 0.270588, 0.239216, 0.188235, 1 )
+environment/default_clear_color=Color( 0.12549, 0.133333, 0.164706, 1 )
 quality/2d/use_pixel_snap=true
