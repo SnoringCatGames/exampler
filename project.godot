@@ -319,6 +319,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/annotators/color_config/color_config.gd"
 }, {
+"base": "EditorProperty",
+"class": "ColorConfigEditorProperty",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/color_config_editor_property.gd"
+}, {
+"base": "EditorInspectorPlugin",
+"class": "ColorConfigInspectorPlugin",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/color_config_inspector_plugin.gd"
+}, {
 "base": "Reference",
 "class": "ColorFactory",
 "language": "GDScript",
@@ -1744,6 +1754,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/scaffolder_project_settings.gd"
 }, {
+"base": "Reference",
+"class": "ScaffolderPropertyHint",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/scaffolder_property_hint.gd"
+}, {
 "base": "FrameworkSchema",
 "class": "ScaffolderSchema",
 "language": "GDScript",
@@ -2562,6 +2577,8 @@ _global_script_class_icons={
 "CollisionCheckUtils": "",
 "CollisionSurfaceResult": "",
 "ColorConfig": "",
+"ColorConfigEditorProperty": "",
+"ColorConfigInspectorPlugin": "",
 "ColorFactory": "",
 "ColorPalette": "",
 "ColorParams": "",
@@ -2847,6 +2864,7 @@ _global_script_class_icons={
 "ScaffolderPlugin": "",
 "ScaffolderProgressBar": "res://addons/scaffolder/assets/images/editor_icons/progress_bar.png",
 "ScaffolderProjectSettings": "",
+"ScaffolderPropertyHint": "",
 "ScaffolderSchema": "",
 "ScaffolderSlider": "res://addons/scaffolder/assets/images/editor_icons/slider.png",
 "ScaffolderSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
@@ -3005,7 +3023,7 @@ _global_script_class_icons={
 config/name="Squirrel Away"
 run/main_scene="res://addons/squirrel_away/src/config/squirrel_away_main.tscn"
 boot_splash/image="res://addons/scaffolder/assets/images/logos/godot_logo_splash.png"
-boot_splash/bg_color=Color( 0.12549, 0.145098, 0.192157, 1 )
+boot_splash/bg_color=Color( 0.27451, 0.384314, 0.117647, 2 )
 config/icon="res://addons/squirrel_away/assets/images/icon.png"
 config/auto_accept_quit=false
 config/quit_on_go_back=false
@@ -3114,5 +3132,5 @@ common/physics_fps=60.0
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_clear_color=Color( 0.12549, 0.133333, 0.164706, 1 )
+environment/default_clear_color=Color( 0.25098, 0.25098, 0.25098, 1 )
 quality/2d/use_pixel_snap=true
