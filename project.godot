@@ -319,6 +319,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/annotators/color_config/color_config.gd"
 }, {
+"base": "VBoxContainer",
+"class": "ColorConfigEdit",
+"language": "GDScript",
+"path": "res://addons/scaffolder/src/plugin/color_config_edit.gd"
+}, {
 "base": "EditorProperty",
 "class": "ColorConfigEditorProperty",
 "language": "GDScript",
@@ -2577,6 +2582,7 @@ _global_script_class_icons={
 "CollisionCheckUtils": "",
 "CollisionSurfaceResult": "",
 "ColorConfig": "",
+"ColorConfigEdit": "",
 "ColorConfigEditorProperty": "",
 "ColorConfigInspectorPlugin": "",
 "ColorFactory": "",
