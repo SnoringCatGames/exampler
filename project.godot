@@ -344,21 +344,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/annotators/color_config/color_palette.gd"
 }, {
-"base": "Reference",
-"class": "ColorParams",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/color_params/color_params.gd"
-}, {
-"base": "Reference",
-"class": "ColorParamsFactory",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/color_params/color_params_factory.gd"
-}, {
-"base": "Reference",
-"class": "ColorParamsType",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/color_params/color_params_type.gd"
-}, {
 "base": "Screen",
 "class": "ConfirmDataDeletionScreenLocal",
 "language": "GDScript",
@@ -979,20 +964,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/edge/utils/horizontal_movement_utils.gd"
 }, {
-"base": "ColorParams",
-"class": "HsvColorParams",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/color_params/hsv_color_params.gd"
-}, {
 "base": "ColorConfig",
 "class": "HsvRangeColorConfig",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/annotators/color_config/hsv_range_color_config.gd"
-}, {
-"base": "ColorParams",
-"class": "HsvRangeColorParams",
-"language": "GDScript",
-"path": "res://addons/scaffolder/src/annotators/color_params/hsv_range_color_params.gd"
 }, {
 "base": "ScaffolderPanelContainer",
 "class": "HudKeyValueBox",
@@ -2587,9 +2562,6 @@ _global_script_class_icons={
 "ColorConfigInspectorPlugin": "",
 "ColorFactory": "",
 "ColorPalette": "",
-"ColorParams": "",
-"ColorParamsFactory": "",
-"ColorParamsType": "",
 "ConfirmDataDeletionScreenLocal": "",
 "ConfirmDataDeletionScreenWithAnalytics": "",
 "ConnectionDirection": "",
@@ -2714,9 +2686,7 @@ _global_script_class_icons={
 "HeaderControlRow": "",
 "HighScoreControlRow": "",
 "HorizontalMovementUtils": "",
-"HsvColorParams": "",
 "HsvRangeColorConfig": "",
-"HsvRangeColorParams": "",
 "HudKeyValueBox": "",
 "HudKeyValueItemControlRow": "",
 "HudKeyValueList": "",
@@ -3029,7 +2999,7 @@ _global_script_class_icons={
 config/name="Squirrel Away"
 run/main_scene="res://addons/squirrel_away/src/config/squirrel_away_main.tscn"
 boot_splash/image="res://addons/scaffolder/assets/images/logos/godot_logo_splash.png"
-boot_splash/bg_color=Color( 0.27451, 0.384314, 0.117647, 2 )
+boot_splash/bg_color=Color( 0.12549, 0.145098, 0.192157, 1 )
 config/icon="res://addons/squirrel_away/assets/images/icon.png"
 config/auto_accept_quit=false
 config/quit_on_go_back=false
