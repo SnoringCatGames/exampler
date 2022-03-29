@@ -2114,11 +2114,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/annotators/surfacer_annotation_element.gd"
 }, {
-"base": "Node",
-"class": "SurfacerAnnotationsManifest",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_annotations_manifest.gd"
-}, {
 "base": "ScaffolderAnnotators",
 "class": "SurfacerAnnotators",
 "language": "GDScript",
@@ -2926,7 +2921,6 @@ _global_script_class_icons={
 "SurfaceTilerSchema": "",
 "SurfaceType": "",
 "SurfacerAnnotationElement": "",
-"SurfacerAnnotationsManifest": "",
 "SurfacerAnnotators": "",
 "SurfacerBeatTracker": "",
 "SurfacerBootstrap": "",
