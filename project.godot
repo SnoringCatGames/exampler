@@ -2234,11 +2234,6 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_movement_manifest.gd"
 }, {
-"base": "ColorPalette",
-"class": "SurfacerPalette",
-"language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_palette.gd"
-}, {
 "base": "FrameworkPlugin",
 "class": "SurfacerPlugin",
 "language": "GDScript",
@@ -2945,7 +2940,6 @@ _global_script_class_icons={
 "SurfacerLoadingScreen": "",
 "SurfacerMetadata": "",
 "SurfacerMovementManifest": "",
-"SurfacerPalette": "",
 "SurfacerPlugin": "",
 "SurfacerSchema": "",
 "SurfacerSpawnPosition": "res://addons/scaffolder/assets/images/editor_icons/spawn_position.png",
@@ -3029,7 +3023,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
 
 [importer_defaults]
 
@@ -3114,5 +3108,5 @@ common/physics_fps=60.0
 quality/intended_usage/framebuffer_allocation=1
 quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
-environment/default_clear_color=Color( 0.25098, 0.25098, 0.25098, 1 )
+environment/default_clear_color=Color( 0.270588, 0.239216, 0.188235, 1 )
 quality/2d/use_pixel_snap=true
