@@ -1519,7 +1519,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/control_rows/displays/recent_movement_annotator_control_row.gd"
 }, {
-"base": "Reference",
+"base": "MultiNumberEditor",
 "class": "Rect2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/rect2_editor.gd"
@@ -2399,12 +2399,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/legend/valid_edge_trajectory_legend_item.gd"
 }, {
-"base": "Reference",
+"base": "MultiNumberEditor",
 "class": "Vector2Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector2_editor.gd"
 }, {
-"base": "Reference",
+"base": "MultiNumberEditor",
 "class": "Vector3Editor",
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/multi_number_editor/vector3_editor.gd"
@@ -3029,7 +3029,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg" )
 
 [importer_defaults]
 
