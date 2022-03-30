@@ -384,6 +384,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/corner_match_inner_tilemap.gd"
 }, {
+"base": "Reference",
+"class": "CornerMatchTile",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/corner_match_tile.gd"
+}, {
 "base": "TileMap",
 "class": "CornerMatchTilemap",
 "language": "GDScript",
@@ -418,7 +423,6 @@ _global_script_classes=[ {
 "class": "CrashTestDummy",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/crash_test_dummy.gd"
-}, {
 }, {
 "base": "Screen",
 "class": "DataAgreementScreen",
@@ -2300,6 +2304,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/screens/third_party_licenses_screen.gd"
 }, {
+"base": "Node",
+"class": "TileAnnotationsParser",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/calculators/tile_annotations_parser.gd"
+}, {
+"base": "Node",
+"class": "TileAnnotationsRecorder",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/calculators/tile_annotations_recorder.gd"
+}, {
 "base": "Reference",
 "class": "TileShapeData",
 "language": "GDScript",
@@ -2309,16 +2323,6 @@ _global_script_classes=[ {
 "class": "TilemapWithManyAngles",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/tiles/tilemap_with_many_angles.gd"
-}, {
-"base": "Node",
-"class": "TilesetAnnotationsParser",
-"language": "GDScript",
-"path": "res://addons/surface_tiler/src/calculators/tileset_annotations_parser.gd"
-}, {
-"base": "Node",
-"class": "TilesetAnnotationsRecorder",
-"language": "GDScript",
-"path": "res://addons/surface_tiler/src/calculators/tileset_annotations_recorder.gd"
 }, {
 "base": "SurfacesTileset",
 "class": "TilesetOld",
@@ -2561,6 +2565,7 @@ _global_script_class_icons={
 "CornerConnectionWeightMultipliers": "",
 "CornerDirection": "",
 "CornerMatchInnerTilemap": "",
+"CornerMatchTile": "",
 "CornerMatchTilemap": "",
 "CornerMatchTilemapInspectorPlugin": "",
 "CornerMatchTileset": "",
@@ -2568,7 +2573,6 @@ _global_script_class_icons={
 "CornerMatchTilesetShapeCalculator": "",
 "CrashReporter": "",
 "CrashTestDummy": "",
-"DTS": "",
 "DataAgreementScreen": "",
 "DebugLevel": "",
 "DebugPanel": "res://addons/scaffolder/assets/images/editor_icons/debug_panel.png",
@@ -2945,10 +2949,10 @@ _global_script_class_icons={
 "TestOddShapesTileset": "",
 "TextControlRow": "",
 "ThirdPartyLicensesScreen": "",
+"TileAnnotationsParser": "",
+"TileAnnotationsRecorder": "",
 "TileShapeData": "",
 "TilemapWithManyAngles": "",
-"TilesetAnnotationsParser": "",
-"TilesetAnnotationsRecorder": "",
 "TilesetOld": "",
 "TilesetWithManyAngles": "",
 "TilesetWithSquareCorners": "",
@@ -3013,7 +3017,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
 
 [importer_defaults]
 
