@@ -832,12 +832,12 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "FrameworkBootstrap",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/framework_bootstrap.gd"
+"path": "res://addons/scaffolder/src/global/framework_bootstrap.gd"
 }, {
 "base": "Node",
 "class": "FrameworkGlobal",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/framework_global.gd"
+"path": "res://addons/scaffolder/src/global/framework_global.gd"
 }, {
 "base": "PanelContainer",
 "class": "FrameworkManifestArrayButtons",
@@ -1567,7 +1567,7 @@ _global_script_classes=[ {
 "base": "FrameworkGlobal",
 "class": "ScInterface",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/sc.gd"
+"path": "res://addons/scaffolder/src/global/sc.gd"
 }, {
 "base": "Node2D",
 "class": "ScaffolderAnnotators",
@@ -1577,12 +1577,12 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderAppMetadata",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_app_metadata.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_app_metadata.gd"
 }, {
 "base": "Node",
 "class": "ScaffolderAudioManifest",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_audio_manifest.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_audio_manifest.gd"
 }, {
 "base": "Button",
 "class": "ScaffolderButton",
@@ -1612,7 +1612,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderCharacterManifest",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_character_manifest.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_character_manifest.gd"
 }, {
 "base": "Node2D",
 "class": "ScaffolderCharacterPositionAnnotator",
@@ -1662,7 +1662,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderGuiConfig",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_gui_config.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_gui_config.gd"
 }, {
 "base": "HSeparator",
 "class": "ScaffolderHSeparator",
@@ -1677,7 +1677,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderImages",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_images.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_images.gd"
 }, {
 "base": "Label",
 "class": "ScaffolderLabel",
@@ -1714,7 +1714,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/data/scaffolder_log.gd"
 }, {
-"base": "Reference",
+"base": "PluginMetadata",
 "class": "ScaffolderMetadata",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/scaffolder_metadata.gd"
@@ -1742,7 +1742,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderProjectSettings",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_project_settings.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_project_settings.gd"
 }, {
 "base": "Reference",
 "class": "ScaffolderPropertyHint",
@@ -1767,7 +1767,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "ScaffolderStyles",
 "language": "GDScript",
-"path": "res://addons/scaffolder/src/config/scaffolder_styles.gd"
+"path": "res://addons/scaffolder/src/global/scaffolder_styles.gd"
 }, {
 "base": "Control",
 "class": "ScaffolderTextureButton",
@@ -1895,6 +1895,11 @@ _global_script_classes=[ {
 "path": "res://addons/squirrel_away/src/characters/squirrel/squirrel.gd"
 }, {
 "base": "Reference",
+"class": "SquirrelAwayDefaultAnnotationParameters",
+"language": "GDScript",
+"path": "res://addons/squirrel_away/src/config/squirrel_away_default_annotation_parameters.gd"
+}, {
+"base": "Reference",
 "class": "SquirrelAwayDefaultColors",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_default_colors.gd"
@@ -1902,7 +1907,7 @@ _global_script_classes=[ {
 "base": "SurfacerFrameworkGlobal",
 "class": "SquirrelAwayInterface",
 "language": "GDScript",
-"path": "res://addons/squirrel_away/src/config/squirrel_away.gd"
+"path": "res://addons/squirrel_away/src/global/squirrel_away.gd"
 }, {
 "base": "SurfacerLevel",
 "class": "SquirrelAwayLevel",
@@ -1927,9 +1932,9 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "SquirrelAwayMain",
 "language": "GDScript",
-"path": "res://addons/squirrel_away/src/config/squirrel_away_main.gd"
+"path": "res://addons/squirrel_away/src/global/squirrel_away_main.gd"
 }, {
-"base": "Reference",
+"base": "PluginMetadata",
 "class": "SquirrelAwayMetadata",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_metadata.gd"
@@ -1967,7 +1972,7 @@ _global_script_classes=[ {
 "base": "FrameworkGlobal",
 "class": "StInterface",
 "language": "GDScript",
-"path": "res://addons/surface_tiler/src/config/st.gd"
+"path": "res://addons/surface_tiler/src/global/st.gd"
 }, {
 "base": "Reference",
 "class": "StaticColorConfig",
@@ -1997,7 +2002,7 @@ _global_script_classes=[ {
 "base": "FrameworkGlobal",
 "class": "SuInterface",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/config/su.gd"
+"path": "res://addons/surfacer/src/global/su.gd"
 }, {
 "base": "Reference",
 "class": "SubtileCorner",
@@ -2099,7 +2104,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_store.gd"
 }, {
-"base": "Reference",
+"base": "PluginMetadata",
 "class": "SurfaceTilerMetadata",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/config/surface_tiler_metadata.gd"
@@ -2113,6 +2118,11 @@ _global_script_classes=[ {
 "class": "SurfaceTilerSchema",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/config/surface_tiler_schema.gd"
+}, {
+"base": "Node",
+"class": "SurfaceTilerThirdPartyLicenses",
+"language": "GDScript",
+"path": "res://addons/surface_tiler/src/config/surface_tiler_third_party_licenses.gd"
 }, {
 "base": "Reference",
 "class": "SurfaceType",
@@ -2137,7 +2147,7 @@ _global_script_classes=[ {
 "base": "FrameworkBootstrap",
 "class": "SurfacerBootstrap",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_bootstrap.gd"
+"path": "res://addons/surfacer/src/global/surfacer_bootstrap.gd"
 }, {
 "base": "ScaffolderCharacter",
 "class": "SurfacerCharacter",
@@ -2167,7 +2177,7 @@ _global_script_classes=[ {
 "base": "ScaffolderCharacterManifest",
 "class": "SurfacerCharacterManifest",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_character_manifest.gd"
+"path": "res://addons/surfacer/src/global/surfacer_character_manifest.gd"
 }, {
 "base": "ScaffolderCharacterPositionAnnotator",
 "class": "SurfacerCharacterPositionAnnotator",
@@ -2234,7 +2244,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/screens/surfacer_loading_screen.gd"
 }, {
-"base": "Reference",
+"base": "PluginMetadata",
 "class": "SurfacerMetadata",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_metadata.gd"
@@ -2242,7 +2252,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "SurfacerMovementManifest",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_movement_manifest.gd"
+"path": "res://addons/surfacer/src/global/surfacer_movement_manifest.gd"
 }, {
 "base": "FrameworkPlugin",
 "class": "SurfacerPlugin",
@@ -2262,7 +2272,7 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "SurfacerSurfacePropertiesManifest",
 "language": "GDScript",
-"path": "res://addons/surfacer/src/config/surfacer_surface_properties_manifest.gd"
+"path": "res://addons/surfacer/src/global/surfacer_surface_properties_manifest.gd"
 }, {
 "base": "Node",
 "class": "SurfacerThirdPartyLicenses",
@@ -2882,6 +2892,7 @@ _global_script_class_icons={
 "Spacer": "res://addons/scaffolder/assets/images/editor_icons/spacer.png",
 "SplashScreen": "",
 "Squirrel": "",
+"SquirrelAwayDefaultAnnotationParameters": "",
 "SquirrelAwayDefaultColors": "",
 "SquirrelAwayInterface": "",
 "SquirrelAwayLevel": "",
@@ -2926,6 +2937,7 @@ _global_script_class_icons={
 "SurfaceTilerMetadata": "",
 "SurfaceTilerPlugin": "",
 "SurfaceTilerSchema": "",
+"SurfaceTilerThirdPartyLicenses": "",
 "SurfaceType": "",
 "SurfacerAnnotationElement": "",
 "SurfacerAnnotators": "",
@@ -3009,7 +3021,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Squirrel Away"
-run/main_scene="res://addons/squirrel_away/src/config/squirrel_away_main.tscn"
+run/main_scene="res://addons/squirrel_away/src/global/squirrel_away_main.tscn"
 boot_splash/image="res://addons/scaffolder/assets/images/logos/godot_logo_splash.png"
 boot_splash/bg_color=Color( 0.12549, 0.145098, 0.192157, 1 )
 config/icon="res://addons/squirrel_away/assets/images/icon.png"
@@ -3018,11 +3030,11 @@ config/quit_on_go_back=false
 
 [autoload]
 
-Sc="*res://addons/scaffolder/src/config/sc.gd"
+Sc="*res://addons/scaffolder/src/global/sc.gd"
 Pl="*res://addons/scaffolder/addons/plugger/src/pl.gd"
-SquirrelAway="*res://addons/squirrel_away/src/config/squirrel_away.gd"
-St="*res://addons/surface_tiler/src/config/st.gd"
-Su="*res://addons/surfacer/src/config/su.gd"
+SquirrelAway="*res://addons/squirrel_away/src/global/squirrel_away.gd"
+St="*res://addons/surface_tiler/src/global/st.gd"
+Su="*res://addons/surfacer/src/global/su.gd"
 
 [display]
 
@@ -3035,7 +3047,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/dialogic/plugin.cfg", "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg" )
 
 [importer_defaults]
 
