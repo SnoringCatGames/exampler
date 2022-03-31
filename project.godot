@@ -849,6 +849,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/addons/plugger/src/gui/framework_manifest_row_group.gd"
 }, {
+"base": "Reference",
+"class": "FrameworkMetadata",
+"language": "GDScript",
+"path": "res://addons/scaffolder/addons/plugger/src/framework_metadata.gd"
+}, {
 "base": "EditorPlugin",
 "class": "FrameworkPlugin",
 "language": "GDScript",
@@ -1410,11 +1415,6 @@ _global_script_classes=[ {
 "path": "res://addons/scaffolder/addons/plugger/src/gui/accordion/plugin_accordion_panel.gd"
 }, {
 "base": "Reference",
-"class": "PluginMetadata",
-"language": "GDScript",
-"path": "res://addons/scaffolder/addons/plugger/src/plugin_metadata.gd"
-}, {
-"base": "Reference",
 "class": "PointerSelectionPosition",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/character/pointer_selection_position.gd"
@@ -1689,7 +1689,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/data/scaffolder_log.gd"
 }, {
-"base": "PluginMetadata",
+"base": "FrameworkMetadata",
 "class": "ScaffolderMetadata",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/scaffolder_metadata.gd"
@@ -1909,7 +1909,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/global/squirrel_away_main.gd"
 }, {
-"base": "PluginMetadata",
+"base": "FrameworkMetadata",
 "class": "SquirrelAwayMetadata",
 "language": "GDScript",
 "path": "res://addons/squirrel_away/src/config/squirrel_away_metadata.gd"
@@ -2079,7 +2079,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/platform_graph/surface/surface_store.gd"
 }, {
-"base": "PluginMetadata",
+"base": "FrameworkMetadata",
 "class": "SurfaceTilerMetadata",
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/config/surface_tiler_metadata.gd"
@@ -2219,7 +2219,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/gui/screens/surfacer_loading_screen.gd"
 }, {
-"base": "PluginMetadata",
+"base": "FrameworkMetadata",
 "class": "SurfacerMetadata",
 "language": "GDScript",
 "path": "res://addons/surfacer/src/config/surfacer_metadata.gd"
@@ -2663,6 +2663,7 @@ _global_script_class_icons={
 "FrameworkManifestPanel": "res://addons/scaffolder/assets/images/editor_icons/accordion_panel.png",
 "FrameworkManifestRow": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_placeholder.png",
 "FrameworkManifestRowGroup": "res://addons/scaffolder/assets/images/editor_icons/accordion_panel.png",
+"FrameworkMetadata": "",
 "FrameworkPlugin": "",
 "FrameworkPluginMainScreen": "res://addons/scaffolder/assets/images/editor_icons/scaffolder_panel_container.png",
 "FrameworkSchema": "",
@@ -2775,7 +2776,6 @@ _global_script_class_icons={
 "PluginAccordionHeader": "res://addons/scaffolder/assets/images/editor_icons/accordion_header.png",
 "PluginAccordionHeaderCaret": "res://addons/scaffolder/addons/plugger/assets/images/caret_right_dark_theme_1.png",
 "PluginAccordionPanel": "res://addons/scaffolder/assets/images/editor_icons/accordion_panel.png",
-"PluginMetadata": "",
 "PointerSelectionPosition": "",
 "PolylineAnnotationElement": "",
 "PolylineLegendItem": "",
