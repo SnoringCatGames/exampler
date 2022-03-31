@@ -2284,6 +2284,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surfacer/src/tiles/surfaces_tileset.gd"
 }, {
+"base": "CornerMatchTilesetInitializer",
+"class": "SurfacesTilesetInitializer",
+"language": "GDScript",
+"path": "res://addons/surfacer/src/tiles/surfaces_tileset_initializer.gd"
+}, {
 "base": "SurfacesTilemap",
 "class": "TestOddShapesTilemap",
 "language": "GDScript",
@@ -2945,6 +2950,7 @@ _global_script_class_icons={
 "SurfacesOfSideGroupItemController": "",
 "SurfacesTilemap": "res://addons/surfacer/assets/images/editor_icons/surfaces_tilemap.png",
 "SurfacesTileset": "",
+"SurfacesTilesetInitializer": "",
 "TestOddShapesTilemap": "",
 "TestOddShapesTileset": "",
 "TextControlRow": "",
