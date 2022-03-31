@@ -3017,7 +3017,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/scaffolder/plugin.cfg", "res://addons/squirrel_away/plugin.cfg", "res://addons/surface_tiler/plugin.cfg", "res://addons/surfacer/plugin.cfg" )
 
 [importer_defaults]
 
