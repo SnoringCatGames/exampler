@@ -1284,7 +1284,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/gui/overlay_mask_transition.gd"
 }, {
-"base": "Reference",
+"base": "ColorConfig",
 "class": "PaletteColorConfig",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/color_config/palette_color_config.gd"
