@@ -339,7 +339,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/color_config/color_factory.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "ColorPalette",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/color_config/color_palette.gd"
@@ -1949,7 +1949,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/surface_tiler/src/global/st.gd"
 }, {
-"base": "Reference",
+"base": "ColorConfig",
 "class": "StaticColorConfig",
 "language": "GDScript",
 "path": "res://addons/scaffolder/src/config/color_config/static_color_config.gd"
